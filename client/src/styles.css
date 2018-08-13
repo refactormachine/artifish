@@ -5,6 +5,7 @@
 @import "assets/css/canvas-modal/style.css";
 @import "~font-awesome/css/font-awesome.css";
 @import "~bootstrap-social/bootstrap-social.css";
+@import "~intro.js/introjs.css";
 body {
   padding-top: 80px;
   padding-bottom: 10px;
@@ -32,4 +33,12 @@ body {
   /* IE10+/Edge */
   user-select: none;
   /* Standard */
+}
+
+.tooltip-inner {
+  min-width: 100px;
+}
+
+.rtl .introjs-tooltipbuttons {
+  direction: rtl
 }

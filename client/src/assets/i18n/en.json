@@ -156,6 +156,10 @@
 		"aluminum": "Aluminum"
 	},
 	"intro": {
+		"next": "Next &rarr;",
+		"back": "&larr; Back",
+		"skip": "Skip",
+		"done": "Done",
 		"step1" :"1. Upload a picture of your room or choose one from our library",
 		"step2" :"2. Choose the filter that fits your vision",
 		"step3" :"3. Select the artworks according to your preferred color",

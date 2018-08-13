@@ -28,6 +28,8 @@ export class NavbarComponent {
   }
 
   startTour() {
+    window.scrollTo(0, 0);
     this.introService.startTour();
+    window.scrollTo(0, 0);
   }
 }

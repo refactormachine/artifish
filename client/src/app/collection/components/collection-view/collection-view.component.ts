@@ -75,7 +75,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       thumbUrl: 'https://images.unsplash.com/photo-1534066519516-fc7b4cc6062c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=1cbedfe74f1e132ff945107d641056ba&auto=format&fit=crop&w=500&q=60',
       startingPriceFormatted: '₪550',
     }];
-  
+
   constructor(
     private alertService: AlertService,
     private router: Router,
@@ -113,7 +113,6 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   }
 
   canDeactivate() {
-    this.collectionItems.push({thumbUrl: "url"})
     return this.handleNavigationAway();
   }
 
@@ -363,6 +362,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     this.openModalCanvas = false;
     this.canvasImageDataUrl = canvasImageDataUrl;
     this.collection.workspaceImageContents = canvasImageDataUrl;
+    this.collection.workspaceImageUrl = canvasImageDataUrl;
   }
 
   loginWithGooglePopup(callback: () => void) {
