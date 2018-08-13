@@ -19,12 +19,13 @@ import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { OAuthAccessDenied, OAuthCanceled } from '../../../auth/models/oauth-errors';
 import { MaterialService } from '../../services/material.service';
+import { IntroService } from '../../../intro.service';
 
 @Component({
   selector: 'app-collection-view',
   templateUrl: './collection-view.component.html',
   styleUrls: ['./collection-view.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class CollectionViewComponent implements OnInit, CollectionViewComponentCanDeactivate {
   direction: string;
@@ -34,6 +35,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   collection: any = {};
   collectionItems: any[] = [];
   portfolioItems: any[];
+
   canvasImageDataUrl: string;
 
   portfolioItemsPage: number = 1;
@@ -66,6 +68,14 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   canvasImages: any[] = [];
   konvaCollection = {konvaImages: [], htmlImages: []}
 
+  introCollectionItems = [{
+      portfolioItemId: 0,
+      name: 'mona lisa',
+      imageUrl: 'https://images.unsplash.com/photo-1534066519516-fc7b4cc6062c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=1cbedfe74f1e132ff945107d641056ba&auto=format&fit=crop&w=500&q=60',
+      thumbUrl: 'https://images.unsplash.com/photo-1534066519516-fc7b4cc6062c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=1cbedfe74f1e132ff945107d641056ba&auto=format&fit=crop&w=500&q=60',
+      startingPriceFormatted: '₪550',
+    }];
+  
   constructor(
     private alertService: AlertService,
     private router: Router,
@@ -78,7 +88,9 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     private translate: TranslateService,
     private modalService: NgbModal,
     private userService: UserService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private introService: IntroService,
+  ) {
     this.direction = environment.rtl ? "rtl" : "ltr";
   }
 
@@ -101,6 +113,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   }
 
   canDeactivate() {
+    this.collectionItems.push({thumbUrl: "url"})
     return this.handleNavigationAway();
   }
 

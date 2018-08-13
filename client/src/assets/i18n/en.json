@@ -64,6 +64,7 @@
 	},
 	"navbar": {
 		"contact_us": "Contact Us",
+		"start_tour": "Start Tour",
 		"home": "Home",
 		"login": "Login",
 		"logout": "Logout",
@@ -153,5 +154,17 @@
 		"canvas": "Canvas",
 		"acrylic_glass": "Acrylic Glass",
 		"aluminum": "Aluminum"
+	},
+	"intro": {
+		"step1" :"1. Upload a picture of your room or choose one from our library",
+		"step2" :"2. Choose the filter that fits your vision",
+		"step3" :"3. Select the artworks according to your preferred color",
+		"step4" :"4. Pick the artworks that you like",
+		"step5" :"5. See the artworks you chose appear on your project board",
+		"step6" :"6. Start you designing process with the artwork your choose in visual tool",
+		"step7" :"7. Enjoy our visualization tool, see the artworks in your space and select the canvas size that you like",
+		"step8" :"8. Return to the home page, what will save your collection",
+		"step9" :"9. Continue to purchase and make your design reality",
+		"step10" :"10. Let’s Start!"
 	}
 }

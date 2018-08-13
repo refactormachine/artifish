@@ -9,6 +9,7 @@ import { AppErrorHandler } from './core/helpers/app-error-handler';
 import { SharedModule } from './shared/shared.module';
 import { CollectionModule } from './collection/collection.module';
 import { PaymentModule } from './payment/payment.module';
+import { IntroService } from './intro.service';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { PaymentModule } from './payment/payment.module';
     PaymentModule
   ],
   providers: [
-    { provide: ErrorHandler, useClass: AppErrorHandler }
+    { provide: ErrorHandler, useClass: AppErrorHandler },
+    IntroService,
   ],
   bootstrap: [AppComponent]
 })

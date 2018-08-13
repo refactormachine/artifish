@@ -6,6 +6,10 @@
   top: 80px;
 }
 
+.withinIntro .sticky-top {
+  position: initial;
+}
+
 .img-close {
   top: 1px;
   right: 10px;
