@@ -107,7 +107,11 @@
 		"upload_a_photo_of_your_room": "העלה תמונה של החדר שלך",
 		"choose_from_collection": "בחר מאוסף קיים",
 		"workspace_collection_library": "תמונות חדרים מוכנות מראש",
-		"workspace_collection_library_help_text": "בחר חדר או צבע קיר כדי לדמות את החדר שאתה עובד עליו"
+		"workspace_collection_library_help_text": "בחר חדר או צבע קיר כדי לדמות את החדר שאתה עובד עליו",
+		"got_confused": "נראה שהתבלבלת!",
+		"drag_image_warning_text": "לחץ על התמונה כדי לבחור אותה, לאחר מכן לחץ על ",
+		"drag_image_warning_text_after_icon": " בסרגל הכלים כדי לגרור אותה",
+		"you_must_set_workspace_picture_first": "ראשית עליך לבחור את תמונת החלל"
 	},
 	"collections": {
 		"my_collections": "הפרוייקטים שלי",

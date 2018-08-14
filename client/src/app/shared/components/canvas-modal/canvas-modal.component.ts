@@ -88,12 +88,22 @@ export class CanvasModalComponent implements OnInit {
 
     let loadedImages = 0;
     if (this.modalImages.length == 0) this.loading = false
+    let x = 60;
+    let y = 60;
+    let imageIndex = 0;
     for (let i = 0; i < this.modalImages.length; i++) {
       const modalImage = this.modalImages[i];
       const positionAttributes = modalImage.positionAttributes;
+      x = 60 + (100 * imageIndex);
+      imageIndex++;
+      if (x > width - 100) {
+        x = 60;
+        y += 150;
+        imageIndex = 0;
+      }
       var konvaImage = new Konva.Image({
-        x: positionAttributes.x || 360 + 100 * i,
-        y: positionAttributes.y || 60,
+        x: positionAttributes.x || x,
+        y: positionAttributes.y || y,
         scaleX: positionAttributes.scaleX || 1,
         scaleY: positionAttributes.scaleY || 1,
         rotation: positionAttributes.rotation || 0,

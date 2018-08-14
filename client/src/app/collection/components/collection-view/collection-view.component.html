@@ -7,10 +7,14 @@
 
       <div class="project-section mt-3 sticky-top">
         <div data-step="1" [attr.data-intro]="('intro.step1' | translate)">
-          <div class="project-toolbar" data-step="6" [attr.data-intro]="'intro.step6' | translate">
+          <div class="project-toolbar">
 
-            <i *ngIf="canvasImageDataUrl || collection.workspaceImageUrl" class="img-button img-edit-name fa fa-arrows float-right clickable"
-              [ngClass]="{ 'd-none': isEditName }" (click)="openCanvasModal()" placement="top" ngbTooltip="{{'collection.see_pictures_on_wall' | translate}}" aria-hidden="true"></i>
+            <div class="float-right img-drag-mode" triggers="click:mouseleave" placement="top" ngbTooltip="{{'collection.you_must_set_workspace_picture_first' | translate}}">
+              <i [class.disabled]="!canvasImageDataUrl && !collection.workspaceImageUrl" class="img-button img-drag-mode fa fa-arrows float-right clickable"
+                [ngClass]="{ 'd-none': isEditName }" (click)="(canvasImageDataUrl || collection.workspaceImageUrl) && openCanvasModal()"
+                placement="top" ngbTooltip="{{'collection.see_pictures_on_wall' | translate}}" aria-hidden="true"
+                data-step="6" [attr.data-intro]="'intro.step6' | translate"></i>
+            </div>
 
             <i class="float-right img-button img-save-name fa fa-check float-right clickable" [ngClass]="{ 'd-none': !isEditName }" (click)="editName(false)"
               placement="top" ngbTooltip="{{'common.save' | translate}}" aria-hidden="true"></i>
@@ -22,7 +26,7 @@
                 placement="top" ngbTooltip="{{'collection.choose_from_collection' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
 
             <i class="fa fa-floppy-o img-button float-right img-save clickable" [class.disabled]="(saveLoading || !unsavedChanges) && (collectionItems.length == 0 && !authService.isLoggedIn())"
-              (click)="!saveLoading && saveCollection(saveModal)" [ngClass]="{ 'fa-spinner fa-spin': saveLoading, 'd-none': isEditName }"
+              (click)="!saveLoading && unsavedChanges && saveCollection(saveModal)" [ngClass]="{ 'fa-spinner fa-spin': saveLoading, 'd-none': isEditName }"
               placement="top" ngbTooltip="{{'collection.save_collection' | translate}}" aria-hidden="true"></i>
 
             <img *ngIf="!authService.isLoggedIn()" src="assets/images/clean-icon.png" class="img-button float-right img-clear clickable"
@@ -133,13 +137,13 @@
         <i class="fa fa-spinner fa-spin fa-3x"></i>
       </div>
       <ng-container *ngIf="portfolioItems && portfolioItems.length > 0; else noResults">
-        <div class="row art-stuff" data-step="4"
-          [attr.data-intro]="'intro.step4' | translate"
-          >
+        <div class="row art-stuff" data-step="4" [attr.data-intro]="'intro.step4' | translate">
           <div *ngFor="let portfolioItem of portfolioItems" class="col-3 mb-2">
             <div class="position-relative">
+              <ng-template #popupContent>{{'collection.drag_image_warning_text' | translate}} <i class='fa fa-arrows'></i> {{'collection.drag_image_warning_text_after_icon' | translate}}</ng-template>
               <img [src]="portfolioItem.thumbUrl" class="portfolio-item-img img-fluid clickable" [ngClass]="{ 'selected-image': portfolioItem.selected }"
-                (click)="imageSelected(portfolioItem)" alt="">
+               triggers="dragstart:dragend" placement="top" popoverTitle="{{'collection.got_confused' | translate}}" [ngbPopover]="popupContent"
+               (click)="imageSelected(portfolioItem)" alt="">
               <i *ngIf="portfolioItem.selected" class="fa fa-check clickable img-check-mark img-button"
                  (click)="imageSelected(portfolioItem)" aria-hidden="true"></i>
             </div>

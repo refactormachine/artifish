@@ -106,7 +106,11 @@
 		"upload_a_photo_of_your_room": "Upload a photo of your room",
 		"choose_from_collection": "Choose from collection",
 		"workspace_collection_library": "Workspace Collection Library",
-		"workspace_collection_library_help_text": "Choose a room or colored wall to simulate the room you are working on"
+		"workspace_collection_library_help_text": "Choose a room or colored wall to simulate the room you are working on",
+		"got_confused": "You got confused!",
+		"drag_image_warning_text": "Click on the image to select it, then click on ",
+		"drag_image_warning_text_after_icon": " in the toolbar to drag it",
+		"you_must_set_workspace_picture_first": "You must set a workspace picture first"
 	},
 	"collections": {
 		"my_collections": "My Saved Projects",
@@ -168,7 +172,7 @@
 		"step3" :"3. Select the artworks according to your preferred color",
 		"step4" :"4. Pick the artworks that you like",
 		"step5" :"5. See the artworks you chose appear on your project board",
-		"step6" :"6. Start you designing process with the artwork your choose in visual tool",
+		"step6" :"6. Start your designing process with the artwork your choose in visual tool",
 		"step7" :"7. Enjoy our visualization tool, see the artworks in your space and select the canvas size that you like",
 		"step8" :"8. Return to the home page, what will save your collection",
 		"step9" :"9. Continue to purchase and make your design reality",

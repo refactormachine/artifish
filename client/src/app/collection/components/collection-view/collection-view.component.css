@@ -54,46 +54,19 @@
   background-color: #dbdbdb;
 }
 
-.img-upload, .img-save, .img-clear, .img-edit-name, .img-save-name {
+.img-upload, .img-save, .img-clear, .img-edit-name, .img-save-name, .img-drag-mode {
   margin-left: 2px;
   margin-right: 2px;
 }
 
-.img-upload.disabled, .img-save.disabled, .img-clear.disabled {
+.img-upload.disabled, .img-save.disabled, .img-clear.disabled, .img-drag-mode.disabled {
   color: #b2b2b2
 }
 
-/* .img-upload {
-  left: 5px;
-  right: unset;
-}
-
-div.rtl .img-upload {
-  right: 5px;
-  left: unset;
-}
-
-.img-save {
-  left: 45px;
-  right: unset;
-}
-
-div.rtl .img-save {
-  right: 45px;
-  left: unset;
-} */
-
 .img-clear {
-  /* left: 85px; */
-  /* right: unset; */
   width: 26px;
   padding: 5px;
 }
-
-/* div.rtl .img-clear {
-  right: 85px;
-  left: unset;
-} */
 
 .editable-text {
   border: 1px solid transparent;
@@ -192,7 +165,6 @@ div.rtl .arrow-left {
 .collection-edit {
   font-size: 1.2em;
   line-height: 1.7em;
-  /* width: 100%; */
 }
 
 .workspace-image {

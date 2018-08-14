@@ -70,12 +70,12 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   konvaCollection = {konvaImages: [], htmlImages: []}
 
   introCollectionItems = [{
-      portfolioItemId: 0,
-      name: 'mona lisa',
-      imageUrl: 'https://images.unsplash.com/photo-1534066519516-fc7b4cc6062c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=1cbedfe74f1e132ff945107d641056ba&auto=format&fit=crop&w=500&q=60',
-      thumbUrl: 'https://images.unsplash.com/photo-1534066519516-fc7b4cc6062c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=1cbedfe74f1e132ff945107d641056ba&auto=format&fit=crop&w=500&q=60',
-      startingPriceFormatted: '₪550',
-    }];
+    portfolioItemId: 0,
+    name: 'Sky',
+    imageUrl: 'assets/images/tutorial-picture.jpg',
+    thumbUrl: 'assets/images/tutorial-picture.jpg',
+    startingPriceFormatted: '$550',
+  }];
 
   constructor(
     private alertService: AlertService,
@@ -410,6 +410,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
 
   private initializeCollection() {
     this.collection = {};
+    this.canvasImageDataUrl = null;
     if (this.collectionItems.length > 0) {
       for (let i = 0; i < this.collectionItems.length; i++) {
         const item = this.collectionItems[i];
