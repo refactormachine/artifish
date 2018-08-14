@@ -25,7 +25,7 @@
           </li>
         </ng-template>
         <li *ngIf='authService.isLoggedIn(); else annonymousUser' ngbDropdown class="nav-item dropdown">
-          <a class="nav-link" unselectable="on" id="dropdownBasic1" ngbDropdownToggle>
+          <a class="nav-link clickable" unselectable="on" id="dropdownBasic1" ngbDropdownToggle>
             {{authService.currentUser.first_name || ('navbar.user' | translate)}}
           </a>
           <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownBasic1">
@@ -36,7 +36,7 @@
           <a routerLink="/contact-us" class="nav-link">{{'navbar.contact_us' | translate}}</a>
         </li>
         <li class="nav-item" (click)='startTour()'>
-          <a class="nav-link">{{'navbar.start_tour' | translate}}</a>
+          <a class="nav-link clickable">{{'navbar.start_tour' | translate}}</a>
         </li>
       </ul>
     </div>

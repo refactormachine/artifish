@@ -1,5 +1,20 @@
 .selected-image {
+  opacity: 0.5;
+}
+
+.img-check-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+}
+
+.portfolio-item-img:hover:not(.selected-image) {
   border: 3px solid gray;
+}
+
+.img-button.img-check-mark:hover:not(.disabled) {
+  background-color: #efefef;
 }
 
 .sticky-top {

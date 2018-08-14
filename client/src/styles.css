@@ -46,3 +46,13 @@ body {
 .rtl.introjs-tooltip {
   direction: rtl;
 }
+
+.introjs-nextbutton:not(.introjs-disabled) {
+  background-color: #28af59;
+  background-image: -webkit-gradient(linear, top left, bottom left, color-stop(0, #2ec866), color-stop(1, #28af59));
+  background-image: -webkit-linear-gradient(top, #2ec866, #28af59);
+  background-image: linear-gradient(to bottom, #2ec866, #28af59);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -1px 6px rgba(32, 138, 70, 0.4);
+  color: #fff;
+  text-shadow: none;
+}

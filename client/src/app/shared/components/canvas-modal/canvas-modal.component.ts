@@ -121,8 +121,10 @@ export class CanvasModalComponent implements OnInit {
         konvaImage.height(imgHeight * ratio);
         layer.draw();
         loadedImages++;
-        if (loadedImages == self.modalImages.length)
+        if (loadedImages == self.modalImages.length) { // When done loading last image
+          self.createTransformer(layer, konvaImage);
           self.loading = false;
+        }
       };
       imageObj.crossOrigin = "anonymous"
       imageObj.src = this.modalImages[i].img;
@@ -172,5 +174,21 @@ export class CanvasModalComponent implements OnInit {
       scaleY: konvaImageAttrs.scaleY,
       rotation: konvaImageAttrs.rotation
     }
+  }
+
+  private createTransformer(layer, konvaImage) {
+    var tr = new Konva.Transformer({
+      enabledHandlers: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+      rotationSnaps: [0, 90, 180, 270],
+      boundBoxFunc: function (oldBox, newBox) {
+        if (newBox.width > 400) {
+          return oldBox;
+        }
+        return newBox;
+      }
+    });
+    layer.add(tr);
+    tr.attachTo(konvaImage);
+    layer.draw();
   }
 }

@@ -410,6 +410,12 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
 
   private initializeCollection() {
     this.collection = {};
+    if (this.collectionItems.length > 0) {
+      for (let i = 0; i < this.collectionItems.length; i++) {
+        const item = this.collectionItems[i];
+        item.selected = false;
+      }
+    }
     this.collectionItems = [];
     this.unsavedChanges = false;
     this.translate.get(TRANSLATE('collection.my_project')).subscribe(res => {

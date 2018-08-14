@@ -17,7 +17,7 @@ export class IntroService {
 
   constructor(private translateService: TranslateService) {}
 
-  startTour () {
+  startTour (options = {}) {
     this.translateService.get([TRANSLATE('intro.next'), TRANSLATE('intro.back'), TRANSLATE('intro.skip'), TRANSLATE('intro.done')]).subscribe(
       res => {
         const intro: IntroJs = introJs().setOptions({
@@ -25,7 +25,8 @@ export class IntroService {
           prevLabel: res['intro.back'],
           skipLabel: res['intro.skip'],
           doneLabel: res['intro.done'],
-          tooltipClass: environment.rtl ? 'rtl' : ''
+          tooltipClass: environment.rtl ? 'rtl' : '',
+          scrollToElement: options['scrollToElement'] || false
         });
 
         intro.onexit(this.onEnd);

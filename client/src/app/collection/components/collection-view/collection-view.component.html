@@ -55,7 +55,7 @@
             </div>
             <div class="col-3 offset-1">
               <i *ngIf="purchaseNavigateLoading" class="fa fa-spinner fa-spin fa-2x"></i>
-              <button *ngIf="!purchaseNavigateLoading" class="btn btn-primary introjs-daniel" (click)="navigateToPurchase(saveModal)">{{'collection.proceed_to_purchase' | translate}}</button>
+              <button *ngIf="!purchaseNavigateLoading" class="btn btn-primary" (click)="navigateToPurchase(saveModal)">{{'collection.proceed_to_purchase' | translate}}</button>
             </div>
           </div>
           <div class="row no-gutters mt-2">
@@ -122,9 +122,7 @@
           </div>
         </div>
 
-        <div class="mt-2 mb-3 mx-auto d-table color-table introjs-daniel" data-step="3"
-          [attr.data-intro]="'intro.step3' | translate"
-          >
+        <div class="mt-2 mb-3 mx-auto d-table color-table" data-step="3" [attr.data-intro]="'intro.step3' | translate">
           <div *ngFor="let hexColor of hexColors" class="color clickable d-inline-block" (click)="selectColorFilter(hexColor)" [ngClass]="{ 'active': filters.color == hexColor }"
             [style.backgroundColor]="hexColor">
           </div>
@@ -135,12 +133,16 @@
         <i class="fa fa-spinner fa-spin fa-3x"></i>
       </div>
       <ng-container *ngIf="portfolioItems && portfolioItems.length > 0; else noResults">
-        <div class="row art-stuff introjs-daniel" data-step="4"
+        <div class="row art-stuff" data-step="4"
           [attr.data-intro]="'intro.step4' | translate"
           >
           <div *ngFor="let portfolioItem of portfolioItems" class="col-3 mb-2">
-            <img [src]="portfolioItem.thumbUrl" class="img-fluid clickable" [ngClass]="{ 'selected-image': portfolioItem.selected }"
-              (click)="imageSelected(portfolioItem)" alt="">
+            <div class="position-relative">
+              <img [src]="portfolioItem.thumbUrl" class="portfolio-item-img img-fluid clickable" [ngClass]="{ 'selected-image': portfolioItem.selected }"
+                (click)="imageSelected(portfolioItem)" alt="">
+              <i *ngIf="portfolioItem.selected" class="fa fa-check clickable img-check-mark img-button"
+                 (click)="imageSelected(portfolioItem)" aria-hidden="true"></i>
+            </div>
             <i class="fa fa-search full-image-button clickable float-right" placement="top" ngbTooltip="{{'collection.more_details' | translate}}"
               (click)="openImageModal(portfolioItem)" aria-hidden="true"></i>
             <p class="mb-0">{{'collection.starting_at' | translate}}: {{portfolioItem.startingPriceFormatted}}</p>
