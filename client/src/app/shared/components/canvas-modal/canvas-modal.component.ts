@@ -33,11 +33,15 @@ export class CanvasModalComponent implements OnInit {
   }
   closeCanvas() {
     this.opened = false;
-    this.stage.find('Transformer').destroy();
-    (this.stage.find('Layer')[0] as Konva.Layer).draw();
-    let canvas = document.getElementsByTagName("canvas")[0]
-    var jpegUrl = canvas.toDataURL("image/jpeg");
-    this.cancelEvent.emit(jpegUrl);
+    if (this.stage) {
+      this.stage.find('Transformer').destroy();
+      (this.stage.find('Layer')[0] as Konva.Layer).draw();
+      let canvas = document.getElementsByTagName("canvas")[0]
+      var jpegUrl = canvas.toDataURL("image/jpeg");
+      this.cancelEvent.emit(jpegUrl);
+    } else {
+      this.cancelEvent.emit(null);
+    }
   }
 
   private loadBackgroundImage() {
@@ -83,6 +87,7 @@ export class CanvasModalComponent implements OnInit {
     layer.draw();
 
     let loadedImages = 0;
+    if (this.modalImages.length == 0) this.loading = false
     for (let i = 0; i < this.modalImages.length; i++) {
       const modalImage = this.modalImages[i];
       const positionAttributes = modalImage.positionAttributes;

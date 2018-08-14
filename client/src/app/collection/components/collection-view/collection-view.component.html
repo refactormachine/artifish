@@ -6,42 +6,48 @@
       <p class="text-center porject-board-help-block mb-1">{{'collection.project_board_hint' | translate}}</p>
 
       <div class="project-section mt-3 sticky-top">
-        <div class="project-toolbar" data-step="6" [attr.data-intro]="'intro.step6' | translate">
+        <div data-step="1" [attr.data-intro]="('intro.step1' | translate)">
+          <div class="project-toolbar" data-step="6" [attr.data-intro]="'intro.step6' | translate">
 
-          <i *ngIf="canvasImageDataUrl || collection.workspaceImageUrl" class="img-button img-edit-name fa fa-arrows float-right clickable"
-            [ngClass]="{ 'd-none': isEditName }" (click)="openCanvasModal()" placement="top" ngbTooltip="{{'collection.see_pictures_on_wall' | translate}}" aria-hidden="true"></i>
+            <i *ngIf="canvasImageDataUrl || collection.workspaceImageUrl" class="img-button img-edit-name fa fa-arrows float-right clickable"
+              [ngClass]="{ 'd-none': isEditName }" (click)="openCanvasModal()" placement="top" ngbTooltip="{{'collection.see_pictures_on_wall' | translate}}" aria-hidden="true"></i>
 
-          <i class="float-right img-button img-save-name fa fa-check float-right clickable" [ngClass]="{ 'd-none': !isEditName }" (click)="editName(false)"
-            placement="top" ngbTooltip="{{'common.save' | translate}}" aria-hidden="true"></i>
+            <i class="float-right img-button img-save-name fa fa-check float-right clickable" [ngClass]="{ 'd-none': !isEditName }" (click)="editName(false)"
+              placement="top" ngbTooltip="{{'common.save' | translate}}" aria-hidden="true"></i>
 
-          <i class="fa fa-upload img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="!saveLoading && imageFile.click()"
-            placement="top" ngbTooltip="{{'collection.upload_space_image' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
+            <i class="fa fa-upload img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="!saveLoading && imageFile.click()"
+              placement="top" ngbTooltip="{{'collection.upload_space_image' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
 
-          <i class="fa fa-floppy-o img-button float-right img-save clickable" [class.disabled]="(saveLoading || !unsavedChanges) && (collectionItems.length == 0 && !authService.isLoggedIn())"
-            (click)="!saveLoading && saveCollection(saveModal)" [ngClass]="{ 'fa-spinner fa-spin': saveLoading, 'd-none': isEditName }"
-            placement="top" ngbTooltip="{{'collection.save_collection' | translate}}" aria-hidden="true"></i>
+              <i class="fa fa-picture-o img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="openModal(workspaceCollectionModal, {size: 'lg'})"
+                placement="top" ngbTooltip="{{'collection.choose_from_collection' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
 
-          <img *ngIf="!authService.isLoggedIn()" src="assets/images/clean-icon.png" class="img-button float-right img-clear clickable"
-            [class.disabled]="saveLoading" (click)="!saveLoading && clearCollection()" placement="top" ngbTooltip="{{'collection.reset_project' | translate}}"
-            [ngClass]="{ 'd-none': isEditName }" aria-hidden="true">
+            <i class="fa fa-floppy-o img-button float-right img-save clickable" [class.disabled]="(saveLoading || !unsavedChanges) && (collectionItems.length == 0 && !authService.isLoggedIn())"
+              (click)="!saveLoading && saveCollection(saveModal)" [ngClass]="{ 'fa-spinner fa-spin': saveLoading, 'd-none': isEditName }"
+              placement="top" ngbTooltip="{{'collection.save_collection' | translate}}" aria-hidden="true"></i>
 
-          <i class="img-button img-edit-name fa fa-pencil float-right clickable introjs-daniel" [ngClass]="{ 'd-none': isEditName }"
-            (click)="editName(true)" placement="top" ngbTooltip="{{'collection.edit_name' | translate}}"
-            aria-hidden="true"></i>
+            <img *ngIf="!authService.isLoggedIn()" src="assets/images/clean-icon.png" class="img-button float-right img-clear clickable"
+              [class.disabled]="saveLoading" (click)="!saveLoading && clearCollection()" placement="top" ngbTooltip="{{'collection.reset_project' | translate}}"
+              [ngClass]="{ 'd-none': isEditName }" aria-hidden="true">
 
-          <input type="text" autofocus (keyup.enter)="onBlurCollectionName()" (blur)="onBlurCollectionName()" [(ngModel)]="collection.name"
-            name="name" #name id="name" class="form-control" [ngClass]="{ 'd-none': !isEditName }">
-          <h5 class="collection-name editable-text mb-0" [ngClass]="{ 'd-none': isEditName, 'd-inline-block': !isEditName }">{{collection.name}}</h5>
+            <i class="img-button img-edit-name fa fa-pencil float-right clickable" [ngClass]="{ 'd-none': isEditName }"
+              (click)="editName(true)" placement="top" ngbTooltip="{{'collection.edit_name' | translate}}"
+              aria-hidden="true"></i>
+
+            <input type="text" autofocus (keyup.enter)="onBlurCollectionName()" (blur)="onBlurCollectionName()" [(ngModel)]="collection.name"
+              name="name" #name id="name" class="form-control" [ngClass]="{ 'd-none': !isEditName }">
+            <h5 class="collection-name editable-text mb-0" [ngClass]="{ 'd-none': isEditName, 'd-inline-block': !isEditName }">{{collection.name}}</h5>
+          </div>
+
+          <div class="position-relative">
+            <img src="assets/images/placeholder_loading.png" [ngClass]="{ 'd-none': !imageLoading }" class="img-fluid" [alt]="collection.name">
+            <img [src]="canvasImageDataUrl || collection.workspaceImageUrl || 'assets/images/workspace_placeholder_with_button.jpg'" [ngClass]="{ 'd-none': imageLoading }"
+              class="workspace-image img-fluid clickable" (click)="!saveLoading && imageFile.click()" [alt]="collection.name">
+            <i *ngIf="imageLoading" class="img-loader position-absolute fa fa-spinner fa-spin fa-3x"></i>
+            <input type="file" (change)="readURL($event)" name="imageFile" #imageFile class="form-control-file d-none" id="inputWorkspaceImage">
+          </div>
         </div>
 
-        <div class="position-relative introjs-daniel" data-step="1" [attr.data-intro]="'intro.step1' | translate">
-          <img src="assets/images/placeholder_loading.png" [ngClass]="{ 'd-none': !imageLoading }" class="img-fluid" [alt]="collection.name">
-          <img [src]="canvasImageDataUrl || collection.workspaceImageUrl || 'assets/images/workspace_placeholder2.png'" [ngClass]="{ 'd-none': imageLoading }"
-            class="workspace-image img-fluid clickable" (click)="!saveLoading && imageFile.click()" [alt]="collection.name">
-          <i *ngIf="imageLoading" class="img-loader position-absolute fa fa-spinner fa-spin fa-3x"></i>
-          <input type="file" (change)="readURL($event)" name="imageFile" #imageFile class="form-control-file d-none" id="inputWorkspaceImage">
-        </div>
-        <div class="purchase-zone introjs-daniel" data-step="5" [attr.data-intro]="'intro.step5' | translate">
+        <div data-step="5" [attr.data-intro]="'intro.step5' | translate">
           <div *ngIf="collectionItems.length > 0 || (introService.isWithinIntro() && introCollectionItems.length > 0)" class="row no-gutters mt-2">
             <div class="col-6 pt-2">
               {{ 'collection.you_have_selected_x_items' | translate:{'items_count':(introService.isWithinIntro() ? introCollectionItems
@@ -85,7 +91,7 @@
       </p>
 
       <ng-container *ngIf="!loadingTags">
-        <div class="introjs-daniel" data-step="2" [attr.data-intro]="'intro.step2' | translate">
+        <div data-step="2" [attr.data-intro]="'intro.step2' | translate">
           <div class="filters-list mt-4">
             <div ngbDropdown class="d-inline-block">
               <button placement="top" ngbTooltip="{{'collection.filter_by_artwork_type' | translate}}" class="btn btn-light" id="dropdownBasic1"
@@ -210,10 +216,31 @@
 
       </div>
       <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Save</button> -->
         <button [disabled]="signupLoading" class="btn btn-primary">{{'common.save' | translate}}</button>
         <i *ngIf="signupLoading" class="fa fa-spinner fa-spin fa-2x align-middle"></i>
       </div>
     </form>
+  </div>
+</ng-template>
+
+<ng-template #workspaceCollectionModal let-c="close" let-d="dismiss">
+  <div [attr.dir]="direction" [ngClass]="direction">
+    <div class="modal-header">
+      <div>
+        <h4 class="modal-title" id="modal-basic-title">{{'collection.workspace_collection_library' | translate}}</h4>
+        <div class="help-block">{{'collection.workspace_collection_library_help_text' | translate}}</div>
+      </div>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div *ngFor="let workspacePreset of workspacePresets" class="col-3 mb-2">
+          <img class="img-fluid clickable" (click)="selectWorkspacePreset(workspacePreset); c('Image selected')" [src]="'assets/images/workspace-presets/' + workspacePreset.image" alt="workspacePreset.name">
+          <p class="h6">{{'workspace_presets.' + workspacePreset.name | translate}}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>

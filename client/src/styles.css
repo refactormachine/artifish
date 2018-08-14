@@ -42,3 +42,7 @@ body {
 .rtl .introjs-tooltipbuttons {
   direction: rtl
 }
+
+.rtl.introjs-tooltip {
+  direction: rtl;
+}

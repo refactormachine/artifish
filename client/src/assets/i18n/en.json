@@ -103,7 +103,10 @@
 		"no_results": "No results",
 		"try_searching_again": "Try searching again or removing filters",
 		"see_pictures_on_wall": "See pictures on wall",
-		"upload_a_photo_of_your_room": "Upload a photo of your room"
+		"upload_a_photo_of_your_room": "Upload a photo of your room",
+		"choose_from_collection": "Choose from collection",
+		"workspace_collection_library": "Workspace Collection Library",
+		"workspace_collection_library_help_text": "Choose a room or colored wall to simulate the room you are working on"
 	},
 	"collections": {
 		"my_collections": "My Saved Projects",
@@ -160,7 +163,7 @@
 		"back": "&larr; Back",
 		"skip": "Skip",
 		"done": "Done",
-		"step1" :"1. Upload a picture of your room or choose one from our library",
+		"step1" :"1. Upload a picture of your room <i class='fa fa-upload'></i> or choose one from our library <i class='fa fa-picture-o'></i>",
 		"step2" :"2. Choose the filter that fits your vision",
 		"step3" :"3. Select the artworks according to your preferred color",
 		"step4" :"4. Pick the artworks that you like",
@@ -170,5 +173,25 @@
 		"step8" :"8. Return to the home page, what will save your collection",
 		"step9" :"9. Continue to purchase and make your design reality",
 		"step10" :"10. Let’s Start!"
+	},
+	"workspace_presets": {
+		"bathroom": "Bathroom",
+		"dress_room": "Dress room",
+		"kitchen": "Kitchen",
+		"living_room": "Living room",
+		"lounge": "Lounge",
+		"seating_area": "Seating area",
+		"working_room": "Working room",
+		"black_wall": "Black wall",
+		"blue_wall": "Blue wall",
+		"gray_wall": "Gray wall",
+		"green_wall": "Green wall",
+		"lilac_wall": "Lilac wall",
+		"orange_wall": "Orange wall",
+		"pink_wall": "Pink wall",
+		"purple_wall": "Purple wall",
+		"red_wall": "Red wall",
+		"white_wall": "White wall",
+		"yellow_wall": "Yellow wall"
 	}
 }

@@ -104,7 +104,10 @@
 		"no_results": "אין תוצאות",
 		"try_searching_again": "נסה לחפש שוב או להסיר חלק מהפילטרים",
 		"see_pictures_on_wall": "סדר תמונות על הקיר",
-		"upload_a_photo_of_your_room": "העלה תמונה של החדר שלך"
+		"upload_a_photo_of_your_room": "העלה תמונה של החדר שלך",
+		"choose_from_collection": "בחר מאוסף קיים",
+		"workspace_collection_library": "תמונות חדרים מוכנות מראש",
+		"workspace_collection_library_help_text": "בחר חדר או צבע קיר כדי לדמות את החדר שאתה עובד עליו"
 	},
 	"collections": {
 		"my_collections": "הפרוייקטים שלי",
@@ -161,7 +164,7 @@
 		"back": "&rarr; הקודם",
 		"skip": "דלג",
 		"done": "סיום",
-		"step1": "1. מעלים תמונה של החדר אותו אתם מעצבים או בוחרים תמונה מתוך הספרייה",
+		"step1": "1. מעלים תמונה של החדר <i class='fa fa-upload'></i> אותו אתם מעצבים או בוחרים תמונה מתוך הספרייה <i class='fa fa-picture-o'></i>",
 		"step2": "2. בוחרים את הפילטרים שמתאים לחזון העיצוב שלכם",
 		"step3": "3. בוחרים את עבודות האומנות לפי הצבע המועדף",
 		"step4": "4. מסמנים את עבודות האומנות אותם אוהבים מתוך המאגר",
@@ -171,5 +174,25 @@
 		"step8": "8. חוזרים לעמוד הבית, מה שישמור גם את עבודתם לתיק העבודות שלכם",
 		"step9": "9. המשיכו לרכישה שתהפוך את עיצוב האומנות שיצרתם למציאות",
 		"step10": "10. בוא נתחיל!"
+	},
+	"workspace_presets": {
+		"bathroom": "חדר אמבטיה",
+		"dress_room": "חדר הלבשה",
+		"kitchen": "מטבח",
+		"living_room": "סלון",
+		"lounge": "טרקלין",
+		"seating_area": "איזור ישיבה",
+		"working_room": "חדר עבודה",
+		"black_wall": "קיר שחור",
+		"blue_wall": "קיר כחול",
+		"gray_wall": "קיר אפור",
+		"green_wall": "קיר ירוק",
+		"lilac_wall": "קיר לילך",
+		"orange_wall": "קיר כתום",
+		"pink_wall": "קיר וורוד",
+		"purple_wall": "קיר סגול",
+		"red_wall": "קיר אדום",
+		"white_wall": "קיר לבן",
+		"yellow_wall": "קיר צהוב"
 	}
 }

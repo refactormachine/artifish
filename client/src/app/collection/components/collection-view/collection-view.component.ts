@@ -35,6 +35,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   collection: any = {};
   collectionItems: any[] = [];
   portfolioItems: any[];
+  workspacePresets = [{ name: 'bathroom', image: 'Bathroom.jpg' }, { name: 'dress_room', image: 'Dress-room.jpg' }, { name: 'kitchen', image: 'Kitchen.jpg' }, { name: 'living_room', image: 'Living-room.jpg' }, { name: 'living_room', image: 'Living-room-2.jpg' }, { name: 'living_room', image: 'Living-room-3.jpg' }, { name: 'lounge', image: 'Lounge.jpg' }, { name: 'seating_area', image: 'Seating-area.jpg' }, { name: 'seating_area', image: 'Seating-area-2.jpg' }, { name: 'working_room', image: 'Working-room.jpg' }, { name: 'black_wall', image: 'Black-wall.jpg' }, { name: 'blue_wall', image: 'Blue-wall.jpg' }, { name: 'gray_wall', image: 'Gray-wall.jpg' }, { name: 'green_wall', image: 'Green-wall.jpg' }, { name: 'lilac_wall', image: 'Lilac-wall.jpg' }, { name: 'orange_wall', image: 'Orange-wall.jpg' }, { name: 'pink_wall', image: 'Pink-wall.jpg' }, { name: 'purple_wall', image: 'Purple-wall.jpg' }, { name: 'red_wall', image: 'Red-wall.jpg' }, { name: 'white_wall', image: 'White-wall.jpg' }, { name: 'yellow_wall', image: 'Yellow-wall.jpg' }];
 
   canvasImageDataUrl: string;
 
@@ -242,7 +243,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     }
   }
 
-  saveCollectionToServer(navigateUrlOnSuccess: string) {
+  saveCollectionToServer(navigateUrlOnSuccess: string, closeModalCallback: () => void = null) {
     let collectionId = this.route.snapshot.paramMap.get('id');
     this.collection.itemsAttributes = this.collectionItems;
     if (collectionId) {
@@ -259,10 +260,12 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
           } else {
             this.router.navigate([navigateUrlOnSuccess]);
           }
+          if (closeModalCallback) closeModalCallback();
         }, (error: AppError) => {
           this.alertService.error(TRANSLATE('collection.error_saving_collection'));
           this.purchaseNavigateLoading = false;
           this.saveLoading = false;
+          if (closeModalCallback) closeModalCallback();
         });
     } else {
       this.collectionService.create(this.collection)
@@ -279,27 +282,28 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
           } else {
             this.router.navigate([navigateUrlOnSuccess]);
           }
+          if (closeModalCallback) closeModalCallback();
         }, (error: AppError) => {
           this.alertService.error(TRANSLATE('collection.error_saving_collection'));
           this.saveLoading = false;
           this.purchaseNavigateLoading = false;
+          if (closeModalCallback) closeModalCallback();
         });
     }
 
   }
 
-  openModal(content) {
-    this.modalService.open(content);
+  openModal(content, options = {}) {
+    this.modalService.open(content, options);
   }
 
-  signupAndSaveCollection(callback: () => void) {
+  signupAndSaveCollection(closeModalCallback: () => void) {
     this.signupLoading = true;
     this.userService.create(this.user)
       .subscribe(
         data => {
-          callback();
           localStorage.setItem("token", data['auth_token']);
-          this.saveCollectionToServer(this.modalNavigateUrlOnSuccess);
+          this.saveCollectionToServer(this.modalNavigateUrlOnSuccess, closeModalCallback);
         },
         (error: AppError) => {
           this.signupLoading = false;
@@ -360,19 +364,34 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
 
   closeCanvasModal(canvasImageDataUrl) {
     this.openModalCanvas = false;
-    this.canvasImageDataUrl = canvasImageDataUrl;
-    this.collection.workspaceImageContents = canvasImageDataUrl;
-    this.collection.workspaceImageUrl = canvasImageDataUrl;
+    if (canvasImageDataUrl) {
+      this.canvasImageDataUrl = canvasImageDataUrl;
+      this.collection.workspaceImageContents = canvasImageDataUrl;
+      this.collection.workspaceImageUrl = canvasImageDataUrl;
+    }
   }
 
-  loginWithGooglePopup(callback: () => void) {
+  loginWithGooglePopup(closeModalCallback: () => void) {
     this.loginLoading = true;
-    this.loginWithPopup(this.authService.loginWithGooglePopup(), callback);
+    this.loginWithPopup(this.authService.loginWithGooglePopup(), closeModalCallback);
   }
 
-  loginWithFacebookPopup(callback: () => void) {
+  loginWithFacebookPopup(closeModalCallback: () => void) {
     this.loginLoading = true;
-    this.loginWithPopup(this.authService.loginWithFacebookPopup(), callback);
+    this.loginWithPopup(this.authService.loginWithFacebookPopup(), closeModalCallback);
+  }
+
+  selectWorkspacePreset(workspacePreset) {
+    let imageUrl = "assets/images/workspace-presets/" + workspacePreset.image;
+    this.imageLoading = true;
+    this.convertImageToBase64(imageUrl).then(dataUrl => {
+      this.collection.workspaceImageUrl = imageUrl;
+      this.collection.workspaceImageContents = dataUrl;
+      this.collection.workspaceImageBareUrl = imageUrl;
+      this.collection.workspaceImageBareContents = dataUrl;
+      this.canvasImageDataUrl = null;
+      this.imageLoading = false;
+    })
   }
 
   private clearCollectionItemsPositions() {
@@ -462,12 +481,11 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     }
   }
 
-  private loginWithPopup(login$: Observable<void>, callback: () => void) {
+  private loginWithPopup(login$: Observable<void>, closeModalCallback: () => void) {
     login$.subscribe(
       () => {
         this.loginLoading = false;
-        callback();
-        this.saveCollectionToServer(this.modalNavigateUrlOnSuccess);
+        this.saveCollectionToServer(this.modalNavigateUrlOnSuccess, closeModalCallback);
       },
       error => {
         this.loginLoading = false;
@@ -477,5 +495,22 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
         } else throw error
       }
     );
+  }
+
+  private convertImageToBase64(imageUrl) {
+    return new Promise((resolve, reject) => {
+      var xmlHTTP = new XMLHttpRequest();
+      xmlHTTP.open('GET', imageUrl, true);
+      xmlHTTP.responseType = 'arraybuffer';
+      xmlHTTP.onload = function (e) {
+        var b64 = btoa(new Uint8Array((e.target as XMLHttpRequest).response).reduce(function (data, byte) {
+          return data + String.fromCharCode(byte);
+        }, ''));
+
+        var dataURL = "data:image/jpeg;base64," + b64;
+        resolve(dataURL);
+      };
+      xmlHTTP.send();
+    });
   }
 }
