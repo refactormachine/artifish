@@ -6,20 +6,22 @@ import * as Konva from 'konva';
   template: `
   <div class="ng-canvas-overlay">
     <div class="ng-canvas-content">
-      <div style="background-color: #ededed;" id="canvasContainer"></div>
+      <div class="uil-ring-css" *ngIf="loading"><div></div></div>
+      <div [ngClass]="{ 'd-none': loading }" style="background-color: #ededed;" id="canvasContainer"></div>
       <a class="close-popup" (click)="closeCanvas()"><i class="fa fa-close"></i></a>
     </div>
   </div>
        `
 })
 export class CanvasModalComponent implements OnInit {
-  public _element:any;
-  public opened:boolean = false;
+  public _element: any;
+  public opened: boolean = false;
   private konvaCollection = { konvaImages: [], htmlImages: [] }
   private stage: Konva.Stage;
+  public loading: boolean = true;
 
   @Input('backgroundImage') public backgroundImage: any;
-  @Input('modalImages') public modalImages:any;
+  @Input('modalImages') public modalImages: any;
   @Output('cancelEvent') cancelEvent = new EventEmitter<any>();
   constructor(public element: ElementRef) {
     this._element = this.element.nativeElement;
@@ -80,6 +82,7 @@ export class CanvasModalComponent implements OnInit {
     layer.add(workspaceImage);
     layer.draw();
 
+    let loadedImages = 0;
     for (let i = 0; i < this.modalImages.length; i++) {
       const modalImage = this.modalImages[i];
       const positionAttributes = modalImage.positionAttributes;
@@ -112,6 +115,9 @@ export class CanvasModalComponent implements OnInit {
         konvaImage.width(imgWidth * ratio);
         konvaImage.height(imgHeight * ratio);
         layer.draw();
+        loadedImages++;
+        if (loadedImages == self.modalImages.length)
+          self.loading = false;
       };
       imageObj.crossOrigin = "anonymous"
       imageObj.src = this.modalImages[i].img;
