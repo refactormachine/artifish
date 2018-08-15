@@ -6,14 +6,14 @@
       <p class="text-center porject-board-help-block mb-1">{{'collection.project_board_hint' | translate}}</p>
 
       <div class="project-section mt-3 sticky-top">
-        <div data-step="1" [attr.data-intro]="('intro.step1' | translate)">
+        <div data-step="1" [attr.data-intro]="('intro.step1' | translate)" data-disable-interaction="true">
           <div class="project-toolbar">
 
             <div class="float-right img-drag-mode" triggers="click:mouseleave" placement="top" ngbTooltip="{{'collection.you_must_set_workspace_picture_first' | translate}}">
               <i [class.disabled]="!canvasImageDataUrl && !collection.workspaceImageUrl" class="img-button img-drag-mode fa fa-arrows float-right clickable"
                 [ngClass]="{ 'd-none': isEditName }" (click)="(canvasImageDataUrl || collection.workspaceImageUrl) && openCanvasModal()"
                 placement="top" ngbTooltip="{{'collection.see_pictures_on_wall' | translate}}" aria-hidden="true"
-                data-step="6" [attr.data-intro]="'intro.step6' | translate"></i>
+                data-step="6" [attr.data-intro]="'intro.step6' | translate" data-disable-interaction="true"></i>
             </div>
 
             <i class="float-right img-button img-save-name fa fa-check float-right clickable" [ngClass]="{ 'd-none': !isEditName }" (click)="editName(false)"
@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div data-step="5" [attr.data-intro]="'intro.step5' | translate">
+        <div data-step="5" [attr.data-intro]="'intro.step5' | translate" data-disable-interaction="true">
           <div *ngIf="collectionItems.length > 0 || (introService.isWithinIntro() && introCollectionItems.length > 0)" class="row no-gutters mt-2">
             <div class="col-6 pt-2">
               {{ 'collection.you_have_selected_x_items' | translate:{'items_count':(introService.isWithinIntro() ? introCollectionItems
@@ -95,7 +95,7 @@
       </p>
 
       <ng-container *ngIf="!loadingTags">
-        <div data-step="2" [attr.data-intro]="'intro.step2' | translate">
+        <div data-step="2" [attr.data-intro]="'intro.step2' | translate" data-disable-interaction="true">
           <div class="filters-list mt-4">
             <div ngbDropdown class="d-inline-block">
               <button placement="top" ngbTooltip="{{'collection.filter_by_artwork_type' | translate}}" class="btn btn-light" id="dropdownBasic1"
@@ -126,7 +126,7 @@
           </div>
         </div>
 
-        <div class="mt-2 mb-3 mx-auto d-table color-table" data-step="3" [attr.data-intro]="'intro.step3' | translate">
+        <div class="mt-2 mb-3 mx-auto d-table color-table" data-step="3" [attr.data-intro]="'intro.step3' | translate" data-disable-interaction="true">
           <div *ngFor="let hexColor of hexColors" class="color clickable d-inline-block" (click)="selectColorFilter(hexColor)" [ngClass]="{ 'active': filters.color == hexColor }"
             [style.backgroundColor]="hexColor">
           </div>
@@ -137,7 +137,7 @@
         <i class="fa fa-spinner fa-spin fa-3x"></i>
       </div>
       <ng-container *ngIf="portfolioItems && portfolioItems.length > 0; else noResults">
-        <div class="row art-stuff" data-step="4" [attr.data-intro]="'intro.step4' | translate">
+        <div class="row art-stuff" data-step="4" [attr.data-intro]="'intro.step4' | translate" data-disable-interaction="true">
           <div *ngFor="let portfolioItem of portfolioItems" class="col-3 mb-2">
             <div class="position-relative">
               <ng-template #popupContent>{{'collection.drag_image_warning_text' | translate}} <i class='fa fa-arrows'></i> {{'collection.drag_image_warning_text_after_icon' | translate}}</ng-template>
