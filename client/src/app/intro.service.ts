@@ -33,8 +33,8 @@ export class IntroService {
           scrollToElement: options['scrollToElement'] || false
         });
 
-        intro.onexit(this.onEnd);
-        intro.oncomplete(this.onEnd);
+        intro.onexit(this.onEnd.bind(this));
+        intro.oncomplete(this.onEnd.bind(this));
         intro.onchange(ele => {
           this.step = parseInt(ele.dataset.step, 10);
         });

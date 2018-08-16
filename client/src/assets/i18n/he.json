@@ -28,7 +28,8 @@
 		"last_name_is_required": "יש למלא שם משפחה",
 		"name_is_required": "יש למלא שם",
 		"a_valid_email_is_required": "יש למלא מייל חוקי",
-		"phone_number_is_required": "יש למלא מספר טלפון"
+		"phone_number_is_required": "יש למלא מספר טלפון",
+		"start": "התחל"
 	},
 	"contact_us": {
 		"get_in_touch": "צור קשר",
@@ -40,7 +41,10 @@
 		"message_is_required": "יש לכתוב הודעה"
 	},
 	"home": {
-		"welcome_to_artista": "ברוך הבא ל Artifish"
+		"welcome_to_artista": "ברוך הבא ל Artifish",
+		"whats_your_vision?": "מה החזון שלך?",
+		"whats_your_vision_text": "כלי אינטרנטי למעצבי פנים, מוצא את האומנות המתאימה ביותר לחלל אותו אתה מעצב בעזרת אלגוריתם ויזואלי והעדפות אישיות",
+		"take_a_tour": "קח אותי לסיור"
 	},
 	"sign_up": {
 		"confirm_password": "סיסמא לאימות",

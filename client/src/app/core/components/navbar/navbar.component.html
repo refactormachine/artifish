@@ -17,6 +17,9 @@
             </a>
           </li>
         </ng-container>
+        <li *ngIf="router.url.startsWith('/collections/') || router.url === '/start'" class="nav-item" (click)='startTour()'>
+          <a class="nav-link clickable">{{'navbar.start_tour' | translate}}</a>
+        </li>
       </ul>
       <ul class="navbar-nav">
         <ng-template #annonymousUser>
@@ -34,9 +37,6 @@
         </li>
         <li class="nav-item" routerLinkActive="active" (click)='close()'>
           <a routerLink="/contact-us" class="nav-link">{{'navbar.contact_us' | translate}}</a>
-        </li>
-        <li class="nav-item" (click)='startTour()'>
-          <a class="nav-link clickable">{{'navbar.start_tour' | translate}}</a>
         </li>
       </ul>
     </div>

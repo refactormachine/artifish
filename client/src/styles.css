@@ -26,6 +26,14 @@ body {
   background-color: #000;
 }
 
+.home-background {
+  background-image: url('/assets/images/home-background.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: 70px;
+}
+
 .ontop-overlay {
   z-index: 9999999 !important;
 }

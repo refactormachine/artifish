@@ -12,7 +12,10 @@ import { IntroService } from '../../../intro.service';
 export class NavbarComponent {
   show: boolean = false;
 
-  constructor(public authService: AuthService, private router: Router, private introService: IntroService) { }
+  constructor(
+    public authService: AuthService,
+    public router: Router,
+    private introService: IntroService) { }
 
   toggleCollapse() {
     this.show = !this.show;

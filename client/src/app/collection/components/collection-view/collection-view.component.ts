@@ -95,9 +95,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     private introService: IntroService,
   ) {
     this.direction = environment.rtl ? "rtl" : "ltr";
-    introService.clickOnDisabledAreaEvent.subscribe(step => {
-      this.clickOnIntroDisabledArea(step, this);
-    })
+    introService.clickOnDisabledAreaEvent.subscribe(this.clickOnIntroDisabledArea.bind(this));
   }
 
   @HostListener('window:beforeunload')
@@ -116,6 +114,14 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       this.portfolioItemsTotalEntries = res.totalEntries;
       this.searchLoading = false;
     })
+  }
+
+  ngAfterViewInit() {
+    if (this.dataService.data.startWithTour)
+      setTimeout(() => {
+        this.dataService.data.startWithTour = false;
+        this.introService.startTour();
+      }, 100);
   }
 
   canDeactivate() {
@@ -513,18 +519,18 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     );
   }
 
-  private clickOnIntroDisabledArea(step: number, self: CollectionViewComponent) {
-    if (self.skipTourModalRef) return;
-    self.skipTourModalRef = self.modalService.open(SkipTourModalContentComponent, { backdropClass: 'd-none', windowClass: 'ontop-overlay' });
-    self.skipTourModalRef.result.catch(res => self.skipTourModalRef = null);
+  private clickOnIntroDisabledArea(step: number) {
+    if (this.skipTourModalRef) return;
+    this.skipTourModalRef = this.modalService.open(SkipTourModalContentComponent, { backdropClass: 'd-none', windowClass: 'ontop-overlay' });
+    this.skipTourModalRef.result.catch(res => this.skipTourModalRef = null);
     const closeModal = () => {
-      if (!self.skipTourModalRef) return;
-      self.skipTourModalRef.close("Closed Intro Tour");
-      self.skipTourModalRef = null;
+      if (!this.skipTourModalRef) return;
+      this.skipTourModalRef.close("Closed Intro Tour");
+      this.skipTourModalRef = null;
     }
-    self.introService.addOnExitCallback(closeModal);
-    self.introService.addOnEndCallback(closeModal);
-    self.introService.addOnChangeCallback(closeModal);
+    this.introService.addOnExitCallback(closeModal);
+    this.introService.addOnEndCallback(closeModal);
+    this.introService.addOnChangeCallback(closeModal);
   }
 
   private convertImageToBase64(imageUrl) {

@@ -27,7 +27,8 @@
 		"last_name_is_required": "Last Name is required",
 		"name_is_required": "Name is required",
 		"a_valid_email_is_required": "A valid email is required",
-		"phone_number_is_required": "Phone Number is required"
+		"phone_number_is_required": "Phone Number is required",
+		"start": "Start"
 	},
 	"contact_us": {
 		"get_in_touch": "Get In Touch",
@@ -39,7 +40,10 @@
 		"message_is_required": "Message is required"
 	},
 	"home": {
-		"welcome_to_artista": "Welcome to Artifish"
+		"welcome_to_artista": "Welcome to Artifish",
+		"whats_your_vision?": "What's your vision?",
+		"whats_your_vision_text": "Online tool for interior designers, matches the most suitable artwork for their space throug a visual algorithm and personal preferences",
+		"take_a_tour": "Take a tour"
 	},
 	"sign_up": {
 		"confirm_password": "Confirm Password",

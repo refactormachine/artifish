@@ -24,7 +24,7 @@ import { MaterialService } from './services/material.service';
     AuthModule,
     NgbModule.forRoot(),
     RouterModule.forChild([
-      { path: '', component: CollectionViewComponent, canDeactivate: [SaveCollectionDataGuard] },
+      { path: 'start', component: CollectionViewComponent, canDeactivate: [SaveCollectionDataGuard] },
       { path: 'collections', component: CollectionsComponent, canActivate: [AuthGuard, VerifiedUserGuard] },
       { path: 'collections/:id', component: CollectionViewComponent, canActivate: [AuthGuard, VerifiedUserGuard], canDeactivate: [SaveCollectionDataGuard] },
       { path: 'collections/:id/purchase', component: PurchaseComponent, canActivate: [AuthGuard, VerifiedUserGuard] },

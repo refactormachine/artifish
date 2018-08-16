@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '../../../../../node_modules/@ng-bootstrap/ng-bootstrap';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-skip-tour-modal-content',
@@ -15,11 +16,10 @@ import { NgbActiveModal } from '../../../../../node_modules/@ng-bootstrap/ng-boo
     </div>
   `
 })
-export class SkipTourModalContentComponent implements OnInit {
+export class SkipTourModalContentComponent {
+  direction: string;
 
-  constructor(public activeModal: NgbActiveModal) { }
-
-  ngOnInit() {
+  constructor(public activeModal: NgbActiveModal) {
+    this.direction = environment.rtl ? "rtl" : "ltr";
   }
-
 }

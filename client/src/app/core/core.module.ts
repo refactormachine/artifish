@@ -14,6 +14,7 @@ import { LocationService } from './services/location.service';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { ContactUsService } from './services/contact-us.service';
 import { SkipTourModalContentComponent } from './components/skip-tour-modal-content/skip-tour-modal-content.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { SkipTourModalContentComponent } from './components/skip-tour-modal-cont
     CustomFormsModule,
     NgbModule.forRoot(),
     RouterModule.forChild([
+      { path: '', component: HomeComponent },
       { path: 'login', component: LoginComponent },
       { path: 'signup', component: SignUpComponent },
       { path: 'contact-us', component: ContactUsComponent },
@@ -32,7 +34,8 @@ import { SkipTourModalContentComponent } from './components/skip-tour-modal-cont
     LoginComponent,
     SignUpComponent,
     ContactUsComponent,
-    SkipTourModalContentComponent
+    SkipTourModalContentComponent,
+    HomeComponent
   ],
   providers: [
     UserService,

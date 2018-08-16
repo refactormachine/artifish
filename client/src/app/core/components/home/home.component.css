@@ -1,0 +1,25 @@
+.text-section {
+  margin-left: 40px;
+  margin-top: 70px;
+}
+
+.text-section p {
+  max-width: 30%;
+  font-size: 1.2rem;
+}
+
+.text-section h1 {
+  max-width: 50%;
+}
+
+.btn-start {
+  color: white;
+  background-color: #8247ff;
+  padding-left: 35px;
+  padding-right: 35px;
+  border-radius: 8px;
+}
+
+.btn-start:hover {
+  background-color: #6a28fa;
+}
