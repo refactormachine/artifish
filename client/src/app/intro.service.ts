@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { IntroJs } from 'intro.js';
 import { TranslateService } from '../../node_modules/@ngx-translate/core';
 import { TRANSLATE } from './translation-marker';
@@ -6,10 +6,13 @@ import { environment } from '../environments/environment';
 
 @Injectable()
 export class IntroService {
+  @Output('clickOnDisabledArea') clickOnDisabledAreaEvent = new EventEmitter<number>();
+  public step: number;
+
   private _introInstance: IntroJs;
   private callbacks: Callbacks;
-  public step: number;
   private withinIntro = false;
+
 
   isWithinIntro() {
     return this.withinIntro;
@@ -18,6 +21,7 @@ export class IntroService {
   constructor(private translateService: TranslateService) {}
 
   startTour (options = {}) {
+    let self = this;
     this.translateService.get([TRANSLATE('intro.next'), TRANSLATE('intro.back'), TRANSLATE('intro.skip'), TRANSLATE('intro.done')]).subscribe(
       res => {
         const intro: IntroJs = introJs().setOptions({
@@ -34,6 +38,9 @@ export class IntroService {
         intro.onchange(ele => {
           this.step = parseInt(ele.dataset.step, 10);
         });
+        intro.onafterchange(ele => {
+          (document.querySelector('.introjs-disableInteraction') as HTMLElement).onclick = this.onDisabledInteractionClick.bind(self);
+        })
 
         this._introInstance = intro;
 
@@ -44,16 +51,27 @@ export class IntroService {
     );
   }
   // this hack allows other views to add the callbacks needed for the tour to work
-  addActionsFromApp(callbacks: Callbacks) {
-    this.callbacks = callbacks;
+  addOnChangeCallback(onChange) {
+    this._introInstance.onchange(onChange);
   }
-  onEnd = () => {
+  addOnEndCallback(onEnd: Function) {
+    this._introInstance.oncomplete(onEnd);
+  }
+  addOnExitCallback(onExit: Function) {
+    this._introInstance.onexit(onExit);
+  }
+  private onEnd() {
     document.body.classList.remove('withinIntro');
     this.withinIntro = false;
+  }
+  private onDisabledInteractionClick(e) {
+    this.clickOnDisabledAreaEvent.emit(this.step);
+    return true;
   }
 }
 
 interface Callbacks {
-  activateFakeCollection: Function;
-  deactivateFakeCollection: Function;
+  onExit?: Function;
+  onComplete?: Function;
+  onChange?: Function;
 }

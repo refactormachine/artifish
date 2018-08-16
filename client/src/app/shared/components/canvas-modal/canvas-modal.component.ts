@@ -34,8 +34,7 @@ export class CanvasModalComponent implements OnInit {
   closeCanvas() {
     this.opened = false;
     if (this.stage) {
-      this.stage.find('Transformer').destroy();
-      (this.stage.find('Layer')[0] as Konva.Layer).draw();
+      this.destroyTransformer();
       let canvas = document.getElementsByTagName("canvas")[0]
       var jpegUrl = canvas.toDataURL("image/jpeg");
       this.cancelEvent.emit(jpegUrl);
@@ -94,12 +93,14 @@ export class CanvasModalComponent implements OnInit {
     for (let i = 0; i < this.modalImages.length; i++) {
       const modalImage = this.modalImages[i];
       const positionAttributes = modalImage.positionAttributes;
-      x = 60 + (100 * imageIndex);
-      imageIndex++;
-      if (x > width - 100) {
-        x = 60;
-        y += 150;
-        imageIndex = 0;
+      if (!positionAttributes.x) {
+        x = 60 + (100 * imageIndex);
+        imageIndex++;
+        if (x > width - 100) {
+          x = 60;
+          y += 150;
+          imageIndex = 0;
+        }
       }
       var konvaImage = new Konva.Image({
         x: positionAttributes.x || x,
@@ -109,6 +110,10 @@ export class CanvasModalComponent implements OnInit {
         rotation: positionAttributes.rotation || 0,
         name: 'image',
         draggable: true,
+        shadowColor: 'black',
+        shadowBlur: 9,
+        shadowOffset: { x: 0, y: 2 },
+        shadowOpacity: 0.25,
         image: new Image()
       });
       konvaImage.on('dragmove', function(e) {
@@ -117,6 +122,13 @@ export class CanvasModalComponent implements OnInit {
       konvaImage.on('transformend', function(e) {
         self.savePositionAttributes(modalImage, e.target.getAttrs());
       })
+      konvaImage.on('mouseenter', function () {
+        stage.container().style.cursor = 'pointer';
+      });
+      konvaImage.on('mouseleave', function () {
+        stage.container().style.cursor = 'default';
+      });
+
       let self = this;
       this.konvaCollection.konvaImages.push(konvaImage);
       layer.add(konvaImage);
@@ -141,14 +153,13 @@ export class CanvasModalComponent implements OnInit {
       this.konvaCollection.htmlImages.push(imageObj);
     }
 
-    stage.on('click', function (e) {
+    let onStageClickOrTap = function (e) {
       // if click on empty area - remove all transformers
       if ((e.target as any) === stage || e.target.hasName('workspaceImage')) {
         stage.find('Transformer').destroy();
         layer.draw();
         return;
       }
-
       // do nothing if clicked NOT on our rectangles
       if (!e.target.hasName('image')) {
         return;
@@ -171,7 +182,10 @@ export class CanvasModalComponent implements OnInit {
       layer.add(tr);
       tr.attachTo(e.target);
       layer.draw();
-    })
+    };
+    stage.on('click', onStageClickOrTap);
+    stage.on('tap', onStageClickOrTap);
+
     let konvaContent = document.getElementsByClassName("konvajs-content");
     (konvaContent[0] as any).style.top = `${centerY}px`;
   }
@@ -198,7 +212,13 @@ export class CanvasModalComponent implements OnInit {
       }
     });
     layer.add(tr);
+    console.log(konvaImage);
     tr.attachTo(konvaImage);
     layer.draw();
+  }
+
+  private destroyTransformer() {
+    this.stage.find('Transformer').destroy();
+    (this.stage.find('Layer')[0] as Konva.Layer).draw();
   }
 }

@@ -1,7 +1,7 @@
 import * as Konva from 'konva';
 import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../../auth/services/auth.service';
@@ -20,12 +20,13 @@ import { Observable } from 'rxjs/Observable';
 import { OAuthAccessDenied, OAuthCanceled } from '../../../auth/models/oauth-errors';
 import { MaterialService } from '../../services/material.service';
 import { IntroService } from '../../../intro.service';
+import { SkipTourModalContentComponent } from '../../../core/components/skip-tour-modal-content/skip-tour-modal-content.component';
 
 @Component({
   selector: 'app-collection-view',
   templateUrl: './collection-view.component.html',
   styleUrls: ['./collection-view.component.css'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class CollectionViewComponent implements OnInit, CollectionViewComponentCanDeactivate {
   direction: string;
@@ -69,6 +70,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   canvasImages: any[] = [];
   konvaCollection = {konvaImages: [], htmlImages: []}
 
+  skipTourModalRef: NgbModalRef;
   introCollectionItems = [{
     portfolioItemId: 0,
     name: 'Sky',
@@ -93,6 +95,9 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     private introService: IntroService,
   ) {
     this.direction = environment.rtl ? "rtl" : "ltr";
+    introService.clickOnDisabledAreaEvent.subscribe(step => {
+      this.clickOnIntroDisabledArea(step, this);
+    })
   }
 
   @HostListener('window:beforeunload')
@@ -482,7 +487,11 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       return confirm(this.translate.instant(TRANSLATE("collection.discard_unsaved_changes")));
     } else {
       if (this.dataService.data.collectionData) {
-        localStorage.setItem('collectionData', JSON.stringify(this.dataService.data.collectionData));
+        try {
+          localStorage.setItem('collectionData', JSON.stringify(this.dataService.data.collectionData));
+        } catch (error) {
+          // Happens when choosing to big image as workspace image. Don't save in local storage in that case
+        }
       }
       return true;
     }
@@ -502,6 +511,20 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
         } else throw error
       }
     );
+  }
+
+  private clickOnIntroDisabledArea(step: number, self: CollectionViewComponent) {
+    if (self.skipTourModalRef) return;
+    self.skipTourModalRef = self.modalService.open(SkipTourModalContentComponent, { backdropClass: 'd-none', windowClass: 'ontop-overlay' });
+    self.skipTourModalRef.result.catch(res => self.skipTourModalRef = null);
+    const closeModal = () => {
+      if (!self.skipTourModalRef) return;
+      self.skipTourModalRef.close("Closed Intro Tour");
+      self.skipTourModalRef = null;
+    }
+    self.introService.addOnExitCallback(closeModal);
+    self.introService.addOnEndCallback(closeModal);
+    self.introService.addOnChangeCallback(closeModal);
   }
 
   private convertImageToBase64(imageUrl) {

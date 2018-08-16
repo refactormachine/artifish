@@ -117,6 +117,10 @@
 		"there_are_no_saved_collections": "There are not any saved projects",
 		"add_collection": "New project"
 	},
+	"core": {
+		"eager_to_start?": "Eager to start?",
+		"you_can_skip_the_tour_message": "You can skip the tour with the skip button. We won't be offended!"
+	},
 	"purchase": {
 		"pay_with_paypal": "Make a Payment",
 		"city_is_required": "City is required",

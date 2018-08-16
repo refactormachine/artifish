@@ -1,3 +1,11 @@
-.app-navbar .navbar-nav .nav-link{
+.app-navbar .navbar-nav .nav-link {
   color: #000000;
+}
+
+nav.navbar {
+  -webkit-box-shadow: 0 0px 12px 2px #b1b1b1;
+  -moz-box-shadow: 0 0px 12px 2px #b1b1b1;
+  box-shadow: 0 0px 12px 2px #b1b1b1;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }

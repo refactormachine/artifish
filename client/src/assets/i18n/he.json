@@ -118,6 +118,10 @@
 		"there_are_no_saved_collections": "לא קיימים פרוייקטים שמורים",
 		"add_collection": "צור פרוייקט"
 	},
+	"core": {
+		"eager_to_start?": "משתוקק להתחיל?",
+		"you_can_skip_the_tour_message": "אתה יכול לדלג על הסיור על ידי לחיצה על הכפתור 'דלג'. אנחנו לא נעלב!"
+	},
 	"purchase": {
 		"pay_with_paypal": "לתשלום",
 		"city_is_required": "יש למלא עיר",

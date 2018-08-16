@@ -6,11 +6,11 @@
       <p class="text-center porject-board-help-block mb-1">{{'collection.project_board_hint' | translate}}</p>
 
       <div class="project-section mt-3 sticky-top">
-        <div data-step="1" [attr.data-intro]="('intro.step1' | translate)" data-disable-interaction="true">
+        <div class="workspace-image-section" data-step="1" [attr.data-intro]="('intro.step1' | translate)" data-disable-interaction="true">
           <div class="project-toolbar">
 
-            <div class="float-right img-drag-mode" triggers="click:mouseleave" placement="top" ngbTooltip="{{'collection.you_must_set_workspace_picture_first' | translate}}">
-              <i [class.disabled]="!canvasImageDataUrl && !collection.workspaceImageUrl" class="img-button img-drag-mode fa fa-arrows float-right clickable"
+            <div id="dragButton" class="float-right img-drag-mode" triggers="click:mouseleave" placement="top" ngbTooltip="{{'collection.you_must_set_workspace_picture_first' | translate}}">
+              <i [class.disabled]="!canvasImageDataUrl && !collection.workspaceImageUrl" class="img-button img-drag-mode fa fa-arrows float-right clickable position-relative"
                 [ngClass]="{ 'd-none': isEditName }" (click)="(canvasImageDataUrl || collection.workspaceImageUrl) && openCanvasModal()"
                 placement="top" ngbTooltip="{{'collection.see_pictures_on_wall' | translate}}" aria-hidden="true"
                 data-step="6" [attr.data-intro]="'intro.step6' | translate" data-disable-interaction="true"></i>
@@ -42,12 +42,12 @@
             <h5 class="collection-name editable-text mb-0" [ngClass]="{ 'd-none': isEditName, 'd-inline-block': !isEditName }">{{collection.name}}</h5>
           </div>
 
-          <div class="position-relative">
+          <div class="position-relative text-center">
             <img src="assets/images/placeholder_loading.png" [ngClass]="{ 'd-none': !imageLoading }" class="img-fluid" [alt]="collection.name">
-            <img [src]="canvasImageDataUrl || collection.workspaceImageUrl || 'assets/images/workspace_placeholder_with_button.jpg'" [ngClass]="{ 'd-none': imageLoading }"
-              class="workspace-image img-fluid clickable" (click)="!saveLoading && imageFile.click()" [alt]="collection.name">
+            <img [appBlackoutHighlight]="canvasImageDataUrl || collection.workspaceImageUrl" elementIdToHighlight="dragButton" [src]="canvasImageDataUrl || collection.workspaceImageUrl || 'assets/images/workspace_placeholder_with_button.jpg'" [ngClass]="{ 'd-none': imageLoading, 'clickable': !canvasImageDataUrl && !collection.workspaceImageUrl }"
+              class="workspace-image img-fluid" (click)="!saveLoading && !canvasImageDataUrl && !collection.workspaceImageUrl && imageFile.click()" [alt]="collection.name">
             <i *ngIf="imageLoading" class="img-loader position-absolute fa fa-spinner fa-spin fa-3x"></i>
-            <input type="file" (change)="readURL($event)" name="imageFile" #imageFile class="form-control-file d-none" id="inputWorkspaceImage">
+            <input type="file" (input)="readURL($event); imageFile.value = ''" name="imageFile" #imageFile class="form-control-file d-none" id="inputWorkspaceImage">
           </div>
         </div>
 
@@ -133,13 +133,13 @@
         </div>
       </ng-container>
 
-      <div *ngIf="searchLoading" class="row">
+      <div *ngIf="searchLoading" class="row no-gutters">
         <i class="fa fa-spinner fa-spin fa-3x"></i>
       </div>
       <ng-container *ngIf="portfolioItems && portfolioItems.length > 0; else noResults">
         <div class="row art-stuff" data-step="4" [attr.data-intro]="'intro.step4' | translate" data-disable-interaction="true">
           <div *ngFor="let portfolioItem of portfolioItems" class="col-3 mb-2">
-            <div class="position-relative">
+            <div class="portfolio-item-img-container position-relative">
               <ng-template #popupContent>{{'collection.drag_image_warning_text' | translate}} <i class='fa fa-arrows'></i> {{'collection.drag_image_warning_text_after_icon' | translate}}</ng-template>
               <img [src]="portfolioItem.thumbUrl" class="portfolio-item-img img-fluid clickable" [ngClass]="{ 'selected-image': portfolioItem.selected }"
                triggers="dragstart:dragend" placement="top" popoverTitle="{{'collection.got_confused' | translate}}" [ngbPopover]="popupContent"
@@ -243,8 +243,9 @@
     <div class="modal-body">
       <div class="row">
         <div *ngFor="let workspacePreset of workspacePresets" class="col-3 mb-2">
-          <img class="img-fluid clickable" (click)="selectWorkspacePreset(workspacePreset); c('Image selected')" [src]="'assets/images/workspace-presets/' + workspacePreset.image" alt="workspacePreset.name">
-          <p class="h6">{{'workspace_presets.' + workspacePreset.name | translate}}</p>
+          <img class="img-fluid clickable" (click)="selectWorkspacePreset(workspacePreset); c('Image selected')" [src]="'assets/images/workspace-presets/' + workspacePreset.image"
+            alt="{{workspacePreset.name}}">
+          <div>{{'workspace_presets.' + workspacePreset.name | translate}}</div>
         </div>
       </div>
     </div>

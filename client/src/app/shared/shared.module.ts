@@ -10,6 +10,7 @@ import { AlertService } from './services/alert.service';
 import { DataService } from './services/data.service';
 import { ImageModalComponent } from './components/image-modal/image-modal.component';
 import { CanvasModalComponent } from './components/canvas-modal/canvas-modal.component';
+import { BlackoutHighlightDirective } from './directives/blackout-highlight.directive';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { CanvasModalComponent } from './components/canvas-modal/canvas-modal.com
   declarations: [
     AlertComponent,
     ImageModalComponent,
-    CanvasModalComponent
+    CanvasModalComponent,
+    BlackoutHighlightDirective
   ],
   exports: [
     AlertComponent,
@@ -40,7 +42,8 @@ import { CanvasModalComponent } from './components/canvas-modal/canvas-modal.com
     CommonModule,
     HttpClientModule,
     FormsModule,
-    TranslateModule
+    TranslateModule,
+    BlackoutHighlightDirective
   ]
 })
 export class SharedModule { }

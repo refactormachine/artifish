@@ -13,6 +13,7 @@ import { VerifiedUserGuard } from './services/verified-user-guard.service';
 import { LocationService } from './services/location.service';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { ContactUsService } from './services/contact-us.service';
+import { SkipTourModalContentComponent } from './components/skip-tour-modal-content/skip-tour-modal-content.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { ContactUsService } from './services/contact-us.service';
     NavbarComponent,
     LoginComponent,
     SignUpComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    SkipTourModalContentComponent
   ],
   providers: [
     UserService,
@@ -40,6 +42,7 @@ import { ContactUsService } from './services/contact-us.service';
   ],
   exports: [
     NavbarComponent,
-  ]
+  ],
+  entryComponents: [SkipTourModalContentComponent]
 })
 export class CoreModule { }

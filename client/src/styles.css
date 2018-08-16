@@ -6,10 +6,32 @@
 @import "~font-awesome/css/font-awesome.css";
 @import "~bootstrap-social/bootstrap-social.css";
 @import "~intro.js/introjs.css";
+@import "~roboto-fontface/css/roboto/roboto-fontface.css";
 body {
   padding-top: 80px;
   padding-bottom: 10px;
-  font-family: sans-serif
+  font-family: 'Roboto', sans-serif;
+}
+
+#appBlackoutHightlightOverlay {
+  display: none;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  position: fixed;
+  opacity: 0.7;
+  box-sizing: content-box;
+  z-index: 999999;
+  background-color: #000;
+}
+
+.ontop-overlay {
+  z-index: 9999999 !important;
+}
+
+.withinIntro .sticky-top {
+  position: initial;
 }
 
 .clickable:not(.disabled) {
@@ -37,6 +59,11 @@ body {
 
 .tooltip-inner {
   min-width: 100px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.popover {
+  font-family: 'Roboto', sans-serif;
 }
 
 .rtl .introjs-tooltipbuttons {
@@ -47,7 +74,7 @@ body {
   direction: rtl;
 }
 
-.introjs-nextbutton:not(.introjs-disabled) {
+.introjs-nextbutton:not(.introjs-disabled), .introjs-donebutton:not(.introjs-disabled) {
   background-color: #28af59;
   background-image: -webkit-gradient(linear, top left, bottom left, color-stop(0, #2ec866), color-stop(1, #28af59));
   background-image: -webkit-linear-gradient(top, #2ec866, #28af59);
