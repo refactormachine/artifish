@@ -9,7 +9,7 @@
   transform: translate(-50%, -50%)
 }
 
-.portfolio-item-img, .colleciton-image {
+.portfolio-item-img, .collection-image, .workspace-image {
   user-drag: none;
   user-select: none;
   -moz-user-select: none;

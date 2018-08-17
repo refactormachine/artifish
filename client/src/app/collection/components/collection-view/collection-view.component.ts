@@ -1,5 +1,5 @@
 import * as Konva from 'konva';
-import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -66,9 +66,11 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
 
   openModalImage: boolean = false;
   openModalCanvas: boolean = false;
+  hideCanvas: boolean = true;
   modalImages: any[] = [];
   canvasImages: any[] = [];
-  konvaCollection = {konvaImages: [], htmlImages: []}
+  konvaCollection = {konvaImages: [], htmlImages: []};
+  collectionItemRemovedEvent = new EventEmitter<any>();
 
   skipTourModalRef: NgbModalRef;
   introCollectionItems = [{
@@ -183,17 +185,19 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     if (portfolioItem.selected) {
       this.collectionItems.push(portfolioItem);
     } else {
-      this.removeCollectionItemById(portfolioItem);
+      this.removeCollectionItem(portfolioItem);
     }
     this.unsavedChanges = true;
   }
 
-  removeCollectionItemById(portfolioItem) {
+  removeCollectionItem(portfolioItem, fireEvent = true) {
     let index = this.collectionItems.indexOf(portfolioItem);
     if (index == -1) return;
     this.collectionItems.splice(index, 1);
     this.unsavedChanges = true;
     portfolioItem.selected = false;
+    if (fireEvent)
+      this.collectionItemRemovedEvent.emit(portfolioItem);
   }
 
   readURL(event): void {
@@ -361,12 +365,22 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   }
 
   openCanvasModal() {
-    this.canvasImages = [];
-    for (let i = 0; i < this.collectionItems.length; i++) {
-      const item = this.collectionItems[i];
-      this.canvasImages.push({ img: item.imageUrl, positionAttributes: item.positionAttributes || {}, collectionItem: item });
-    }
-    this.openModalCanvas = true;
+    this.unsavedChanges = true;
+    this.recreateCanvas(true);
+    this.hideCanvas = false;
+  }
+
+  recreateCanvas(useAllCollectionItems = false) {
+    this.openModalCanvas = false; // destroy canvas
+    setTimeout(() => {
+      this.openModalCanvas = true; // and recreate canvas
+      this.canvasImages = [];
+      for (let i = 0; i < this.collectionItems.length; i++) {
+        const item = this.collectionItems[i];
+        if (!useAllCollectionItems && !item.positionAttributes) continue; // skip items that were never positioned in canvas unless called with useAllCollectionItems set to true
+        this.canvasImages.push({ img: item.imageUrl, positionAttributes: item.positionAttributes || {}, collectionItem: item });
+      }
+    }, 100);
   }
 
   closeImageModal() {
@@ -374,7 +388,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   }
 
   closeCanvasModal(canvasImageDataUrl) {
-    this.openModalCanvas = false;
+    this.hideCanvas = true;
     if (canvasImageDataUrl) {
       this.canvasImageDataUrl = canvasImageDataUrl;
       this.collection.workspaceImageContents = canvasImageDataUrl;
@@ -441,6 +455,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       this.collectionService.get(collectionId).subscribe(res => {
         this.collection = res;
         this.collectionItems = res.items;
+        this.recreateCanvas();
         this.isLoading = false;
       }, error => {
         this.router.navigate(['/collections']);
@@ -467,6 +482,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       }
     }
     this.dataService.data.collectionData = collectionData;
+    this.recreateCanvas();
   }
 
   private loadTags() {

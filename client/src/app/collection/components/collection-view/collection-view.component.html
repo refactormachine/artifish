@@ -25,7 +25,7 @@
               <i class="fa fa-picture-o img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="openModal(workspaceCollectionModal, {size: 'lg'})"
                 placement="top" ngbTooltip="{{'collection.choose_from_collection' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
 
-            <i class="fa fa-floppy-o img-button float-right img-save clickable" [class.disabled]="(saveLoading || !unsavedChanges) && (collectionItems.length == 0 && !authService.isLoggedIn())"
+            <i class="fa fa-floppy-o img-button float-right img-save clickable" [class.disabled]="(saveLoading || !unsavedChanges) && !authService.isLoggedIn()"
               (click)="!saveLoading && unsavedChanges && saveCollection(saveModal)" [ngClass]="{ 'fa-spinner fa-spin': saveLoading, 'd-none': isEditName }"
               placement="top" ngbTooltip="{{'collection.save_collection' | translate}}" aria-hidden="true"></i>
 
@@ -75,7 +75,7 @@
             <ng-container *ngIf="collectionItems.length > 0 && !introService.isWithinIntro()">
               <div *ngFor="let collectionItem of collectionItems" class="col-md-4 mb-4 px-2 position-relative">
                 <img [src]="collectionItem.thumbUrl" class="img-fluid collection-image" alt="">
-                <i class="fa fa-times-circle position-absolute img-close clickable" (click)="removeCollectionItemById(collectionItem)" aria-hidden="true"></i>
+                <i class="fa fa-times-circle position-absolute img-close clickable" (click)="removeCollectionItem(collectionItem)" aria-hidden="true"></i>
                 <i class="fa fa-search full-image-button clickable float-right" (click)="openImageModal(collectionItem)" aria-hidden="true"></i>
                 <p>{{'collection.starting_at' | translate}}: {{collectionItem.startingPriceFormatted}}</p>
               </div>
@@ -170,7 +170,12 @@
     <ImageModal [modalImages]="modalImages" [imagePointer]="0" (cancelEvent)="closeImageModal()"></ImageModal>
   </div>
   <div *ngIf="openModalCanvas">
-    <CanvasModal [backgroundImage]="collection.workspaceImageBareUrl" [modalImages]="canvasImages" (cancelEvent)="closeCanvasModal($event)"></CanvasModal>
+    <CanvasModal [ngClass]="{ 'd-none': hideCanvas }"
+                 [collectionItemRemovedEvent]="collectionItemRemovedEvent"
+                 [backgroundImage]="collection.workspaceImageBareUrl"
+                 [modalImages]="canvasImages"
+                 (cancelEvent)="closeCanvasModal($event)"
+                 (deleteImage)="removeCollectionItem($event, false)"></CanvasModal>
   </div>
 </ng-container>
 
@@ -187,41 +192,47 @@
     </div>
     <form name="form" (ngSubmit)="f.form.valid && signupAndSaveCollection(c)" #f="ngForm" novalidate>
       <div class="modal-body">
-        <div *ngIf="modalErrorMessage" class="help-block text-danger">{{modalErrorMessage | translate}}</div>
-
-        <div class="form-group">
-          <label for="email">{{'common.email' | translate}}</label>
-          <input type="text" [ngClass]="{ 'is-invalid': f.submitted && (!email.valid || validationErrors.email) }" class="form-control"
-            name="email" [(ngModel)]="user.email" #email="ngModel" required email />
-          <div *ngIf="f.submitted && !email.valid" class="help-block text-danger">{{'common.a_valid_email_is_required' | translate}}</div>
-          <div *ngIf="validationErrors.email">
-            <div *ngFor="let error of validationErrors.email" class="help-block text-danger">{{'common.email' | translate}} {{error | translate}}</div>
-          </div>
+        <div *ngIf="loginLoading" class="text-center">
+          <i class="fa fa-spinner fa-spin fa-3x"></i>
         </div>
-        <div class="form-group">
-          <label for="password">{{'collection.choose_a_password' | translate}}</label>
-          <input type="password" [ngClass]="{ 'is-invalid': f.submitted && (!password.valid || validationErrors.password) }" class="form-control"
-            name="password" [(ngModel)]="user.password" #password="ngModel" required minlength="6" />
-          <div *ngIf="f.submitted && password.errors?.required" class="help-block text-danger">{{'sign_up.password_is_required' | translate}}</div>
-          <div *ngIf="f.submitted && !password.errors?.required && password.errors?.minlength" class="help-block text-danger">{{ 'sign_up.password_should_be_at_least_x_characters' | translate:{'characters':password.errors.minlength.requiredLength}
-            }}
-          </div>
-          <div *ngIf="validationErrors.password">
-            <div *ngFor="let error of validationErrors.password" class="help-block text-danger">{{'common.password' | translate}} {{error}}</div>
-          </div>
-        </div>
+        <ng-container *ngIf="!loginLoading">
+          <div *ngIf="modalErrorMessage" class="help-block text-danger">{{modalErrorMessage | translate}}</div>
 
-        <p>{{'common.or' | translate}}</p>
+          <div class="form-group">
+            <label for="email">{{'common.email' | translate}}</label>
+            <input type="text" [ngClass]="{ 'is-invalid': f.submitted && (!email.valid || validationErrors.email) }" class="form-control"
+              name="email" [(ngModel)]="user.email" #email="ngModel" required email />
+            <div *ngIf="f.submitted && !email.valid" class="help-block text-danger">{{'common.a_valid_email_is_required' | translate}}</div>
+            <div *ngIf="validationErrors.email">
+              <div *ngFor="let error of validationErrors.email" class="help-block text-danger">{{'common.email' | translate}} {{error | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">{{'collection.choose_a_password' | translate}}</label>
+            <input type="password" [ngClass]="{ 'is-invalid': f.submitted && (!password.valid || validationErrors.password) }" class="form-control"
+              name="password" [(ngModel)]="user.password" #password="ngModel" required minlength="6" />
+            <div *ngIf="f.submitted && password.errors?.required" class="help-block text-danger">{{'sign_up.password_is_required' | translate}}</div>
+            <div *ngIf="f.submitted && !password.errors?.required && password.errors?.minlength" class="help-block text-danger">{{ 'sign_up.password_should_be_at_least_x_characters' | translate:{'characters':password.errors.minlength.requiredLength}
+              }}
+            </div>
+            <div *ngIf="validationErrors.password">
+              <div *ngFor="let error of validationErrors.password" class="help-block text-danger">{{'common.password' | translate}} {{error}}</div>
+            </div>
+          </div>
 
-        <button type="button" class="btn btn-social btn-facebook" (click)='loginWithFacebookPopup(c)'>
-          <span class="fa fa-facebook"></span> {{'login.login_with_facebook' | translate}}
-        </button>
-        <button type="button" class="btn btn-social btn-google" (click)='loginWithGooglePopup(c)'>
-          <span class="fa fa-google"></span> {{'login.login_with_google' | translate}}
-        </button>
+          <p>{{'common.or' | translate}}</p>
+
+          <button type="button" class="btn btn-social btn-facebook" (click)='loginWithFacebookPopup(c)'>
+            <span class="fa fa-facebook"></span> {{'login.login_with_facebook' | translate}}
+          </button>
+          <button type="button" class="btn btn-social btn-google" (click)='loginWithGooglePopup(c)'>
+            <span class="fa fa-google"></span> {{'login.login_with_google' | translate}}
+          </button>
+        </ng-container>
+
 
       </div>
-      <div class="modal-footer">
+      <div *ngIf="!loginLoading" class="modal-footer">
         <button [disabled]="signupLoading" class="btn btn-primary">{{'common.save' | translate}}</button>
         <i *ngIf="signupLoading" class="fa fa-spinner fa-spin fa-2x align-middle"></i>
       </div>

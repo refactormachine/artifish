@@ -8,39 +8,65 @@ import * as Konva from 'konva';
     <div class="ng-canvas-content">
       <div class="uil-ring-css" *ngIf="loading"><div></div></div>
       <div [ngClass]="{ 'd-none': loading }" style="background-color: #ededed;" id="canvasContainer"></div>
-      <a class="close-popup" (click)="closeCanvas()"><i class="fa fa-close"></i></a>
+      <a class="canvas-button close-popup" (click)="closeCanvas()"><i class="fa fa-close"></i></a>
+      <a *ngIf="showImageButtons" class="canvas-button delete-image" (click)="deleteImage()"><i class="fa fa-trash"></i></a>
     </div>
   </div>
        `
 })
-export class CanvasModalComponent implements OnInit {
+export class CanvasModalComponent implements AfterViewInit {
   public _element: any;
   public opened: boolean = false;
   private konvaCollection = { konvaImages: [], htmlImages: [] }
+  private konvaImagesToCollectionItem: Map<Konva.Image, any> = new Map<Konva.Image, any>();
   private stage: Konva.Stage;
+  private layer: Konva.Layer;
   public loading: boolean = true;
+  public showImageButtons: boolean = false;
+  private selectedKonvaImage: Konva.Image;
 
   @Input('backgroundImage') public backgroundImage: any;
   @Input('modalImages') public modalImages: any;
+  @Input('collectionItemRemovedEvent') public collectionItemRemovedEvent: EventEmitter<any>;
   @Output('cancelEvent') cancelEvent = new EventEmitter<any>();
+  @Output('deleteImage') deleteImageEvent = new EventEmitter<any>();
   constructor(public element: ElementRef) {
     this._element = this.element.nativeElement;
   }
-  ngOnInit() {
+  ngAfterViewInit() {
     setTimeout(() => {
       this.loadBackgroundImage();
     }, 200);
+    this.collectionItemRemovedEvent.subscribe(this.removeCollectionItem.bind(this));
   }
   closeCanvas() {
     this.opened = false;
     if (this.stage) {
       this.destroyTransformer();
-      let canvas = document.getElementsByTagName("canvas")[0]
-      var jpegUrl = canvas.toDataURL("image/jpeg");
+      var jpegUrl = this.stage.toDataURL({ mimeType: "image/jpeg" });
       this.cancelEvent.emit(jpegUrl);
     } else {
       this.cancelEvent.emit(null);
     }
+  }
+
+  deleteImage() {
+    const collectionItem = this.konvaImagesToCollectionItem.get(this.selectedKonvaImage);
+    this.selectedKonvaImage.destroy();
+    this.destroyTransformer();
+    this.layer.draw();
+
+    this.deleteImageEvent.emit(collectionItem);
+  }
+
+  removeCollectionItem(collectionItem) {
+    this.konvaImagesToCollectionItem.forEach((item, konvaImage) => {
+      if (item == collectionItem) {
+        konvaImage.destroy();
+        this.closeCanvas();
+        return;
+      }
+    })
   }
 
   private loadBackgroundImage() {
@@ -73,7 +99,8 @@ export class CanvasModalComponent implements OnInit {
     });
     this.stage = stage;
 
-    var layer = new Konva.Layer();
+    let layer = new Konva.Layer();
+    this.layer = layer;
     stage.add(layer);
 
     var workspaceImage = new Konva.Image({
@@ -131,6 +158,8 @@ export class CanvasModalComponent implements OnInit {
 
       let self = this;
       this.konvaCollection.konvaImages.push(konvaImage);
+      this.konvaImagesToCollectionItem.set(konvaImage, modalImage.collectionItem);
+      this.savePositionAttributes(modalImage, positionAttributes || {});
       layer.add(konvaImage);
       var imageObj = new Image();
       imageObj.onload = function (e) {
@@ -144,7 +173,7 @@ export class CanvasModalComponent implements OnInit {
         layer.draw();
         loadedImages++;
         if (loadedImages == self.modalImages.length) { // When done loading last image
-          self.createTransformer(layer, konvaImage);
+          self.createTransformer(konvaImage);
           self.loading = false;
         }
       };
@@ -156,8 +185,7 @@ export class CanvasModalComponent implements OnInit {
     let onStageClickOrTap = function (e) {
       // if click on empty area - remove all transformers
       if ((e.target as any) === stage || e.target.hasName('workspaceImage')) {
-        stage.find('Transformer').destroy();
-        layer.draw();
+        this.destroyTransformer();
         return;
       }
       // do nothing if clicked NOT on our rectangles
@@ -166,23 +194,11 @@ export class CanvasModalComponent implements OnInit {
       }
       // remove old transformers
       // TODO: we can skip it if current rect is already selected
-      stage.find('Transformer').destroy();
+      this.destroyTransformer();
 
       // create new transformer
-      var tr = new Konva.Transformer({
-        enabledHandlers: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-        rotationSnaps: [0, 90, 180, 270],
-        boundBoxFunc: function (oldBox, newBox) {
-          if (newBox.width > 400) {
-            return oldBox;
-          }
-          return newBox;
-        }
-      });
-      layer.add(tr);
-      tr.attachTo(e.target);
-      layer.draw();
-    };
+      this.createTransformer(e.target);
+    }.bind(this);
     stage.on('click', onStageClickOrTap);
     stage.on('tap', onStageClickOrTap);
 
@@ -200,7 +216,7 @@ export class CanvasModalComponent implements OnInit {
     }
   }
 
-  private createTransformer(layer, konvaImage) {
+  private createTransformer(konvaImage) {
     var tr = new Konva.Transformer({
       enabledHandlers: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
       rotationSnaps: [0, 90, 180, 270],
@@ -211,14 +227,25 @@ export class CanvasModalComponent implements OnInit {
         return newBox;
       }
     });
-    layer.add(tr);
-    console.log(konvaImage);
+    this.layer.add(tr);
     tr.attachTo(konvaImage);
-    layer.draw();
+    this.layer.draw();
+    this.selectedKonvaImage = konvaImage;
+    this.showButtons();
   }
 
   private destroyTransformer() {
     this.stage.find('Transformer').destroy();
-    (this.stage.find('Layer')[0] as Konva.Layer).draw();
+    this.layer.draw();
+    this.selectedKonvaImage = null;
+    this.hideButtons();
+  }
+
+  private showButtons() {
+    this.showImageButtons = true;
+  }
+
+  private hideButtons() {
+    this.showImageButtons = false;
   }
 }
