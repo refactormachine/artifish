@@ -114,7 +114,8 @@
 		"got_confused": "You got confused!",
 		"drag_image_warning_text": "Click on the image to select it, then click on ",
 		"drag_image_warning_text_after_icon": " in the toolbar to drag it",
-		"you_must_set_workspace_picture_first": "You must set a workspace picture first"
+		"you_must_set_workspace_picture_first": "You must set a workspace picture first",
+		"download_workspace_image": "Download workspace image"
 	},
 	"collections": {
 		"my_collections": "My Saved Projects",

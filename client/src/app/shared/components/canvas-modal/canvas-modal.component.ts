@@ -43,7 +43,8 @@ export class CanvasModalComponent implements AfterViewInit {
     this.opened = false;
     if (this.stage) {
       this.destroyTransformer();
-      var jpegUrl = this.stage.toDataURL({ mimeType: "image/jpeg" });
+      let canvas = document.getElementsByTagName("canvas")[0]
+      var jpegUrl = canvas.toDataURL("image/jpeg");
       this.cancelEvent.emit(jpegUrl);
     } else {
       this.cancelEvent.emit(null);

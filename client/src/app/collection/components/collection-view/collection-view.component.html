@@ -22,8 +22,8 @@
             <i class="fa fa-upload img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="!saveLoading && imageFile.click()"
               placement="top" ngbTooltip="{{'collection.upload_space_image' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
 
-              <i class="fa fa-picture-o img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="openModal(workspaceCollectionModal, {size: 'lg'})"
-                placement="top" ngbTooltip="{{'collection.choose_from_collection' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
+            <i class="fa fa-picture-o img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="openModal(workspaceCollectionModal, {size: 'lg'})"
+              placement="top" ngbTooltip="{{'collection.choose_from_collection' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
 
             <i class="fa fa-floppy-o img-button float-right img-save clickable" [class.disabled]="(saveLoading || !unsavedChanges) && !authService.isLoggedIn()"
               (click)="!saveLoading && unsavedChanges && saveCollection(saveModal)" [ngClass]="{ 'fa-spinner fa-spin': saveLoading, 'd-none': isEditName }"
@@ -33,9 +33,11 @@
               [class.disabled]="saveLoading" (click)="!saveLoading && clearCollection()" placement="top" ngbTooltip="{{'collection.reset_project' | translate}}"
               [ngClass]="{ 'd-none': isEditName }" aria-hidden="true">
 
-            <i class="img-button img-edit-name fa fa-pencil float-right clickable" [ngClass]="{ 'd-none': isEditName }"
-              (click)="editName(true)" placement="top" ngbTooltip="{{'collection.edit_name' | translate}}"
-              aria-hidden="true"></i>
+            <i class="fa fa-download img-button float-right img-download-workspace clickable" [class.disabled]="saveLoading || (!canvasImageDataUrl && !collection.workspaceImageUrl)" (click)="(canvasImageDataUrl || collection.workspaceImageUrl) && downloadWorkspaceImage()"
+              placement="top" ngbTooltip="{{'collection.download_workspace_image' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
+
+            <i class="img-button img-edit-name fa fa-pencil float-right clickable" [ngClass]="{ 'd-none': isEditName }" (click)="editName(true)"
+              placement="top" ngbTooltip="{{'collection.edit_name' | translate}}" aria-hidden="true"></i>
 
             <input type="text" autofocus (keyup.enter)="onBlurCollectionName()" (blur)="onBlurCollectionName()" [(ngModel)]="collection.name"
               name="name" #name id="name" class="form-control" [ngClass]="{ 'd-none': !isEditName }">
@@ -44,7 +46,8 @@
 
           <div class="position-relative text-center">
             <img src="assets/images/placeholder_loading.png" [ngClass]="{ 'd-none': !imageLoading }" class="img-fluid" [alt]="collection.name">
-            <img [appBlackoutHighlight]="canvasImageDataUrl || collection.workspaceImageUrl" elementIdToHighlight="dragButton" [src]="canvasImageDataUrl || collection.workspaceImageUrl || 'assets/images/workspace_placeholder_with_button.jpg'" [ngClass]="{ 'd-none': imageLoading, 'clickable': !canvasImageDataUrl && !collection.workspaceImageUrl }"
+            <img [src]="canvasImageDataUrl || collection.workspaceImageUrl || 'assets/images/workspace_placeholder_with_button.jpg'" [ngClass]="{ 'd-none': imageLoading, 'clickable': !canvasImageDataUrl && !collection.workspaceImageUrl }"
+                 [appBlackoutHighlight]="canvasImageDataUrl || collection.workspaceImageUrl" elementIdToHighlight="dragButton"
               class="workspace-image img-fluid" (click)="!saveLoading && !canvasImageDataUrl && !collection.workspaceImageUrl && imageFile.click()" [alt]="collection.name">
             <i *ngIf="imageLoading" class="img-loader position-absolute fa fa-spinner fa-spin fa-3x"></i>
             <input type="file" (input)="readURL($event); imageFile.value = ''" name="imageFile" #imageFile class="form-control-file d-none" id="inputWorkspaceImage">

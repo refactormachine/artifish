@@ -371,6 +371,8 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   }
 
   recreateCanvas(useAllCollectionItems = false) {
+    if (!this.canvasImageDataUrl && !this.collection.workspaceImageUrl)
+      return;
     this.openModalCanvas = false; // destroy canvas
     setTimeout(() => {
       this.openModalCanvas = true; // and recreate canvas
@@ -565,4 +567,14 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       xmlHTTP.send();
     });
   }
+
+  downloadWorkspaceImage() {
+    var link = document.createElement("a");
+    link.download = this.collection.name + ".jpg";
+    link.href = this.canvasImageDataUrl || this.collection.workspaceImageUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
 }

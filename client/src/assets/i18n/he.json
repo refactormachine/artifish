@@ -115,7 +115,8 @@
 		"got_confused": "נראה שהתבלבלת!",
 		"drag_image_warning_text": "לחץ על התמונה כדי לבחור אותה, לאחר מכן לחץ על ",
 		"drag_image_warning_text_after_icon": " בסרגל הכלים כדי לגרור אותה",
-		"you_must_set_workspace_picture_first": "ראשית עליך לבחור את תמונת החלל"
+		"you_must_set_workspace_picture_first": "ראשית עליך לבחור את תמונת החלל",
+		"download_workspace_image": "הורד תמונה של החלל"
 	},
 	"collections": {
 		"my_collections": "הפרוייקטים שלי",

@@ -68,12 +68,12 @@
   background-color: #dbdbdb;
 }
 
-.img-upload, .img-save, .img-clear, .img-edit-name, .img-save-name, .img-drag-mode {
+.img-button {
   margin-left: 2px;
   margin-right: 2px;
 }
 
-.img-upload.disabled, .img-save.disabled, .img-clear.disabled, .img-drag-mode.disabled {
+.img-button.disabled {
   color: #b2b2b2
 }
 
