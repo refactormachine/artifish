@@ -272,6 +272,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
           this.alertService.error(TRANSLATE('collection.error_saving_collection'));
           this.purchaseNavigateLoading = false;
           this.saveLoading = false;
+          this.loginLoading = false;
           if (closeModalCallback) closeModalCallback();
         });
     } else {
@@ -294,6 +295,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
           this.alertService.error(TRANSLATE('collection.error_saving_collection'));
           this.saveLoading = false;
           this.purchaseNavigateLoading = false;
+          this.loginLoading = false;
           if (closeModalCallback) closeModalCallback();
         });
     }
@@ -527,7 +529,6 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   private loginWithPopup(login$: Observable<void>, closeModalCallback: () => void) {
     login$.subscribe(
       () => {
-        this.loginLoading = false;
         this.saveCollectionToServer(this.modalNavigateUrlOnSuccess, closeModalCallback);
       },
       error => {
