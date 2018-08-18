@@ -93,11 +93,11 @@
       </h2>
       <p class="text-center porject-board-help-block mb-1">{{'collection.explore_artworks_hint' | translate}}</p>
 
-      <p *ngIf="loadingTags">{{'collection.loading_filters' | translate}}...
+      <p *ngIf="loadingFilters">{{'collection.loading_filters' | translate}}...
         <i class="fa fa-spinner fa-spin fa-2x"></i>
       </p>
 
-      <ng-container *ngIf="!loadingTags">
+      <ng-container *ngIf="!loadingFilters">
         <div data-step="2" [attr.data-intro]="'intro.step2' | translate" data-disable-interaction="true">
           <div class="filters-list mt-4">
             <div ngbDropdown class="d-inline-block">
@@ -116,7 +116,7 @@
               <div class="app-arrow arrow-left float-left"></div>
             </div>
 
-            <div *ngIf="!loadingTags" class="horizontal-slide tag-list" id="tagList">
+            <div class="horizontal-slide tag-list" id="tagList">
               <div *ngFor="let tag of tags" class="tag">
                 <button class="btn btn-light" [ngClass]="{ 'btn-dark': isTagSelected(tag) }" placement="top" ngbTooltip="{{'collection.filter_by' | translate}} {{'tags.' + tag.name | translate}}"
                   (click)="selectTagFilter(tag)">{{'tags.' + tag.name | translate}}</button>

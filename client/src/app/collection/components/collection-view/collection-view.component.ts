@@ -1,11 +1,17 @@
-import * as Konva from 'konva';
-import { Component, HostListener, OnInit, ViewEncapsulation, EventEmitter } from '@angular/core';
+import 'rxjs/add/observable/forkJoin';
+
+import { Component, EventEmitter, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs/Observable';
 
+import { environment } from '../../../../environments/environment';
+import { OAuthAccessDenied, OAuthCanceled } from '../../../auth/models/oauth-errors';
 import { AuthService } from '../../../auth/services/auth.service';
+import { SkipTourModalContentComponent } from '../../../core/components/skip-tour-modal-content/skip-tour-modal-content.component';
 import { UserService } from '../../../core/services/user.service';
+import { IntroService } from '../../../intro.service';
 import { AppError } from '../../../shared/models/app-error';
 import { ValidationError } from '../../../shared/models/validation-error';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -13,14 +19,9 @@ import { DataService } from '../../../shared/services/data.service';
 import { TRANSLATE } from '../../../translation-marker';
 import { CollectionViewComponentCanDeactivate } from '../../services/collection-view-can-deactivate.service';
 import { CollectionService } from '../../services/collection.service';
+import { MaterialService } from '../../services/material.service';
 import { PortfolioItemService } from '../../services/portfolio-item.service';
 import { TagService } from '../../services/tag.service';
-import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs/Observable';
-import { OAuthAccessDenied, OAuthCanceled } from '../../../auth/models/oauth-errors';
-import { MaterialService } from '../../services/material.service';
-import { IntroService } from '../../../intro.service';
-import { SkipTourModalContentComponent } from '../../../core/components/skip-tour-modal-content/skip-tour-modal-content.component';
 
 @Component({
   selector: 'app-collection-view',
@@ -52,11 +53,11 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
 
   isLoading: boolean = true;
   searchLoading: boolean = true;
+  loadingFilters: boolean = true;
   saveLoading: boolean = false;
   purchaseNavigateLoading: boolean = false;
   signupLoading: boolean = false;
   imageLoading: boolean = false;
-  loadingTags: boolean = true;
   loginLoading: boolean = false;
 
   isEditName: boolean = false;
@@ -109,21 +110,12 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     this.newVersionInitialization();
     this.initializeCollection();
     this.loadCollection();
-    this.loadTags();
-    this.loadMaterials();
+    this.loadFilters();
     this.portfolioItemService.getRandomly().subscribe(res => {
       this.portfolioItems = res.portfolioItems;
       this.portfolioItemsTotalEntries = res.totalEntries;
       this.searchLoading = false;
     })
-  }
-
-  ngAfterViewInit() {
-    if (this.dataService.data.startWithTour)
-      setTimeout(() => {
-        this.dataService.data.startWithTour = false;
-        this.introService.startTour();
-      }, 100);
   }
 
   canDeactivate() {
@@ -487,23 +479,34 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     this.recreateCanvas();
   }
 
-  private loadTags() {
-    this.tagService.getAll().subscribe(res => {
-      this.tags = res;
-      this.loadingTags = false;
+  private loadFilters() {
+    Observable.forkJoin(
+      this.tagService.getAll(),
+      this.materialService.getAll()
+    ).subscribe(res => {
+      this.tags = res[0];
+      this.setMaterials(res[1]);
+      this.loadingFilters = false;
+      this.startTourIfRequested();
     });
   }
 
-  private loadMaterials() {
-    this.materialService.getAll().subscribe(res => {
-      for (let i = 0; i < res.length; i++) {
-        const materialObj = res[i];
-        if (this.materialTypes.indexOf(materialObj.materialType) == -1)
-          this.materialTypes.push(materialObj.materialType);
-      }
-      if (this.materialTypes.length == 1) this.selectedMaterialType = this.materialTypes[0];
-      this.loadingTags = false;
-    });
+  private setMaterials(materials) {
+    for (let i = 0; i < materials.length; i++) {
+      const materialObj = materials[i];
+      if (this.materialTypes.indexOf(materialObj.materialType) == -1)
+        this.materialTypes.push(materialObj.materialType);
+    }
+    if (this.materialTypes.length == 1) this.selectedMaterialType = this.materialTypes[0];
+  }
+
+  private startTourIfRequested() {
+    if (this.dataService.data.startWithTour) {
+      setTimeout(() => {
+        this.dataService.data.startWithTour = false;
+        this.introService.startTour();
+      }, 100);
+    }
   }
 
   private handleNavigationAway() {
