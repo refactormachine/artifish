@@ -42,6 +42,11 @@ class AuthenticateOauthUser
     user = User.new(user_data.merge(provider: @provider, is_verified: true))
     # Skip validation to not fail on missing password
     user.save!(validate: false)
+    begin
+      ActionLogMailer.user_registered(user).deliver
+    rescue Exception => e
+      Rails.logger.error "Failed to send user_registered email for new user with id #{user.id}"
+    end
     user
   end
 end

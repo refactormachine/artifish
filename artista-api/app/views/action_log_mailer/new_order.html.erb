@@ -1,0 +1,46 @@
+<h1>New order</h1>
+
+<dl>
+  <dt>Order Id</dt>
+  <dd><%= @order.id %></dd>
+  <br>
+  <dt>First name</dt>
+  <dd><%= @order.first_name %></dd>
+  <br>
+  <dt>Last name</dt>
+  <dd><%= @order.last_name %></dd>
+  <br>
+  <dt>City</dt>
+  <dd><%= @order.city %></dd>
+  <br>
+  <dt>Address</dt>
+  <dd><%= @order.address %></dd>
+  <br>
+  <dt>Zip code</dt>
+  <dd><%= @order.zip_code %></dd>
+  <br>
+  <dt>Email</dt>
+  <dd><%= @order.user.email %></dd>
+  <br>
+  <dt>Phone Number</dt>
+  <dd><%= @order.phone_number %></dd>
+</dl>
+
+<p>Items:</p>
+<% if !@order.items.blank? %>
+  <% for item in @order.items %>
+    <dl>
+      <dt>Product identifier</dt>
+      <dd><%= item.product_identifier %></dd>
+      <br>
+      <dt>Product URL</dt>
+      <dd><%= item.product_url %></dd>
+      <br>
+      <dt>Price</dt>
+      <dd><%= item.price.format %></dd>
+    </dl>
+  <% end %>
+<% end %>
+
+<p>Total: <%= @order.total_amount.format %></p>
+

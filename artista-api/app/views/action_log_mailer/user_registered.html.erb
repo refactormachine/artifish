@@ -1,0 +1,9 @@
+<h1>New user was registered to the MVP</h1>
+
+<dl>
+  <dt>Email</dt>
+  <dd><%= @user.email %></dd>
+  <br>
+  <dt>Name</dt>
+  <dd><%= (@user.first_name || '') + " " + (@user.last_name || '') %></dd>
+</dl>

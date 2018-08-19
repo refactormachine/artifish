@@ -127,7 +127,7 @@
 		"you_can_skip_the_tour_message": "You can skip the tour with the skip button. We won't be offended!"
 	},
 	"purchase": {
-		"pay_with_paypal": "Make a Payment",
+		"make_a_payment": "Make a Payment",
 		"city_is_required": "City is required",
 		"address_is_required": "Address is required",
 		"zip_code_is_required": "Zip Code is required",

@@ -1,0 +1,5 @@
+<h1>Order with id <%= @order.id%> was paid</h1>
+<p>Order Total: <%= @order.total_amount.format %></p>
+<p>Amount Paid: <%= @paypal_transaction.amount.format %></p>
+
+

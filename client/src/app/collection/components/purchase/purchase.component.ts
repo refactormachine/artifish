@@ -94,6 +94,7 @@ export class PurchaseComponent implements OnInit {
   }
 
   saveOrder() {
+    this.isLoadingPaypal = true;
     let orderItems = [];
     for (let i = 0; i < this.collectionItems.length; i++) {
       const collectionItem = this.collectionItems[i];
@@ -101,15 +102,17 @@ export class PurchaseComponent implements OnInit {
       const orderItem = {
         name: collectionItem.name,
         imageUrl: collectionItem.imageUrl,
-        itemUrl: collectionItem.itemUrl,
         purchaseOptionId: itemSelections.selectedPrice.id,
+        collectionItemId: collectionItem.id
       }
       orderItems.push(orderItem);
     }
     this.order.itemsAttributes = orderItems;
-    this.orderService.create(this.order).subscribe(order => {
-      this.generatePaypalLink(order.id);
-    })
+    this.orderService.create(this.order).subscribe(
+      order => {
+        this.generatePaypalLink(order.id);
+      }, err => this.isLoadingPaypal = false
+    );
   }
 
   materialSelected(collectionItem, materialId) {
@@ -185,7 +188,6 @@ export class PurchaseComponent implements OnInit {
   }
 
   private generatePaypalLink(orderId) {
-    this.isLoadingPaypal = true;
     let currentUrl = window.location.href;
     let amount = this.totalAmountCents / 100.0;
     let currencyCode = this.currencyCode;

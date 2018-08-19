@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   start() {
+    if (!this.dataService.data) this.dataService.data = {}
     this.dataService.data.startWithTour = false;
     this.router.navigate(['start']);
   }

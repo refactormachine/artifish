@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_12_162708) do
+ActiveRecord::Schema.define(version: 2018_08_19_084418) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -78,13 +78,14 @@ ActiveRecord::Schema.define(version: 2018_08_12_162708) do
   create_table "order_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "image_url"
-    t.string "item_url"
+    t.string "product_url"
     t.bigint "purchase_option_id"
     t.integer "price_cents", default: 0, null: false
     t.string "price_currency", default: "USD", null: false
     t.bigint "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "product_identifier"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["purchase_option_id"], name: "index_order_items_on_purchase_option_id"
   end

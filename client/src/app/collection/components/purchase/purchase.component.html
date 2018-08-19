@@ -44,7 +44,7 @@
             <div *ngIf="f.submitted && !phoneNumber.valid" class="help-block text-danger">{{'purchase.phone_number_is_required' | translate}}</div>
           </div>
         </div>
-        <button [disabled]="isLoadingPaypal" class="btn btn-primary">{{'purchase.pay_with_paypal' | translate}}</button>
+        <button [disabled]="isLoadingPaypal" class="btn btn-primary">{{'purchase.make_a_payment' | translate}}</button>
         <i *ngIf="isLoadingPaypal" class="fa fa-spinner fa-spin fa-2x align-middle"></i>
       </form>
     </div>

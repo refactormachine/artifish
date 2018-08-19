@@ -16,6 +16,12 @@ class PaymentsController < ApplicationController
       :app_order_id => params[:order_id]
     }
     @paypal_transaction = Processors::PaypalExpress.new.checkout(checkout_options)
+    begin
+      order = Order.find(params[:order_id])
+      ActionLogMailer.order_paid(order, @paypal_transaction).deliver
+    rescue Exception => e
+      Rails.logger.error "Failed to send order_paid email for new order with id (#{order.id}, #{@paypal_transaction.id})"
+    end
     render(:show, status: :created)
   end
 

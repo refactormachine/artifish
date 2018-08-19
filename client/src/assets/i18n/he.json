@@ -128,7 +128,7 @@
 		"you_can_skip_the_tour_message": "אתה יכול לדלג על הסיור על ידי לחיצה על הכפתור 'דלג'. אנחנו לא נעלב!"
 	},
 	"purchase": {
-		"pay_with_paypal": "לתשלום",
+		"make_a_payment": "לתשלום",
 		"city_is_required": "יש למלא עיר",
 		"address_is_required": "יש למלא כתובת",
 		"zip_code_is_required": "יש למלא מיקוד",

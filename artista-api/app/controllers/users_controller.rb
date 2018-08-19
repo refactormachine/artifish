@@ -14,7 +14,12 @@ class UsersController < ApplicationController
   # end
 
   def create
-    User.create!(user_params.merge(is_verified: true))
+    user = User.create!(user_params.merge(is_verified: true))
+    begin
+      ActionLogMailer.user_registered(user).deliver
+    rescue Exception => e
+      Rails.logger.error "Failed to send user_registered email for new user with id #{user.id}"
+    end
     token = AuthenticateUser.new(user_params[:email], user_params[:password]).call
     response = Message.user_created(token)
     json_response(response, :created)
