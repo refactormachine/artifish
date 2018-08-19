@@ -26,4 +26,7 @@ Rails.application.routes.draw do
   get '/location/get_locale', to: 'location#get_locale'
 
   post 'contact_us', to: 'contact_us#create'
+
+  get 'static', to: 'static_pages#index'
+  get 'static/yaniv', to: 'static_pages#yaniv'
 end
