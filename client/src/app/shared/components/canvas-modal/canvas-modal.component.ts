@@ -34,9 +34,7 @@ export class CanvasModalComponent implements AfterViewInit {
     this._element = this.element.nativeElement;
   }
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.loadBackgroundImage();
-    }, 200);
+    this.loadBackgroundImage();
     this.collectionItemRemovedEvent.subscribe(this.removeCollectionItem.bind(this));
   }
   closeCanvas() {
@@ -93,11 +91,16 @@ export class CanvasModalComponent implements AfterViewInit {
     let height = iHeight * ratio;
     var centerY = (cHeight - iHeight * ratio) / 2;
 
-    let stage = new Konva.Stage({
-      container: 'canvasContainer',
-      width: width,
-      height: height
-    });
+    let stage;
+    try {
+      stage = new Konva.Stage({
+        container: 'canvasContainer',
+        width: width,
+        height: height
+      });
+    } catch (error) {
+      return;
+    }
     this.stage = stage;
 
     let layer = new Konva.Layer();
