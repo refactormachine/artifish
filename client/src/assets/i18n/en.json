@@ -33,7 +33,8 @@
 		"name_is_required": "Name is required",
 		"a_valid_email_is_required": "A valid email is required",
 		"phone_number_is_required": "Phone Number is required",
-		"start": "Start"
+		"start": "Start",
+		"size": "Size"
 	},
 	"contact_us": {
 		"get_in_touch": "Get In Touch",

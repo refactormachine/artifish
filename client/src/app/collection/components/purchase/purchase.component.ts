@@ -27,6 +27,7 @@ export class PurchaseComponent implements OnInit {
   isLoadingPaypal: boolean = false;
   order: any = {};
   selectionPerItemMapping = new Object();
+  filterSize: string;
 
   openModalWindow: boolean = false;
   modalImage: any[] = [];
@@ -46,6 +47,9 @@ export class PurchaseComponent implements OnInit {
     const component = this;
     this.order.firstName = this.authService.currentUser.first_name;
     this.order.lastName = this.authService.currentUser.last_name;
+
+    if (this.dataService.data.filterSize)
+      this.filterSize = `${this.dataService.data.filterSize.width || ''}x${this.dataService.data.filterSize.height || ''}`
 
     let id = this.route.snapshot.paramMap.get('id');
     history.pushState(null, null, window.location.href);
@@ -68,21 +72,25 @@ export class PurchaseComponent implements OnInit {
             let firstPurchaseOption = item.purchaseOptions[0];
 
             // Auto select material from list by the filtered selected material from the items search page
-            if (this.dataService.data && this.dataService.data.selectedMaterialType) {
-              let selectedMaterialType = this.dataService.data.selectedMaterialType;
+            if (this.dataService.data && this.dataService.data.filterMaterialType) {
+              let filterMaterialType = this.dataService.data.filterMaterialType;
               for (let i = 0; i < item.purchaseOptions.length; i++) {
                 const purchaseOption = item.purchaseOptions[i];
-                if (purchaseOption.material == selectedMaterialType) {
+                if (purchaseOption.material == filterMaterialType) {
                   firstPurchaseOption = purchaseOption;
                   break;
                 }
               }
             }
 
+            let selectedPrice = firstPurchaseOption.prices[0];
+            if (this.filterSize) {
+              selectedPrice = (firstPurchaseOption.prices as any[]).find(price => price.size.indexOf(this.filterSize) != -1);
+            }
             this.selectionPerItemMapping[item.id] = {
               selectedMaterial: firstPurchaseOption,
-              selectedPrice: firstPurchaseOption.prices[0],
-              selectedSizeId: firstPurchaseOption.prices[0].sizeId
+              selectedPrice: selectedPrice,
+              selectedSizeId: selectedPrice.sizeId
             };
 
           }

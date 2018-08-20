@@ -6,6 +6,12 @@ class PortfolioItemsController < ApplicationController
     query_tags = []
     query_tags = params[:tags].split(' ') if params[:tags]
     color = hex_to_color(params[:color]) if params[:color]
+
+    size_name_query = "#{params[:width]}x#{params[:height]}" if params[:width] && params[:height]
+    size_name_query = "#{params[:width]}x%" if params[:width] && !params[:height]
+    size_name_query = "%x#{params[:height]}" if !params[:width] && params[:height]
+    size_ids = Size.where.has{name =~ size_name_query}.pluck(:id) if size_name_query
+
     material_id = Material.where(material_type: params[:material]).pluck(:id).first if params[:material]
 
     @portfolio_items = PortfolioItem.joins(:tags).where.has{ tags.name.in query_tags } if query_tags.present?
@@ -22,6 +28,7 @@ class PortfolioItemsController < ApplicationController
 
     @portfolio_items = @portfolio_items.joins(:purchase_options => :material).where.has{purchase_options.material.enabled == true}
     @portfolio_items = @portfolio_items.where.has{purchase_options.material_id == material_id} if material_id
+    @portfolio_items = @portfolio_items.where.has{purchase_options.size_id.in size_ids} if size_ids
 
     # This part should come after last filter to get a correct number of total entries!
     @portfolio_items = @portfolio_items.distinct

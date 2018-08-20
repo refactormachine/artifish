@@ -18,6 +18,7 @@
     "build-all": "for lang in en he; do npm run build:$lang; done",
     "deploy:gh:en": "npm run build:en -- --base-href='https://artifish.github.io/artifish/' && ngh --repo https://github.com/artifish/artifish.git --dir dist/en",
     "deploy:gh:he": "npm run build:he -- --base-href='https://artifish.github.io/artifish.il/' && ngh --repo https://github.com/artifish/artifish.il.git --dir dist/he",
+    "deploy:gh:staging": "npm run build:en -- --base-href='https://artifish.github.io/artifish-staging/' && ngh --repo https://github.com/artifish/artifish-staging.git --dir dist/en",
     "deploy:gh-all": "for lang in en he; do npm run deploy:gh:$lang; done"
   },
   "private": true,

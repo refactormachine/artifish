@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   def create
     user = User.create!(user_params.merge(is_verified: true))
     begin
-      ActionLogMailer.user_registered(user).deliver
+      ActionLogMailer.user_registered(user).deliver unless user.email.include?("@test.com")
     rescue Exception => e
       Rails.logger.error "Failed to send user_registered email for new user with id #{user.id}"
     end

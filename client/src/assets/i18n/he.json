@@ -34,7 +34,8 @@
 		"name_is_required": "יש למלא שם",
 		"a_valid_email_is_required": "יש למלא מייל חוקי",
 		"phone_number_is_required": "יש למלא מספר טלפון",
-		"start": "התחל"
+		"start": "התחל",
+		"size": "גודל"
 	},
 	"contact_us": {
 		"get_in_touch": "צור קשר",

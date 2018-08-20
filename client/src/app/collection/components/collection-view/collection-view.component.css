@@ -209,8 +209,14 @@ div.rtl .arrow-left {
   box-shadow: 0 3px 12px 0px #b1b1b1;
 }
 
-/* Blackout screen and focus on element */
+.size-input {
+  width: 50px !important;
+}
 
-.expose {
-  position: relative;
+.size-filter {
+  background-color: #f8f9fa;
+  padding-top: 2px;
+  padding-bottom: 3px;
+  border: 1px solid #f8f9fa;
+  border-radius: 0.25rem;
 }

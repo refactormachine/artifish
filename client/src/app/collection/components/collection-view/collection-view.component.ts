@@ -45,7 +45,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   portfolioItemsTotalEntries: number;
   portfolioItemsPageSize: number = 40;
 
-  filters: { tags: any[]; color: string, material: any } = { tags: [], color: null, material: null }
+  filters: { tags: any[]; color: string, material: any, size: {width: string, height: string} } = { tags: [], color: null, material: null, size: {width: null, height: null} }
   tags: any[] = [];
   materialTypes: any[] = [];
   hexColors: any[] = ['#bcb7b0', '#000000', '#0c2c53', '#444a6d', '#1797b8', '#00a7ed', '#0e59e1', '#2f29e7', '#7327e7', '#c55c9c', '#cd3846', '#e1947f', '#e69f55', '#efd05e', '#9abe45', '#1ec6b7', '#bdfdfc'];//, '#ff0000', '#00ff00', '#0000ff']
@@ -99,6 +99,8 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   ) {
     this.direction = environment.rtl ? "rtl" : "ltr";
     introService.clickOnDisabledAreaEvent.subscribe(this.clickOnIntroDisabledArea.bind(this));
+    if (!this.dataService.data) this.dataService.data = {};
+    this.dataService.data.filterSize = this.filters.size;
   }
 
   @HostListener('window:beforeunload')
@@ -163,7 +165,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     if (this.selectedMaterialType == materialType) return
     this.selectedMaterialType = materialType;
     this.filters.material = materialType;
-    this.dataService.data.selectedMaterialType = materialType;
+    this.dataService.data.filterMaterialType = materialType;
     this.externalSearch();
   }
 

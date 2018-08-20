@@ -100,6 +100,7 @@
       <ng-container *ngIf="!loadingFilters">
         <div data-step="2" [attr.data-intro]="'intro.step2' | translate" data-disable-interaction="true">
           <div class="filters-list mt-4">
+            <!-- Type filter -->
             <div ngbDropdown class="d-inline-block">
               <button placement="top" ngbTooltip="{{'collection.filter_by_artwork_type' | translate}}" class="btn btn-light" id="dropdownBasic1"
                 ngbDropdownToggle>{{'collection.type' | translate}}{{ selectedMaterialType ? ': ' + ('materials.' + selectedMaterialType | translate) :
@@ -109,6 +110,22 @@
                 <button *ngFor="let materialType of materialTypes" (click)="selectArtType(materialType)" class="dropdown-item">{{'materials.' + materialType | translate}}</button>
               </div>
             </div>
+
+            <!-- Size filter -->
+            <form class="form-inline d-inline-flex size-filter">
+              <div class="form-group">
+                <label for="sizeWidth" class="mx-2">{{'common.size' | translate}}</label>
+                <input type="text" [(ngModel)]="filters.size.width" class="form-control form-control-sm size-input" id="sizeWidth" name="sizeWidth" >
+              </div>
+              <div class="form-group">
+                <label for="sizeHeight" class="mx-1">X</label>
+                <input type="text" [(ngModel)]="filters.size.height" class="form-control form-control-sm size-input" id="sizeHeight" name="sizeHeight">
+              </div>
+              <div class="form-group mx-1">
+                <button class="btn btn-light btn-sm" (click)="externalSearch()"><i class="fa fa-check"></i></button>
+              </div>
+            </form>
+
           </div>
 
           <div class="mb-3 tag-chooser">
