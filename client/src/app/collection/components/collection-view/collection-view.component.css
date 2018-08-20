@@ -220,3 +220,32 @@ div.rtl .arrow-left {
   border: 1px solid #f8f9fa;
   border-radius: 0.25rem;
 }
+
+.price-range {
+  width: 200px;
+  vertical-align: middle;
+}
+
+.price-range .noUi-tooltip {
+  font-size: 11px;
+}
+
+.noUi-horizontal .noUi-handle {
+  width: 23px;
+  height: 22px;
+  top: -3px;
+}
+
+.noUi-handle:after, .noUi-handle:before {
+  height: 14px;
+  width: 1px;
+  top: 3px;
+}
+
+.noUi-handle:before {
+  left: 8px;
+}
+
+.noUi-handle:after {
+  left: 12px;
+}

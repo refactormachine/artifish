@@ -22,6 +22,7 @@ import { CollectionService } from '../../services/collection.service';
 import { MaterialService } from '../../services/material.service';
 import { PortfolioItemService } from '../../services/portfolio-item.service';
 import { TagService } from '../../services/tag.service';
+import { PurchaseOptionService } from '../../services/purchase-option.service';
 
 @Component({
   selector: 'app-collection-view',
@@ -45,11 +46,14 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   portfolioItemsTotalEntries: number;
   portfolioItemsPageSize: number = 40;
 
-  filters: { tags: any[]; color: string, material: any, size: {width: string, height: string} } = { tags: [], color: null, material: null, size: {width: null, height: null} }
+  filters: { tags: any[]; color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any }
+          = { tags: [], color: null, material: null, size: { width: null, height: null }, minPrice: null, maxPrice: null }
   tags: any[] = [];
   materialTypes: any[] = [];
   hexColors: any[] = ['#bcb7b0', '#000000', '#0c2c53', '#444a6d', '#1797b8', '#00a7ed', '#0e59e1', '#2f29e7', '#7327e7', '#c55c9c', '#cd3846', '#e1947f', '#e69f55', '#efd05e', '#9abe45', '#1ec6b7', '#bdfdfc'];//, '#ff0000', '#00ff00', '#0000ff']
   selectedMaterialType: any;
+  priceRange: any[] = [0];
+  maxPrice: string;
 
   isLoading: boolean = true;
   searchLoading: boolean = true;
@@ -90,6 +94,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     private portfolioItemService: PortfolioItemService,
     private tagService: TagService,
     private materialService: MaterialService,
+    private purchaseOptionService: PurchaseOptionService,
     private dataService: DataService,
     private translate: TranslateService,
     private modalService: NgbModal,
@@ -166,6 +171,12 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     this.selectedMaterialType = materialType;
     this.filters.material = materialType;
     this.dataService.data.filterMaterialType = materialType;
+    this.externalSearch();
+  }
+
+  onPriceRangeChanged() {
+    this.filters.minPrice = this.priceRange[0];
+    this.filters.maxPrice = this.priceRange[1];
     this.externalSearch();
   }
 
@@ -486,10 +497,13 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   private loadFilters() {
     Observable.forkJoin(
       this.tagService.getAll(),
-      this.materialService.getAll()
+      this.materialService.getAll(),
+      this.purchaseOptionService.getMaxPrice()
     ).subscribe(res => {
       this.tags = res[0];
       this.setMaterials(res[1]);
+      this.maxPrice = res[2]['max_price_rounded'];
+      this.priceRange = [0, this.maxPrice];
       this.loadingFilters = false;
       this.startTourIfRequested();
     });

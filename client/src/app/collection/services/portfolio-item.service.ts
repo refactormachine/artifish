@@ -13,7 +13,7 @@ export class PortfolioItemService {
   constructor(private http: HttpClient) { }
 
   search(
-    filters: { tags: any[], color: string, material: any, size: { width: string, height: string } },
+    filters: { tags: any[], color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any },
     page: number,
     pageSize: number
   ): Observable<any> {
@@ -23,6 +23,8 @@ export class PortfolioItemService {
     if (filters.material) params.material = filters.material
     if (filters.size.width) params.width = filters.size.width;
     if (filters.size.height) params.height = filters.size.height;
+    if (filters.minPrice != null) params.min_price = filters.minPrice;
+    if (filters.maxPrice != null) params.max_price = filters.maxPrice;
     return this.http.get(this.baseUrl, { params: params })
       .catch(this.handleError);
   }

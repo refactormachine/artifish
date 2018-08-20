@@ -14,6 +14,9 @@ class PortfolioItemsController < ApplicationController
 
     material_id = Material.where(material_type: params[:material]).pluck(:id).first if params[:material]
 
+    min_price_cents = Money.from_amount(params[:min_price].to_i).cents if params[:min_price]
+    max_price_cents = Money.from_amount(params[:max_price].to_i).cents if params[:max_price]
+
     @portfolio_items = PortfolioItem.joins(:tags).where.has{ tags.name.in query_tags } if query_tags.present?
     @portfolio_items = (@portfolio_items || PortfolioItem).joins(:portfolio_item_colors).where.has{ portfolio_item_colors.color_id == color.id }
                                                           .select("portfolio_item_colors.dominance_index, portfolio_item_colors.dominance_weight")
@@ -29,6 +32,9 @@ class PortfolioItemsController < ApplicationController
     @portfolio_items = @portfolio_items.joins(:purchase_options => :material).where.has{purchase_options.material.enabled == true}
     @portfolio_items = @portfolio_items.where.has{purchase_options.material_id == material_id} if material_id
     @portfolio_items = @portfolio_items.where.has{purchase_options.size_id.in size_ids} if size_ids
+    # byebug
+    @portfolio_items = @portfolio_items.where.has{(purchase_options.price_cents > min_price_cents) & (purchase_options.price_cents < max_price_cents)} if min_price_cents && max_price_cents
+    # byebug
 
     # This part should come after last filter to get a correct number of total entries!
     @portfolio_items = @portfolio_items.distinct
