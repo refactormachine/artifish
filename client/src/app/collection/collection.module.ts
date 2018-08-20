@@ -16,6 +16,7 @@ import { PortfolioItemService } from './services/portfolio-item.service';
 import { TagService } from './services/tag.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaterialService } from './services/material.service';
+import { BetaLoginGuard } from '../core/services/beta-login-guard.service';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { MaterialService } from './services/material.service';
     AuthModule,
     NgbModule.forRoot(),
     RouterModule.forChild([
-      { path: 'start', component: CollectionViewComponent, canDeactivate: [SaveCollectionDataGuard] },
+      { path: 'start', component: CollectionViewComponent, canActivate: [BetaLoginGuard], canDeactivate: [SaveCollectionDataGuard] },
       { path: 'collections', component: CollectionsComponent, canActivate: [AuthGuard, VerifiedUserGuard] },
       { path: 'collections/:id', component: CollectionViewComponent, canActivate: [AuthGuard, VerifiedUserGuard], canDeactivate: [SaveCollectionDataGuard] },
       { path: 'collections/:id/purchase', component: PurchaseComponent, canActivate: [AuthGuard, VerifiedUserGuard] },

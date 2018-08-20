@@ -6,6 +6,11 @@
 			"must_grant_permissions": "יש להתחבר כדי לבצע פעולות"
 		}
 	},
+	"beta_login": {
+		"incorrect_password": "הסיסמא שגויה",
+		"enter_beta": "היכנס לבטא",
+		"enter_beta_password": "הכנס סיסמאת כניסה לבטא"
+	},
 	"common": {
 		"or": "או",
 		"cancel": "ביטול",

@@ -5,6 +5,11 @@
 			"must_grant_permissions": "You must grant permissions to this application in order to login"
 		}
 	},
+	"beta_login": {
+		"incorrect_password": "Incorrect password",
+		"enter_beta": "Enter Beta",
+		"enter_beta_password": "Enter beta password"
+	},
 	"common": {
 		"or": "Or",
 		"cancel": "Cancel",

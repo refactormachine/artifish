@@ -15,6 +15,9 @@ import { ContactUsComponent } from './components/contact-us/contact-us.component
 import { ContactUsService } from './services/contact-us.service';
 import { SkipTourModalContentComponent } from './components/skip-tour-modal-content/skip-tour-modal-content.component';
 import { HomeComponent } from './components/home/home.component';
+import { BetaLoginComponent } from './components/beta-login/beta-login.component';
+import { BetaLoginGuard } from './services/beta-login-guard.service';
+import { BetaComponent } from './components/beta/beta.component';
 
 @NgModule({
   imports: [
@@ -27,6 +30,7 @@ import { HomeComponent } from './components/home/home.component';
       { path: 'login', component: LoginComponent },
       { path: 'signup', component: SignUpComponent },
       { path: 'contact-us', component: ContactUsComponent },
+      { path: 'beta', component: BetaComponent },
     ])
   ],
   declarations: [
@@ -35,17 +39,23 @@ import { HomeComponent } from './components/home/home.component';
     SignUpComponent,
     ContactUsComponent,
     SkipTourModalContentComponent,
-    HomeComponent
+    HomeComponent,
+    BetaLoginComponent,
+    BetaComponent
   ],
   providers: [
     UserService,
     VerifiedUserGuard,
     LocationService,
-    ContactUsService
+    ContactUsService,
+    BetaLoginGuard
   ],
   exports: [
     NavbarComponent,
   ],
-  entryComponents: [SkipTourModalContentComponent]
+  entryComponents: [
+    SkipTourModalContentComponent,
+    BetaLoginComponent
+  ]
 })
 export class CoreModule { }

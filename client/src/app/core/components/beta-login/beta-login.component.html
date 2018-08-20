@@ -1,0 +1,17 @@
+<div [attr.dir]="direction" [ngClass]="direction">
+  <div class="modal-body">
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+      <span aria-hidden="true" style="font-size: 30px;">&times;</span>
+    </button>
+    <form class="form-signin" #f="ngForm" (ngSubmit)="login()">
+      <h1 class="h3 mb-3 font-weight-normal">{{'beta_login.enter_beta_password' | translate}}</h1>
+      <label for="inputPassword" class="sr-only">{{'common.password' | translate}}</label>
+      <input type="password" [(ngModel)]="passcode" #password="ngModel" name="passcode" id="inputPassword" class="form-control" placeholder="Password"
+             (keydown)="(badLogin = false) || true" required>
+      <div *ngIf="f.submitted && password.errors?.required" class="help-block text-danger">{{'sign_up.password_is_required' |translate}}
+      </div>
+      <div *ngIf="!password.errors?.required && badLogin" class="help-block text-danger">{{'beta_login.incorrect_password' | translate}}</div>
+      <button type="submit" class="btn btn-primary btn-block" type="submit">{{'beta_login.enter_beta' | translate}}</button>
+    </form>
+  </div>
+</div>

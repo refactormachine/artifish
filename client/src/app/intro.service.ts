@@ -55,10 +55,16 @@ export class IntroService {
     this._introInstance.onchange(onChange);
   }
   addOnEndCallback(onEnd: Function) {
-    this._introInstance.oncomplete(onEnd);
+    this._introInstance.oncomplete(() => {
+      onEnd();
+      this.withinIntro = false;
+    });
   }
   addOnExitCallback(onExit: Function) {
-    this._introInstance.onexit(onExit);
+    this._introInstance.onexit(() => {
+      onExit();
+      this.withinIntro = false;
+    });
   }
   private onEnd() {
     document.body.classList.remove('withinIntro');
