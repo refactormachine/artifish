@@ -17,24 +17,24 @@ class PortfolioItemsController < ApplicationController
     min_price_cents = Money.from_amount(params[:min_price].to_i).cents if params[:min_price]
     max_price_cents = Money.from_amount(params[:max_price].to_i).cents if params[:max_price]
 
-    @portfolio_items = PortfolioItem.joins(:tags).where.has{ tags.name.in query_tags } if query_tags.present?
-    @portfolio_items = (@portfolio_items || PortfolioItem).joins(:portfolio_item_colors).where.has{ portfolio_item_colors.color_id == color.id }
-                                                          .select("portfolio_item_colors.dominance_index, portfolio_item_colors.dominance_weight")
-                                                          .order("portfolio_item_colors.dominance_index ASC, portfolio_item_colors.dominance_weight ASC") if color.present?
-
-    if @portfolio_items.nil?
+    if no_filters
       random_tags = Tag.all.sample(5)
       portfolio_items_ids = []
       random_tags.each { |tag| portfolio_items_ids += tag.portfolio_items.last(20).pluck(:id).sample(4) }
       @portfolio_items = PortfolioItem.where(:id => portfolio_items_ids)
     end
 
+    @portfolio_items = (@portfolio_items || PortfolioItem).joins(:purchase_options => :material).where.has{purchase_options.material.enabled == true}
+
+    @portfolio_items = @portfolio_items.joins(:tags).where.has{ tags.name.in query_tags } if query_tags.present?
+    @portfolio_items = @portfolio_items.joins(:portfolio_item_colors).where.has{ portfolio_item_colors.color_id == color.id }
+                                                          .select("portfolio_item_colors.dominance_index, portfolio_item_colors.dominance_weight")
+                                                          .order("portfolio_item_colors.dominance_index ASC, portfolio_item_colors.dominance_weight ASC") if color.present?
+
     @portfolio_items = @portfolio_items.joins(:purchase_options => :material).where.has{purchase_options.material.enabled == true}
     @portfolio_items = @portfolio_items.where.has{purchase_options.material_id == material_id} if material_id
     @portfolio_items = @portfolio_items.where.has{purchase_options.size_id.in size_ids} if size_ids
-    # byebug
     @portfolio_items = @portfolio_items.where.has{(purchase_options.price_cents > min_price_cents) & (purchase_options.price_cents < max_price_cents)} if min_price_cents && max_price_cents
-    # byebug
 
     # This part should come after last filter to get a correct number of total entries!
     @portfolio_items = @portfolio_items.distinct
@@ -56,5 +56,9 @@ class PortfolioItemsController < ApplicationController
   def hex_to_color(hex_color)
     m = hex_color.match /#(..)(..)(..)/
     Color.where(r: m[1].hex, g: m[2].hex, b: m[3].hex).first
+  end
+
+  def no_filters
+    params[:tags].blank? && params[:color].blank? && params[:width].blank? && params[:height].blank? && params[:material].blank? && params[:min_price].blank? && params[:max_price].blank?
   end
 end
