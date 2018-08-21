@@ -35,7 +35,8 @@
 		"a_valid_email_is_required": "יש למלא מייל חוקי",
 		"phone_number_is_required": "יש למלא מספר טלפון",
 		"start": "התחל",
-		"size": "גודל"
+		"size": "גודל",
+		"price": "מחיר"
 	},
 	"contact_us": {
 		"get_in_touch": "צור קשר",
@@ -146,9 +147,7 @@
 		"address_is_required": "יש למלא כתובת",
 		"zip_code_is_required": "יש למלא מיקוד",
 		"material": "סוג חומר",
-		"size": "גודל",
 		"total_amount": "עלות כוללת",
-		"price": "מחיר",
 		"failed_to_remove_item": "הסרת הפריט נכשלה"
 	},
 	"paypal_callback": {

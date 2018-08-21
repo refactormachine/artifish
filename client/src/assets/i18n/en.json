@@ -34,7 +34,8 @@
 		"a_valid_email_is_required": "A valid email is required",
 		"phone_number_is_required": "Phone Number is required",
 		"start": "Start",
-		"size": "Size"
+		"size": "Size",
+		"price": "Price"
 	},
 	"contact_us": {
 		"get_in_touch": "Get In Touch",
@@ -145,9 +146,7 @@
 		"address_is_required": "Address is required",
 		"zip_code_is_required": "Zip Code is required",
 		"material": "Material",
-		"size": "Size",
 		"total_amount": "Total amount",
-		"price": "Price",
 		"failed_to_remove_item": "Failed to remove item"
 	},
 	"paypal_callback": {

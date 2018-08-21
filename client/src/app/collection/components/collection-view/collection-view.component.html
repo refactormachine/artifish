@@ -139,7 +139,7 @@
             </form>
 
             <!-- Price filter -->
-            <label>Price</label>
+            <label>{{'common.price' | translate}}</label>
             <div class="price-range d-inline-block ml-2">
               <nouislider [connect]="true" [min]="0" [tooltips]="true"
                 [max]="maxPrice" [step]="10" [(ngModel)]="priceRange" (change)="onPriceRangeChanged()"></nouislider>

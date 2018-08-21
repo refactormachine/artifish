@@ -71,7 +71,7 @@
                   </select>
                 </div>
                 <div class="form-group row">
-                  <label for="sizeSelect" class="col-form-label col-sm-2">{{'purchase.size' | translate}}</label>
+                  <label for="sizeSelect" class="col-form-label col-sm-2">{{'common.size' | translate}}</label>
                   <select class="form-control col-sm-10" name="selectedSize" id="sizeSelect"
                           [(ngModel)]="selectionPerItemMapping[collectionItem.id].selectedSizeId"
                           (change)="sizeSelected(collectionItem, $event.target.value)">
@@ -81,7 +81,7 @@
                 </div>
               </form>
               <div>
-                <strong>{{'purchase.price' | translate}}: {{selectionPerItemMapping[collectionItem.id].selectedPrice.priceCents / 100.0 | currency:selectionPerItemMapping[collectionItem.id].selectedPrice.currencyCode:'symbol':'1.2-2'}}</strong>
+                <strong>{{'common.price' | translate}}: {{selectionPerItemMapping[collectionItem.id].selectedPrice.priceCents / 100.0 | currency:selectionPerItemMapping[collectionItem.id].selectedPrice.currencyCode:'symbol':'1.2-2'}}</strong>
               </div>
             </div>
           </div>
