@@ -183,6 +183,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   pageChanged(event) {
     this.portfolioItems = [];
     this.externalSearch();
+    window.scrollTo(0, 0);
   }
 
   imageSelected(portfolioItem) {
