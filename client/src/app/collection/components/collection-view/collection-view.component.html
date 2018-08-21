@@ -68,19 +68,31 @@
           <div class="row no-gutters mt-2">
             <ng-container *ngIf="introService.isWithinIntro()">
               <div *ngFor="let introCollectionItem of introCollectionItems" class="col-md-4 mb-4 px-2 position-relative">
-                <img [src]="introCollectionItem.thumbUrl" class="img-fluid collection-image" alt="">
-                <i class="fa fa-times-circle position-absolute img-close clickable" aria-hidden="true"></i>
-                <i class="fa fa-search full-image-button clickable float-right" aria-hidden="true"></i>
-                <p>{{'collection.starting_at' | translate}}: {{introCollectionItem.startingPriceFormatted}}</p>
+                <div class="d-flex flex-column align-items-center h-100">
+                  <div class="d-flex align-items-center h-100">
+                    <img [src]="introCollectionItem.thumbUrl" class="img-fluid collection-image" alt="">
+                  </div>
+                </div>
+                <div class="w-100">
+                  <i class="fa fa-times-circle clickable float-right ml-1" aria-hidden="true"></i>
+                  <i class="fa fa-search clickable float-right" aria-hidden="true"></i>
+                  <p class="mb-0 starting-at">{{'collection.starting_at' | translate}}: {{introCollectionItem.startingPriceFormatted}}</p>
+                </div>
               </div>
             </ng-container>
 
             <ng-container *ngIf="collectionItems.length > 0 && !introService.isWithinIntro()">
               <div *ngFor="let collectionItem of collectionItems" class="col-md-4 mb-4 px-2 position-relative">
-                <img [src]="collectionItem.thumbUrl" class="img-fluid collection-image" alt="">
-                <i class="fa fa-times-circle position-absolute img-close clickable" (click)="removeCollectionItem(collectionItem)" aria-hidden="true"></i>
-                <i class="fa fa-search full-image-button clickable float-right" (click)="openImageModal(collectionItem)" aria-hidden="true"></i>
-                <p>{{'collection.starting_at' | translate}}: {{collectionItem.startingPriceFormatted}}</p>
+                <div class="d-flex flex-column align-items-center h-100">
+                  <div class="d-flex align-items-center h-100">
+                    <img [src]="collectionItem.thumbUrl" class="img-fluid collection-image" alt="">
+                  </div>
+                </div>
+                <div class="w-100">
+                  <i class="fa fa-times-circle clickable float-right ml-1" (click)="removeCollectionItem(collectionItem)" aria-hidden="true"></i>
+                  <i class="fa fa-search clickable float-right" (click)="openImageModal(collectionItem)" aria-hidden="true"></i>
+                  <p class="mb-0 starting-at">{{'collection.starting_at' | translate}}: {{collectionItem.startingPriceFormatted}}</p>
+                </div>
               </div>
             </ng-container>
           </div>
@@ -165,17 +177,22 @@
       <ng-container *ngIf="portfolioItems && portfolioItems.length > 0; else noResults">
         <div class="row art-stuff" data-step="4" [attr.data-intro]="'intro.step4' | translate" data-disable-interaction="true">
           <div *ngFor="let portfolioItem of portfolioItems" class="col-3 mb-2">
-            <div class="portfolio-item-img-container position-relative">
-              <ng-template #popupContent>{{'collection.drag_image_warning_text' | translate}} <i class='fa fa-arrows'></i> {{'collection.drag_image_warning_text_after_icon' | translate}}</ng-template>
-              <img [src]="portfolioItem.thumbUrl" class="portfolio-item-img img-fluid clickable" [ngClass]="{ 'selected-image': portfolioItem.selected }"
-               triggers="dragstart:dragend" placement="top" popoverTitle="{{'collection.got_confused' | translate}}" [ngbPopover]="popupContent"
-               (click)="imageSelected(portfolioItem)" alt="">
-              <i *ngIf="portfolioItem.selected" class="fa fa-check clickable img-check-mark img-button"
-                 (click)="imageSelected(portfolioItem)" aria-hidden="true"></i>
+            <div class="d-flex flex-column align-items-center h-100">
+              <div class="portfolio-item-img-container position-relative d-flex align-items-center h-100">
+                <ng-template #popupContent>{{'collection.drag_image_warning_text' | translate}} <i class='fa fa-arrows'></i> {{'collection.drag_image_warning_text_after_icon'
+                  | translate}}</ng-template>
+                <img [src]="portfolioItem.thumbUrl" class="portfolio-item-img img-fluid clickable" [ngClass]="{ 'selected-image': portfolioItem.selected }"
+                  triggers="dragstart:dragend" placement="top" popoverTitle="{{'collection.got_confused' | translate}}" [ngbPopover]="popupContent"
+                  (click)="imageSelected(portfolioItem)" alt="">
+                <i *ngIf="portfolioItem.selected" class="fa fa-check clickable img-check-mark img-button" (click)="imageSelected(portfolioItem)"
+                  aria-hidden="true"></i>
+              </div>
+              <div class="w-100">
+                <i class="fa fa-search clickable float-right" placement="top" ngbTooltip="{{'collection.more_details' | translate}}"
+                  (click)="openImageModal(portfolioItem)" aria-hidden="true"></i>
+                <p class="mb-0 starting-at">{{'collection.starting_at' | translate}}: {{portfolioItem.startingPriceFormatted}}</p>
+              </div>
             </div>
-            <i class="fa fa-search full-image-button clickable float-right" placement="top" ngbTooltip="{{'collection.more_details' | translate}}"
-              (click)="openImageModal(portfolioItem)" aria-hidden="true"></i>
-            <p class="mb-0">{{'collection.starting_at' | translate}}: {{portfolioItem.startingPriceFormatted}}</p>
           </div>
         </div>
         <div *ngIf="portfolioItemsTotalEntries / portfolioItemsPageSize > 1" class="text-center mt-3">
@@ -190,6 +207,8 @@
           <img src="assets/images/sad_baby.png" width="170px" alt="No results">
         </div>
       </ng-template>
+      <!-- To fix issue when hover on tags moves content -->
+      <div class="w-100" style="height: 10px;"></div>
     </div>
   </div>
   <div *ngIf="openModalImage">

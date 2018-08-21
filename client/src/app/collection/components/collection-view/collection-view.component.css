@@ -18,8 +18,12 @@
   -ms-user-select: none;
 }
 
+.portfolio-item-img {
+  border: 3px solid transparent;
+}
+
 .portfolio-item-img:hover:not(.selected-image) {
-  border: 3px solid gray;
+  border-color: gray;
 }
 
 .portfolio-item-img-container .popover {
@@ -29,6 +33,10 @@
 .portfolio-item-img-container .popover .popover-header {
   background-color: red;
   color: white;
+}
+
+.starting-at {
+  font-size: 13px;
 }
 
 .img-button.img-check-mark:hover:not(.disabled) {
@@ -118,10 +126,11 @@
 .color {
   width: 30px;
   height: 30px;
+  border: 2px solid transparent;
 }
 
 .color:hover {
-  border: 2px solid #000;
+  border-color: #000;
 }
 
 .color.active {
