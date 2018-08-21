@@ -49,7 +49,14 @@
 		"welcome_to_artista": "Welcome to Artifish",
 		"whats_your_vision?": "What's your vision?",
 		"whats_your_vision_text": "Online tool for interior designers, matches the most suitable artwork for their space throug a visual algorithm and personal preferences",
-		"take_a_tour": "Take a tour"
+		"take_a_tour": "Take a tour",
+		"how_it_works?": "How it works?",
+		"how_it_works_01": "Upload a photo of your room / sketch (optional)",
+		"how_it_works_02": "Use the filters to search for artwork",
+		"how_it_works_03": "Review the pictures on your room’s photo",
+		"how_it_works_04": "Export the file to a document you can share with your clients",
+		"how_it_works_05": "Order the artwork and get the delivery in few days",
+		"try_it_out": "Try it out!"
 	},
 	"sign_up": {
 		"confirm_password": "Confirm Password",

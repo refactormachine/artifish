@@ -2,5 +2,49 @@
   <h1>{{'home.whats_your_vision?' | translate}}</h1>
   <p class="mt-5">{{'home.whats_your_vision_text' | translate}}</p>
   <button class="btn btn-start mt-3 mr-2" (click)="start()">{{'common.start' | translate}}</button>
-  <button class="btn btn-start mt-3" (click)="startWithTour()">{{'home.take_a_tour' | translate}}</button>
+<a class="btn btn-start mt-3" [routerLink]="['.']" fragment="how-it-works">{{'home.how_it_works?' | translate}}</a>
+  <!-- <button class="btn btn-start mt-3" (click)="startWithTour()">{{'home.take_a_tour' | translate}}</button> -->
 </div>
+
+<a id="how-it-works" class="how-it-works-anchor"></a>
+<section class="how-it-works-video py-5 text-center" style="background-color: #f4f4f4; margin: 0 -50px;">
+  <h1 class="mb-4">{{'home.how_it_works?' | translate}}</h1>
+  <div class="video-wrapper">
+    <iframe width="654" height="368" src="https://www.youtube.com/embed/jJffsio2n5E" frameborder="0" allow="autoplay; encrypted-media"
+    allowfullscreen></iframe>
+  </div>
+</section>
+
+<section class="how-it-works-section">
+  <div class="row mb-5">
+    <div class="col-md-4 text-center">
+      <img src="assets/images/how-it-works/how_it_works_01.png" alt="" class="img-fluid mb-3">
+      <p class="title">{{'home.how_it_works_01' | translate}}</p>
+    </div>
+    <div class="col-md-4 text-center">
+      <img src="assets/images/how-it-works/how_it_works_02.png" alt="" class="img-fluid mb-3">
+      <p class="title">{{'home.how_it_works_02' | translate}}</p>
+    </div>
+    <div class="col-md-4 text-center">
+      <img src="assets/images/how-it-works/how_it_works_03.png" alt="" class="img-fluid mb-3">
+      <p class="title">{{'home.how_it_works_03' | translate}}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 left-col text-center">
+      <img src="assets/images/how-it-works/how_it_works_04.png" alt="" class="img-fluid mb-3">
+      <p class="title">{{'home.how_it_works_04' | translate}}</p>
+    </div>
+    <div class="col-md-6 right-col text-center">
+      <img src="assets/images/how-it-works/how_it_works_05.png" alt="" class="img-fluid mb-3">
+      <p class="title">{{'home.how_it_works_05' | translate}}</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="text-center mt-5 py-5 try-section">
+  <h1>{{'home.try_it_out' | translate}}</h1>
+  <button class="btn btn-start mt-3 mr-2" (click)="start()">{{'common.start' | translate}}</button>
+  <button class="btn btn-start mt-3" (click)="startWithTour()">{{'home.take_a_tour' | translate}}</button>
+</section>
