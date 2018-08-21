@@ -49,7 +49,4 @@ test:
 #
 production:
   <<: *default
-  adapter: postgresql
-  database: artista_production
-  username: artista
-  password: <%= ENV['ARTISTA_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
