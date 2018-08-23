@@ -2,6 +2,7 @@ import { Component, isDevMode } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../environments/environment';
 import { LocationService } from './core/services/location.service';
+import { Gtag } from 'angular-gtag';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ export class AppComponent {
   direction: string;
 
   constructor(private translate: TranslateService,
-              private locationService: LocationService) {
+              private locationService: LocationService,
+              gtag: Gtag) {
     translate.setDefaultLang(environment.defaultLanguage);
     this.direction = environment.rtl ? "rtl" : "ltr";
 

@@ -37,6 +37,7 @@
     "@ngx-translate/core": "^9.1.1",
     "@ngx-translate/http-loader": "^2.0.1",
     "@types/jquery": "^3.3.5",
+    "angular-gtag": "^1.0.3",
     "angular2-jwt": "^0.2.3",
     "bootstrap-social": "^5.1.1",
     "client-oauth2": "^4.1.0",
