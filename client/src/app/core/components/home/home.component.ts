@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { environment } from '../../../../environments/environment';
 import { DataService } from '../../../shared/services/data.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { BetaLoginComponent } from '../beta-login/beta-login.component';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +20,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    document.body.classList.add('home-background');
+    let backgroundClass = environment.rtl ? 'home-background-rtl' : 'home-background';
+    document.body.classList.add(backgroundClass);
     this.route.fragment.subscribe(fragment => {
       this.fragment = fragment;
       if (!this.fragment) {
@@ -39,7 +40,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    document.body.classList.remove('home-background');
+    let backgroundClass = environment.rtl ? 'home-background-rtl' : 'home-background';
+    document.body.classList.remove(backgroundClass);
   }
 
   start() {

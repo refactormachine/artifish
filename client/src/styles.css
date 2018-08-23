@@ -35,6 +35,14 @@ body {
   background-position-y: 70px;
 }
 
+.home-background-rtl {
+  background-image: url('/assets/images/home-background-rtl.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position-y: 70px;
+}
+
 .ontop-overlay {
   z-index: 9999999 !important;
 }
