@@ -18,6 +18,7 @@ import { HomeComponent } from './components/home/home.component';
 import { BetaLoginComponent } from './components/beta-login/beta-login.component';
 import { BetaLoginGuard } from './services/beta-login-guard.service';
 import { BetaComponent } from './components/beta/beta.component';
+import { JoinBetaService } from './services/join-beta.service';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { BetaComponent } from './components/beta/beta.component';
     VerifiedUserGuard,
     LocationService,
     ContactUsService,
+    JoinBetaService,
     BetaLoginGuard
   ],
   exports: [

@@ -3,15 +3,30 @@
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
       <span aria-hidden="true" style="font-size: 30px;">&times;</span>
     </button>
-    <form class="form-signin" #f="ngForm" (ngSubmit)="login()">
-      <h1 class="h3 mb-3 font-weight-normal">{{'beta_login.enter_beta_password' | translate}}</h1>
-      <label for="inputPassword" class="sr-only">{{'common.password' | translate}}</label>
-      <input type="password" [(ngModel)]="passcode" #password="ngModel" name="passcode" id="inputPassword" class="form-control" placeholder="Password"
-             (keydown)="(badLogin = false) || true" required>
-      <div *ngIf="f.submitted && password.errors?.required" class="help-block text-danger">{{'sign_up.password_is_required' |translate}}
-      </div>
-      <div *ngIf="!password.errors?.required && badLogin" class="help-block text-danger">{{'beta_login.incorrect_password' | translate}}</div>
-      <button type="submit" class="btn btn-primary btn-block" type="submit">{{'beta_login.enter_beta' | translate}}</button>
-    </form>
+    <div class="form-signin">
+      <form *ngIf="!requestingPassword" class="mb-3" #f="ngForm" (ngSubmit)="login()">
+        <h1 class="h3 mb-3 font-weight-normal">{{'beta_login.enter_beta_password' | translate}}</h1>
+        <label for="inputPassword" class="sr-only">{{'common.password' | translate}}</label>
+        <input type="password" [(ngModel)]="passcode" #password="ngModel" name="passcode" id="inputPassword" class="form-control"
+          placeholder="Password" (keydown)="(badLogin = false) || true" required>
+        <div *ngIf="f.submitted && password.errors?.required" class="help-block text-danger">{{'sign_up.password_is_required' |translate}}
+        </div>
+        <div *ngIf="!password.errors?.required && badLogin" class="help-block text-danger">{{'beta_login.incorrect_password' |
+          translate}}</div>
+        <button type="submit" class="btn btn-primary btn-block" type="submit">{{'beta_login.enter_beta' | translate}}</button>
+        <p class="mt-2">Don't have a password. <button class="btn btn-link request-password-btn" (click)="showRequestForPassword(true)">Click
+            here</button> to get one</p>
+      </form>
+
+      <form name="requestPasswordForm" *ngIf="requestingPassword" #f="ngForm" (ngSubmit)="f.form.valid && requestBetaPassword()" novalidate>
+        <h1 class="h3 mb-3 font-weight-normal">{{'beta_login.get_beta_access' | translate}}</h1>
+        <p>{{'beta_login.type_your_email_message' | translate}}</p>
+        <input type="email" [ngClass]="{ 'is-invalid': f.submitted && !email.valid }"
+               class="form-control" placeholder="{{'common.email' | translate}}" name="email" #email="ngModel" [(ngModel)]="userEmail" required email/>
+        <div *ngIf="f.submitted && !email.valid" class="help-block text-danger">{{'common.a_valid_email_is_required' | translate}}</div>
+        <button type="submit" [disabled]="requestingPasswordLoading" class="btn btn-primary btn-block" type="submit">{{'beta_login.get_password' | translate}} <i *ngIf="requestingPasswordLoading" class="fa fa-spinner fa-spin align-middle"></i></button>
+        <p *ngIf="emailSent">{{'beta_login.check_your_email_message' | translate}}</p>
+      </form>
+    </div>
   </div>
 </div>

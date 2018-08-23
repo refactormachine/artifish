@@ -8,7 +8,11 @@
 	"beta_login": {
 		"incorrect_password": "Incorrect password",
 		"enter_beta": "Enter Beta",
-		"enter_beta_password": "Enter beta password"
+		"enter_beta_password": "Enter beta password",
+		"get_password": "Get Password",
+		"check_your_email_message": "Thanks! Check your email. You should see an email with the password for the beta",
+		"get_beta_access": "Get Beta Access",
+		"type_your_email_message": "Type your email to get a password for the beta for free"
 	},
 	"common": {
 		"or": "Or",

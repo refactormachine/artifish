@@ -18,11 +18,19 @@ export class AppComponent {
               gtag: Gtag) {
     translate.setDefaultLang(environment.defaultLanguage);
     this.direction = environment.rtl ? "rtl" : "ltr";
+    this.newVersionInitialization();
 
     // if (!isDevMode()) {
     //   this.localeLoading = true;
     //   this.redirectToLocaleSite();
     // }
+  }
+
+  private newVersionInitialization() {
+    if (localStorage.getItem('version') !== 'v1') {
+      localStorage.clear();
+    }
+    localStorage.setItem('version', 'v1');
   }
 
   private redirectToLocaleSite() {

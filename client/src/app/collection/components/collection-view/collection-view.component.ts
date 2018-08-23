@@ -114,7 +114,6 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   }
 
   ngOnInit() {
-    this.newVersionInitialization();
     this.initializeCollection();
     this.loadCollection();
     this.loadFilters();
@@ -434,13 +433,6 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       const item = this.collectionItems[i];
       item.positionAttributes = {};
     }
-  }
-
-  private newVersionInitialization() {
-    if (localStorage.getItem('version') !== 'v1') {
-      localStorage.clear();
-    }
-    localStorage.setItem('version', 'v1');
   }
 
   private initializeCollection() {

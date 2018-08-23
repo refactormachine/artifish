@@ -10,7 +10,6 @@ import { BetaLoginComponent } from '../beta-login/beta-login.component';
   styleUrls: ['../home/home.component.css']
 })
 export class BetaComponent implements OnInit, OnDestroy {
-  betaLoggedIn: boolean = false;
   fragment: string;
 
   constructor(
@@ -18,7 +17,6 @@ export class BetaComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: NgbModal) {
-    this.betaLoggedIn = localStorage.getItem("betaLogin") == "4646";
   }
 
   ngOnInit() {

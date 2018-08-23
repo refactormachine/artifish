@@ -27,6 +27,8 @@ Rails.application.routes.draw do
 
   post 'contact_us', to: 'contact_us#create'
 
+  post 'join_beta', to: 'join_beta#create'
+
   get 'purchase_options/max_price', to: 'purchase_options#max_price'
 
   get 'static', to: 'static_pages#index'

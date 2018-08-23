@@ -9,7 +9,11 @@
 	"beta_login": {
 		"incorrect_password": "הסיסמא שגויה",
 		"enter_beta": "היכנס לבטא",
-		"enter_beta_password": "הכנס סיסמאת כניסה לבטא"
+		"enter_beta_password": "הכנס סיסמאת כניסה לבטא",
+		"get_password": "קבל סיסמא",
+		"check_your_email_message": "תודה! בדוק את תיבת המייל שלך. הסיסמא נשלחה אליך",
+		"get_beta_access": "קבל גישה לבטא",
+		"type_your_email_message": "הכנס את האימייל בשביל לקבל סיסמא לבטא בחינם"
 	},
 	"common": {
 		"or": "או",
