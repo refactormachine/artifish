@@ -13,12 +13,13 @@ export class PortfolioItemService {
   constructor(private http: HttpClient) { }
 
   search(
-    filters: { tags: any[], color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any },
+    filters: { query: string, tags: any[], color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any },
     page: number,
     pageSize: number
   ): Observable<any> {
     let tagsParam = this.buildTagParams(filters.tags);
     let params: any = { tags: tagsParam, page: page, per_page: pageSize };
+    if (filters.query) params.query = filters.query
     if (filters.color) params.color = filters.color
     if (filters.material) params.material = filters.material
     if (filters.size.width) params.width = filters.size.width;

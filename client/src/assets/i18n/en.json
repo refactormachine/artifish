@@ -35,7 +35,8 @@
 		"phone_number_is_required": "Phone Number is required",
 		"start": "Start",
 		"size": "Size",
-		"price": "Price"
+		"price": "Price",
+		"all": "All"
 	},
 	"contact_us": {
 		"get_in_touch": "Get In Touch",
@@ -116,7 +117,6 @@
 		"filter_by": "Filter by",
 		"more_details": "More details",
 		"type": "Type",
-		"all": "All",
 		"filter_by_artwork_type": "Filter by artwork type",
 		"no_results": "No results",
 		"try_searching_again": "Try searching again or removing filters",

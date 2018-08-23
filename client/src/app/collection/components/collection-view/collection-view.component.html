@@ -1,6 +1,81 @@
 <i *ngIf="isLoading" class="fa fa-spinner fa-spin fa-3x"></i>
 <ng-container *ngIf="!isLoading && collection">
   <div class="row">
+    <ng-container *ngIf="!loadingFilters">
+      <div class="col-lg-6">
+        <div data-step="2" [attr.data-intro]="'intro.step2' | translate" data-disable-interaction="true">
+          <div class="mt-4">
+            <!-- Type filter -->
+            <div ngbDropdown class="d-inline-block">
+              <button placement="top" ngbTooltip="{{'collection.filter_by_artwork_type' | translate}}" class="btn btn-light" id="dropdownBasic1"
+                ngbDropdownToggle>{{'collection.type' | translate}}{{ selectedMaterialType ? ': ' + ('materials.' + selectedMaterialType
+                | translate) : '' }}</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button *ngIf="materialTypes.length > 1" (click)="selectArtType({materialType: 'all', name: 'all'})" class="dropdown-item">{{'common.all'
+                  | translate}}</button>
+                <button *ngFor="let materialType of materialTypes" (click)="selectArtType(materialType)" class="dropdown-item">{{'materials.'
+                  + materialType | translate}}</button>
+              </div>
+            </div>
+
+            <!-- Size filter -->
+            <form class="form-inline d-inline-flex size-filter">
+              <div class="form-group">
+                <label for="sizeWidth" class="mx-2">{{'common.size' | translate}}</label>
+                <input type="text" [(ngModel)]="filters.size.width" class="form-control form-control-sm size-input" id="sizeWidth" name="sizeWidth">
+              </div>
+              <div class="form-group">
+                <label for="sizeHeight" class="mx-1">X</label>
+                <input type="text" [(ngModel)]="filters.size.height" class="form-control form-control-sm size-input" id="sizeHeight" name="sizeHeight">
+              </div>
+              <div class="form-group mx-1">
+                <button class="btn btn-light btn-sm" (click)="externalSearch()"><i class="fa fa-check"></i></button>
+              </div>
+            </form>
+
+            <!-- Price filter -->
+            <label>{{'common.price' | translate}}</label>
+            <div class="price-range d-inline-block ml-2">
+              <nouislider [connect]="true" [min]="0" [tooltips]="true" [max]="maxPrice" [step]="10" [(ngModel)]="priceRange" (change)="onPriceRangeChanged()"></nouislider>
+            </div>
+          </div>
+
+          <div class="mb-3 tag-chooser">
+            <div class="arrow-wrapper" (click)="arrowClick(direction == 'rtl' ? false : true)">
+              <div class="app-arrow arrow-left float-left"></div>
+            </div>
+
+            <div class="horizontal-slide tag-list" id="tagList">
+              <div *ngFor="let tag of tags" class="tag">
+                <button class="btn btn-light" [ngClass]="{ 'btn-dark': isTagSelected(tag) }" placement="top" ngbTooltip="{{'collection.filter_by' | translate}} {{'tags.' + tag.name | translate}}"
+                  (click)="selectTagFilter(tag)">{{'tags.' + tag.name | translate}}</button>
+              </div>
+            </div>
+
+            <div class="arrow-wrapper" (click)="arrowClick(direction == 'rtl' ? true : false)">
+              <div class="app-arrow arrow-right float-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 pt-4">
+        <form #f="ngForm" autocomplete="off" (ngSubmit)="searchByQuery()" >
+          <div class="form-group text-search">
+            <button type="submit" class="btn"><i class="fa fa-search clickable"></i></button>
+            <input type="text" name="query" [(ngModel)]="filters.query" class="form-control" id="inputSearch">
+          </div>
+        </form>
+        <div class="mx-auto d-table color-table" data-step="3" [attr.data-intro]="'intro.step3' | translate" data-disable-interaction="true">
+          <div class="color colorful clickable d-inline-block" (click)="selectColorFilter(null)"
+               [ngClass]="{ 'active': filters.color == null }" placement="top" ngbTooltip="{{'common.all' | translate}}"></div>
+          <div *ngFor="let hexColor of hexColors" class="color clickable d-inline-block" (click)="selectColorFilter(hexColor)" [ngClass]="{ 'active': filters.color == hexColor }"
+            [style.backgroundColor]="hexColor">
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="row">
     <div class="col-lg-5 collection-panel pb-5">
       <h3 class="mt-2 mb-0 text-center">{{'collection.project_board' | translate}}</h3>
       <p class="text-center porject-board-help-block mb-1">{{'collection.project_board_hint' | translate}}</p>
@@ -108,68 +183,6 @@
       <p *ngIf="loadingFilters">{{'collection.loading_filters' | translate}}...
         <i class="fa fa-spinner fa-spin fa-2x"></i>
       </p>
-
-      <ng-container *ngIf="!loadingFilters">
-        <div data-step="2" [attr.data-intro]="'intro.step2' | translate" data-disable-interaction="true">
-          <div class="filters-list mt-4">
-            <!-- Type filter -->
-            <div ngbDropdown class="d-inline-block">
-              <button placement="top" ngbTooltip="{{'collection.filter_by_artwork_type' | translate}}" class="btn btn-light" id="dropdownBasic1"
-                ngbDropdownToggle>{{'collection.type' | translate}}{{ selectedMaterialType ? ': ' + ('materials.' + selectedMaterialType | translate) :
-                '' }}</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button *ngIf="materialTypes.length > 1" (click)="selectArtType({materialType: 'all', name: 'all'})" class="dropdown-item">{{'collection.all' | translate}}</button>
-                <button *ngFor="let materialType of materialTypes" (click)="selectArtType(materialType)" class="dropdown-item">{{'materials.' + materialType | translate}}</button>
-              </div>
-            </div>
-
-            <!-- Size filter -->
-            <form class="form-inline d-inline-flex size-filter">
-              <div class="form-group">
-                <label for="sizeWidth" class="mx-2">{{'common.size' | translate}}</label>
-                <input type="text" [(ngModel)]="filters.size.width" class="form-control form-control-sm size-input" id="sizeWidth" name="sizeWidth" >
-              </div>
-              <div class="form-group">
-                <label for="sizeHeight" class="mx-1">X</label>
-                <input type="text" [(ngModel)]="filters.size.height" class="form-control form-control-sm size-input" id="sizeHeight" name="sizeHeight">
-              </div>
-              <div class="form-group mx-1">
-                <button class="btn btn-light btn-sm" (click)="externalSearch()"><i class="fa fa-check"></i></button>
-              </div>
-            </form>
-
-            <!-- Price filter -->
-            <label>{{'common.price' | translate}}</label>
-            <div class="price-range d-inline-block ml-2">
-              <nouislider [connect]="true" [min]="0" [tooltips]="true"
-                [max]="maxPrice" [step]="10" [(ngModel)]="priceRange" (change)="onPriceRangeChanged()"></nouislider>
-            </div>
-          </div>
-
-          <div class="mb-3 tag-chooser">
-            <div class="arrow-wrapper" (click)="arrowClick(direction == 'rtl' ? false : true)">
-              <div class="app-arrow arrow-left float-left"></div>
-            </div>
-
-            <div class="horizontal-slide tag-list" id="tagList">
-              <div *ngFor="let tag of tags" class="tag">
-                <button class="btn btn-light" [ngClass]="{ 'btn-dark': isTagSelected(tag) }" placement="top" ngbTooltip="{{'collection.filter_by' | translate}} {{'tags.' + tag.name | translate}}"
-                  (click)="selectTagFilter(tag)">{{'tags.' + tag.name | translate}}</button>
-              </div>
-            </div>
-
-            <div class="arrow-wrapper" (click)="arrowClick(direction == 'rtl' ? true : false)">
-              <div class="app-arrow arrow-right float-right"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-2 mb-3 mx-auto d-table color-table" data-step="3" [attr.data-intro]="'intro.step3' | translate" data-disable-interaction="true">
-          <div *ngFor="let hexColor of hexColors" class="color clickable d-inline-block" (click)="selectColorFilter(hexColor)" [ngClass]="{ 'active': filters.color == hexColor }"
-            [style.backgroundColor]="hexColor">
-          </div>
-        </div>
-      </ng-container>
 
       <div *ngIf="searchLoading" class="row no-gutters">
         <i class="fa fa-spinner fa-spin fa-3x"></i>

@@ -105,7 +105,7 @@
   white-space: nowrap;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
-  width: 625px;
+  width: 540px;
 }
 
 .horizontal-slide .tag {
@@ -119,14 +119,29 @@
   overflow-x: hidden;
 }
 
-.filters-list {
-  margin: 0 22px;
-}
-
 .color {
   width: 30px;
   height: 30px;
   border: 2px solid transparent;
+}
+
+.colorful {
+  border-width: 0;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff3232+11,f4ff32+21,f4ff32+29,32ff32+40,32ffff+50,32ffff+58,3239ff+67,9f22aa+88,875196+100 */
+  background: #ff3232;
+  /* Old browsers */
+  background: -moz-linear-gradient(-45deg, #ff3232 11%, #f4ff32 21%, #f4ff32 29%, #32ff32 40%, #32ffff 50%, #32ffff 58%, #3239ff 67%, #9f22aa 88%, #875196 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #ff3232 11%, #f4ff32 21%, #f4ff32 29%, #32ff32 40%, #32ffff 50%, #32ffff 58%, #3239ff 67%, #9f22aa 88%, #875196 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #ff3232 11%, #f4ff32 21%, #f4ff32 29%, #32ff32 40%, #32ffff 50%, #32ffff 58%, #3239ff 67%, #9f22aa 88%, #875196 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', endColorstr='#875196', GradientType=1);
+  /* IE6-9 fallback on horizontal gradient */
+}
+
+.color-table .tooltip-inner {
+  min-width: unset;
 }
 
 .color:hover {
@@ -134,7 +149,15 @@
 }
 
 .color.active {
-  border: 2px solid #000;
+  border-color: #000;
+}
+
+.colorful:hover {
+  border: 2px solid gray;
+}
+
+.colorful.active {
+  border: 2px solid gray;
 }
 
 .item-color {
@@ -231,7 +254,7 @@ div.rtl .arrow-left {
 }
 
 .price-range {
-  width: 200px;
+  width: 170px;
   vertical-align: middle;
 }
 
@@ -257,4 +280,19 @@ div.rtl .arrow-left {
 
 .noUi-handle:after {
   left: 12px;
+}
+
+.text-search .form-control {
+  position: relative;
+  padding-right: 45px !important;
+}
+
+.text-search button {
+  background-color: transparent;
+  padding: 0;
+  position: absolute;
+  top: 26px;
+  right: 26px;
+  font-size: 20px;
+  z-index: 9999;
 }

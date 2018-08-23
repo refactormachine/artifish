@@ -36,7 +36,8 @@
 		"phone_number_is_required": "יש למלא מספר טלפון",
 		"start": "התחל",
 		"size": "גודל",
-		"price": "מחיר"
+		"price": "מחיר",
+		"all": "הכל"
 	},
 	"contact_us": {
 		"get_in_touch": "צור קשר",
@@ -117,7 +118,6 @@
 		"filter_by": "סנן לפי",
 		"more_details": "פרטים נוספים",
 		"type": "סוג",
-		"all": "הכל",
 		"filter_by_artwork_type": "סנן לפי סוג אמנות",
 		"no_results": "אין תוצאות",
 		"try_searching_again": "נסה לחפש שוב או להסיר חלק מהפילטרים",

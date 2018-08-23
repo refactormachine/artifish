@@ -46,8 +46,8 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   portfolioItemsTotalEntries: number;
   portfolioItemsPageSize: number = 40;
 
-  filters: { tags: any[]; color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any }
-          = { tags: [], color: null, material: null, size: { width: null, height: null }, minPrice: null, maxPrice: null }
+  filters: { query: string, tags: any[]; color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any }
+          = { query: null, tags: [], color: null, material: null, size: { width: null, height: null }, minPrice: null, maxPrice: null }
   tags: any[] = [];
   materialTypes: any[] = [];
   hexColors: any[] = ['#bcb7b0', '#000000', '#0c2c53', '#444a6d', '#1797b8', '#00a7ed', '#0e59e1', '#2f29e7', '#7327e7', '#c55c9c', '#cd3846', '#e1947f', '#e69f55', '#efd05e', '#9abe45', '#1ec6b7', '#bdfdfc'];//, '#ff0000', '#00ff00', '#0000ff']
@@ -135,6 +135,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   }
 
   externalSearch() {
+    this.portfolioItemsPage = 1;
     this.searchLoading = true;
     this.portfolioItemService.search(this.filters, this.portfolioItemsPage, this.portfolioItemsPageSize).subscribe(res => {
       this.portfolioItems = res.portfolioItems;
@@ -143,8 +144,13 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     })
   }
 
+  searchByQuery() {
+    this.filters.tags = [];
+    this.filters.color = null;
+    this.externalSearch();
+  }
+
   selectTagFilter(tagObj) {
-    this.portfolioItemsPage = 1;
     let selectedTagIndex = this.filters.tags.indexOf(tagObj);
     if (selectedTagIndex == -1) {
       this.filters.tags.push(tagObj);
@@ -156,13 +162,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   }
 
   selectColorFilter(hexColor) {
-    this.portfolioItemsPage = 1;
-    if (this.filters.color == hexColor) {
-      this.filters.color = null;
-    } else {
-      this.filters.color = hexColor;
-    }
-
+    this.filters.color = hexColor;
     this.externalSearch();
   }
 
