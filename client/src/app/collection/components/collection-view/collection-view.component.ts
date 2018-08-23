@@ -23,6 +23,7 @@ import { MaterialService } from '../../services/material.service';
 import { PortfolioItemService } from '../../services/portfolio-item.service';
 import { TagService } from '../../services/tag.service';
 import { PurchaseOptionService } from '../../services/purchase-option.service';
+import { ScrollbarComponent } from 'ngx-scrollbar';
 
 @Component({
   selector: 'app-collection-view',
@@ -128,9 +129,10 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     return this.handleNavigationAway();
   }
 
-  arrowClick(toLeft) {
+  arrowClick(scrollbar: ScrollbarComponent, toLeft) {
     const toMove = 400;
-    document.getElementById('tagList').scrollLeft += toLeft ? -toMove : toMove;
+    let scrollLeft = scrollbar.view.scrollLeft + (toLeft ? -toMove : toMove);
+    scrollbar.scrollXTo(scrollLeft, 800);
   }
 
   externalSearch() {

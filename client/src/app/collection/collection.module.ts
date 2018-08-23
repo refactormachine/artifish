@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NouisliderModule } from 'ng2-nouislider';
+import { ScrollbarModule } from 'ngx-scrollbar';
 
 import { AuthModule } from '../auth/auth.module';
 import { AuthGuard } from '../auth/services/auth-guard.service';
@@ -27,12 +28,13 @@ import { PurchaseOptionService } from './services/purchase-option.service';
     AuthModule,
     NgbModule.forRoot(),
     NouisliderModule,
+    ScrollbarModule,
     RouterModule.forChild([
       { path: 'start', component: CollectionViewComponent, canActivate: [BetaLoginGuard], canDeactivate: [SaveCollectionDataGuard] },
       { path: 'collections', component: CollectionsComponent, canActivate: [AuthGuard, VerifiedUserGuard] },
       { path: 'collections/:id', component: CollectionViewComponent, canActivate: [AuthGuard, VerifiedUserGuard], canDeactivate: [SaveCollectionDataGuard] },
       { path: 'collections/:id/purchase', component: PurchaseComponent, canActivate: [AuthGuard, VerifiedUserGuard] },
-    ]),
+    ])
   ],
   declarations: [CollectionsComponent, CollectionViewComponent, PurchaseComponent],
   providers: [

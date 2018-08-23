@@ -48,6 +48,7 @@
     "konva": "^2.1.8",
     "ng2-nouislider": "^1.7.12",
     "ng2-validation": "^4.2.0",
+    "ngx-scrollbar": "^1.5.7",
     "nouislider": "^11.1.0",
     "roboto-fontface": "^0.10.0",
     "rxjs": "^5.5.6",

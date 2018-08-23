@@ -9,7 +9,7 @@
 @import "~roboto-fontface/css/roboto/roboto-fontface.css";
 @import "~nouislider/distribute/nouislider.min.css";
 body {
-  padding-top: 80px;
+  padding-top: 55px;
   padding-bottom: 10px;
   font-family: 'Roboto', sans-serif;
 }
@@ -32,7 +32,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  background-position-y: 70px;
+  background-position: 0% 70px !important;
 }
 
 .home-background-rtl {
@@ -40,7 +40,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  background-position-y: 70px;
+  background-position: 0% 70px !important;
 }
 
 .ontop-overlay {
