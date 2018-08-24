@@ -10,14 +10,14 @@ module SearchProviders
     URL = "#{BASE_URL}result.asp?rootcat=749&cat_id=%s&parent=749"
     GET_PRICE_AJAX_URL = "http://www.galmir.co.il/ajax/calculateP.asp?w=%s&h=%s&q=1&material=%s&id=%s"
     CATEGORIES = {
-      :pop_art => 897,
-      :urban => 752,
-      :nature => 832,
-      :animals => 751,
-      :kids => 859,
-      :movies_and_tv => 937,
-      :music => 938,
-      :commercials => 838
+      "pop-art" => 897,
+      "urban" => 752,
+      "nature" => 832,
+      "animals" => 751,
+      "kids" => 859,
+      "movies-and-tv" => 937,
+      "music" => 938,
+      "commercials" => 838
     }
     ALLOWED_MATERIALS_IDS = [2, 1]
     MATERIAL_NAME_TO_TYPE = {

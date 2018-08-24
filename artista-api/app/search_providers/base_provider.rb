@@ -19,8 +19,8 @@ module SearchProviders
       # Load existing portfolios to not reprocess them
       tags_to_product_urls = PortfolioItem.where(supplier_id: @supplier_id).joins(:tags).select("portfolio_items.product_url, tags.name").group_by(&:name)
       tags_to_product_urls.each do |tag_name, items|
-        @already_loaded_portfolios[tag_name.to_sym] = {}
-        items.each { |item| @already_loaded_portfolios[tag_name.to_sym][item.product_url] = true }
+        @already_loaded_portfolios[tag_name] = {}
+        items.each { |item| @already_loaded_portfolios[tag_name][item.product_url] = true }
       end
 
       self.class::CATEGORIES.each do |category_name, category_identifiers|

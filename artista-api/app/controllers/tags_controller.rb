@@ -3,6 +3,6 @@ class TagsController < ApplicationController
 
   # GET /tags.json
   def index
-    @tags = Tag.all
+    @tags = Tag.joins(:portfolio_items).group("tags.id, tags.name").having("COUNT(*) > 5").select("tags.*").to_a.take(30)
   end
 end

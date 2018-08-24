@@ -35,7 +35,14 @@ class PortfolioItemsController < ApplicationController
       @portfolio_items = @portfolio_items.where.has{purchase_options.material_id == material_id} if material_id
       @portfolio_items = @portfolio_items.where.has{purchase_options.size_id.in size_ids} if size_ids
       @portfolio_items = @portfolio_items.where.has{(purchase_options.price_cents > min_price_cents) & (purchase_options.price_cents < max_price_cents)} if min_price_cents && max_price_cents
-      @portfolio_items = @portfolio_items.where.has{|pi| pi.name =~ "%#{params[:query]}%"} if params[:query]
+      if params[:query].present?
+        query_words = params[:query].split(' ')
+        where_clause = query_words.map{|word| "(tags.name = '#{word}' OR tags.name LIKE '#{word}-%') OR "}.join.chomp(' OR ')
+        tags_id = Tag.where(where_clause).pluck(:id)
+        # tags_id = Tag.where.has{name.in query_words}.pluck(:id)
+        tags_id = [] if tags_id.count != query_words.count # no results if didn't find one of the words
+        @portfolio_items = @portfolio_items.joins(:tags).where.has{|pi| pi.tags.id.in tags_id }.group("portfolio_items.id").having("COUNT(DISTINCT portfolio_items_tags.tag_id) = #{tags_id.length}")
+      end
     end
 
     # This part should come after last filter to get a correct number of total entries!

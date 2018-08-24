@@ -166,21 +166,6 @@
 		"phone_number": "Phone number",
 		"items_ordered": "Items Ordered"
 	},
-	"tags": {
-		"pop_art": "Pop Art",
-		"kids": "Kids",
-		"commercials": "Commercials",
-		"music": "Music",
-		"animals": "Animals",
-		"nature": "Nature",
-		"urban": "Urban",
-		"movies_and_tv": "Movies & TV",
-		"humanity": "Humanity",
-		"abstract": "Abstract",
-		"water": "Water",
-		"flowers": "Flowers",
-		"childhood": "Childhood"
-	},
 	"materials": {
 		"all": "All",
 		"canvas": "Canvas",

@@ -167,21 +167,6 @@
 		"phone_number": "מספר טלפון",
 		"items_ordered": "פריטים שהוזמנו"
 	},
-	"tags": {
-		"pop_art": "פופ ארט",
-		"kids": "ילדים",
-		"commercials": "מסחרי",
-		"music": "מוזיקה",
-		"animals": "חיות",
-		"nature": "טבע",
-		"urban": "אורבני",
-		"movies_and_tv": "טלויזיה",
-		"humanity": "אנושות",
-		"abstract": "אסטרקטי",
-		"water": "מים",
-		"flowers": "פרחים",
-		"childhood": "ילדות"
-	},
 	"materials": {
 		"all": "הכל",
 		"canvas": "קנבס",

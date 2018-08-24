@@ -1,7 +1,7 @@
 module SearchProviders
   class Galmir < BaseProvider
     ALLOWED_CATALOGS = {
-      :pop_art => {
+      "pop-art" => {
         "GA-C0940" => true,
         "GA-C0922" => true,
         "GA-C0821" => true,
@@ -38,7 +38,7 @@ module SearchProviders
         "GA-C0775" => true,
         "GA-C1670" => true
       },
-      :kids => {
+      "kids" => {
         "GA-C0633" => true,
         "GA-C1042" => true,
         "GA-C0630" => true,
@@ -82,7 +82,7 @@ module SearchProviders
         "GA-C0459" => true,
         "GA-C0510" => true
       },
-      :commercials => {
+      "commercials" => {
         "GA-C1052" => true,
         "GA-C1628" => true,
         "GA-C0766" => true,
@@ -120,7 +120,7 @@ module SearchProviders
         "GA-C1449" => true,
         "GA-C0964" => true
       },
-      :music => {
+      "music" => {
         "GA-C1557" => true,
         "GA-C1559" => true,
         "GA-C1498" => true,
@@ -161,7 +161,7 @@ module SearchProviders
         "GA-C1718" => true,
         "GA-C0019" => true
       },
-      :movies_and_tv => {
+      "movies-and-tv" => {
         "GA-C1560" => true,
         "GA-C1643" => true,
         "GA-C0941" => true,
@@ -195,7 +195,7 @@ module SearchProviders
         "GA-C1705" => true,
         "GA-C1191" => true
       },
-      :animals => {
+      "animals" => {
         "GA-C0202" => true,
         "GA-C0206" => true,
         "GA-C0197" => true,
@@ -239,7 +239,7 @@ module SearchProviders
         "GA-C0681" => true,
         "GA-C0691" => true
       },
-      :nature => {
+      "nature" => {
         "GA-C0186" => true,
         "GA-C0183" => true,
         "GA-C0353" => true,
@@ -283,7 +283,7 @@ module SearchProviders
         "GA-C1406" => true,
         "GA-C1407" => true
       },
-      :urban => {
+      "urban" => {
         "GA-CP0319" => true,
         "GA-CP0001" => true,
         "GA-C0407" => true,

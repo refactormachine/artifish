@@ -17,8 +17,8 @@
           <div class="horizontal-slide tag-list" id="tagList">
             <ng-scrollbar #tagsScroll [trackX]="true" [trackY]="false" viewClass="tags-scrollbar" barClass="tags-scrollbar-bar" thumbClass="tags-scrollbar-thumb">
               <div *ngFor="let tag of tags" class="tag">
-                <button class="btn btn-light" [ngClass]="{ 'btn-dark': isTagSelected(tag) }" container="body" placement="top" ngbTooltip="{{'collection.filter_by' | translate}} {{'tags.' + tag.name | translate}}"
-                  (click)="selectTagFilter(tag)">{{'tags.' + tag.name | translate}}</button>
+                <button class="btn btn-light" [ngClass]="{ 'btn-dark': isTagSelected(tag) }" container="body" placement="top" ngbTooltip="{{'collection.filter_by' | translate}} {{tag.name}}"
+                  (click)="selectTagFilter(tag)">{{tag.name}}</button>
               </div>
             </ng-scrollbar>
           </div>

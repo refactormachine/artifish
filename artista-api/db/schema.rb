@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_23_071425) do
+ActiveRecord::Schema.define(version: 2018_08_24_113530) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -141,7 +141,7 @@ ActiveRecord::Schema.define(version: 2018_08_23_071425) do
   create_table "portfolio_items_tags", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "tag_id", null: false
     t.bigint "portfolio_item_id", null: false
-    t.index ["portfolio_item_id", "tag_id"], name: "index_portfolio_items_tags_on_portfolio_item_id_and_tag_id"
+    t.index ["portfolio_item_id", "tag_id"], name: "index_portfolio_items_tags_on_portfolio_item_id_and_tag_id", unique: true
     t.index ["tag_id", "portfolio_item_id"], name: "index_portfolio_items_tags_on_tag_id_and_portfolio_item_id"
   end
 
