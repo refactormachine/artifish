@@ -53,25 +53,28 @@ class PortfolioItem < ApplicationRecord
     vision_tags += labels
     vision_tags += face_expressions if face_expressions
 
-    dominant_colors = vision_image.properties.colors.map{|c| Color.new(r: c.red, g: c.green, b: c.blue)}
+    vision_dominant_colors = vision_image.properties.colors
     temp_file.unlink
 
     tag_colors = {}
-    dominant_colors.each_with_index do |dominant_color, index|
+    vision_dominant_colors.each do |vision_dominant_color|
+      DominantColor.create!(portfolio_item_id: self.id, r: vision_dominant_color.red, g: vision_dominant_color.green, b: vision_dominant_color.blue, score: vision_dominant_color.score, pixel_fraction: vision_dominant_color.pixel_fraction)
+      dominant_color = Color.new(r: vision_dominant_color.red, g: vision_dominant_color.green, b: vision_dominant_color.blue)
       tag_color = @@filter_colors.min_by { |filter_color| calculate_color_diff(dominant_color, filter_color) }
-      dominance_weight = calculate_color_diff(dominant_color, tag_color)
+      dominance_similarity = calculate_color_diff(dominant_color, tag_color)
       tag_colors[tag_color] ||= {}
-      tag_colors[tag_color][:dominance_index] ||= index
-      if tag_colors[tag_color][:dominance_weight]
-        tag_colors[tag_color][:dominance_weight] = [dominance_weight, tag_colors[tag_color][:dominance_weight]].min
+      tag_colors[tag_color][:dominance_score] ||= vision_dominant_color.score
+      tag_colors[tag_color][:dominance_pixel_fraction] ||= vision_dominant_color.pixel_fraction
+      if tag_colors[tag_color][:dominance_similarity]
+        tag_colors[tag_color][:dominance_similarity] = [dominance_similarity, tag_colors[tag_color][:dominance_similarity]].min
       else
-        tag_colors[tag_color][:dominance_weight] = dominance_weight
+        tag_colors[tag_color][:dominance_similarity] = dominance_similarity
       end
     end
 
     tag_colors.each do |c, dominance_hash|
       begin
-        self.portfolio_item_colors.create!(color_id: c.id, dominance_index: dominance_hash[:dominance_index], dominance_weight: dominance_hash[:dominance_weight].to_i)
+        self.portfolio_item_colors.create!(color_id: c.id, dominance_pixel_fraction: dominance_hash[:dominance_pixel_fraction], dominance_score: dominance_hash[:dominance_score], dominance_similarity: dominance_hash[:dominance_similarity].to_i)
       rescue ActiveRecord::RecordNotUnique => e
         nil
       end
@@ -81,6 +84,35 @@ class PortfolioItem < ApplicationRecord
       tag = Tag.find_or_create_by!(name: vision_tag.gsub(/[ _]/, '-'))
       begin
         tags << tag
+      rescue ActiveRecord::RecordNotUnique => e
+        nil
+      end
+    end
+  end
+
+  def regenerate_color_tags
+    self.portfolio_item_colors.destroy_all
+    @@filter_colors ||= Color.all
+    tag_colors = {}
+
+    saved_dominant_colors = DominantColor.where(portfolio_item_id: self.id)
+    saved_dominant_colors.each do |saved_dominant_color|
+      dominant_color = Color.new(r: saved_dominant_color.r, g: saved_dominant_color.g, b: saved_dominant_color.b)
+      tag_color = @@filter_colors.min_by { |filter_color| calculate_color_diff(dominant_color, filter_color) }
+      dominance_similarity = calculate_color_diff(dominant_color, tag_color)
+      tag_colors[tag_color] ||= {}
+      tag_colors[tag_color][:dominance_score] ||= saved_dominant_color.score
+      tag_colors[tag_color][:dominance_pixel_fraction] ||= saved_dominant_color.pixel_fraction
+      if tag_colors[tag_color][:dominance_similarity]
+        tag_colors[tag_color][:dominance_similarity] = [dominance_similarity, tag_colors[tag_color][:dominance_similarity]].min
+      else
+        tag_colors[tag_color][:dominance_similarity] = dominance_similarity
+      end
+    end
+
+    tag_colors.each do |c, dominance_hash|
+      begin
+        self.portfolio_item_colors.create!(color_id: c.id, dominance_pixel_fraction: dominance_hash[:dominance_pixel_fraction], dominance_score: dominance_hash[:dominance_score], dominance_similarity: dominance_hash[:dominance_similarity].to_i)
       rescue ActiveRecord::RecordNotUnique => e
         nil
       end
@@ -103,18 +135,19 @@ class PortfolioItem < ApplicationRecord
     tag_colors = {}
     dominant_colors.each_with_index do |dominant_color, index|
       tag_color = @@filter_colors.min_by { |filter_color| calculate_color_diff(dominant_color, filter_color) }
-      dominance_weight = calculate_color_diff(dominant_color, tag_color)
+      dominance_similarity = calculate_color_diff(dominant_color, tag_color)
       tag_colors[tag_color] ||= {}
-      tag_colors[tag_color][:dominance_index] ||= index
-      if tag_colors[tag_color][:dominance_weight]
-        tag_colors[tag_color][:dominance_weight] = [dominance_weight, tag_colors[tag_color][:dominance_weight]].min
+      tag_colors[tag_color][:dominance_score] ||= index
+      tag_colors[tag_color][:dominance_pixel_fraction] ||= index
+      if tag_colors[tag_color][:dominance_similarity]
+        tag_colors[tag_color][:dominance_similarity] = [dominance_similarity, tag_colors[tag_color][:dominance_similarity]].min
       else
-        tag_colors[tag_color][:dominance_weight] = dominance_weight
+        tag_colors[tag_color][:dominance_similarity] = dominance_similarity
       end
     end
     tag_colors.each do |c, dominance_hash|
       begin
-        self.portfolio_item_colors.create!(color_id: c.id, dominance_index: dominance_hash[:dominance_index], dominance_weight: dominance_hash[:dominance_weight].to_i)
+        self.portfolio_item_colors.create!(color_id: c.id, dominance_pixel_fraction: dominance_hash[:dominance_pixel_fraction], dominance_score: dominance_hash[:dominance_score], dominance_similarity: dominance_hash[:dominance_similarity].to_i)
       rescue ActiveRecord::RecordNotUnique => e
         nil
       end

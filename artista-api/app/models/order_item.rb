@@ -5,7 +5,7 @@
 #  id                 :bigint(8)        not null, primary key
 #  name               :string(255)
 #  image_url          :string(255)
-#  item_url           :string(255)
+#  product_url        :string(255)
 #  purchase_option_id :bigint(8)
 #  price_cents        :integer          default(0), not null
 #  price_currency     :string(255)      default("USD"), not null

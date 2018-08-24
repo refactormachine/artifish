@@ -30,8 +30,8 @@ class PortfolioItemsController < ApplicationController
     else
       @portfolio_items = @portfolio_items.joins(:tags).where.has{ tags.name.in query_tags } if query_tags.present?
       @portfolio_items = @portfolio_items.joins(:portfolio_item_colors).where.has{ portfolio_item_colors.color_id == color.id }
-                                          .select("portfolio_item_colors.dominance_index, portfolio_item_colors.dominance_weight")
-                                          .order("portfolio_item_colors.dominance_index ASC, portfolio_item_colors.dominance_weight ASC") if color.present?
+                                          .select("portfolio_item_colors.dominance_pixel_fraction, portfolio_item_colors.dominance_score, portfolio_item_colors.dominance_similarity")
+                                          .order("portfolio_item_colors.dominance_pixel_fraction DESC, portfolio_item_colors.dominance_score DESC, portfolio_item_colors.dominance_similarity ASC") if color.present?
       @portfolio_items = @portfolio_items.where.has{purchase_options.material_id == material_id} if material_id
       @portfolio_items = @portfolio_items.where.has{purchase_options.size_id.in size_ids} if size_ids
       @portfolio_items = @portfolio_items.where.has{(purchase_options.price_cents > min_price_cents) & (purchase_options.price_cents < max_price_cents)} if min_price_cents && max_price_cents
@@ -55,7 +55,7 @@ class PortfolioItemsController < ApplicationController
     @portfolio_items = @portfolio_items
     .select("MIN(purchase_options.price_cents) as starting_price")
     .select("purchase_options.price_currency")
-    .select("portfolio_items.*").group("portfolio_items.id, purchase_options.price_currency #{', portfolio_item_colors.dominance_index, portfolio_item_colors.dominance_weight' if color.present?}") if @portfolio_items
+    .select("portfolio_items.*").group("portfolio_items.id, purchase_options.price_currency #{', portfolio_item_colors.dominance_pixel_fraction, portfolio_item_colors.dominance_score, portfolio_item_colors.dominance_similarity' if color.present?}") if @portfolio_items
 
     @portfolio_items = @portfolio_items.shuffle if no_filters # shuffle in case of showing random items as no filters were provided
   end

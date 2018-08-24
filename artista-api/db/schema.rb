@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_24_113530) do
+ActiveRecord::Schema.define(version: 2018_08_24_213129) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -63,6 +63,16 @@ ActiveRecord::Schema.define(version: 2018_08_24_113530) do
     t.float "h"
     t.float "s"
     t.float "l"
+  end
+
+  create_table "dominant_colors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "r"
+    t.integer "g"
+    t.integer "b"
+    t.float "score"
+    t.bigint "portfolio_item_id"
+    t.float "pixel_fraction"
+    t.index ["portfolio_item_id"], name: "index_dominant_colors_on_portfolio_item_id"
   end
 
   create_table "materials", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -120,8 +130,9 @@ ActiveRecord::Schema.define(version: 2018_08_24_113530) do
   create_table "portfolio_item_colors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "portfolio_item_id", null: false
     t.bigint "color_id", null: false
-    t.integer "dominance_index", null: false
-    t.integer "dominance_weight", null: false
+    t.float "dominance_score", null: false
+    t.float "dominance_similarity", null: false
+    t.float "dominance_pixel_fraction"
     t.index ["color_id", "portfolio_item_id"], name: "index_portfolio_item_colors_on_color_id_and_portfolio_item_id"
     t.index ["portfolio_item_id", "color_id"], name: "index_portfolio_item_colors_on_portfolio_item_id_and_color_id", unique: true
   end
@@ -196,6 +207,7 @@ ActiveRecord::Schema.define(version: 2018_08_24_113530) do
 
   add_foreign_key "collection_items", "collections"
   add_foreign_key "collections", "users"
+  add_foreign_key "dominant_colors", "portfolio_items"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "purchase_options"
   add_foreign_key "orders", "users"
