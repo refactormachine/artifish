@@ -197,9 +197,17 @@
                   aria-hidden="true"></i>
               </div>
               <div class="w-100">
-                <i class="fa fa-search clickable float-right" placement="top" ngbTooltip="{{'collection.more_details' | translate}}"
-                  (click)="openImageModal(portfolioItem)" aria-hidden="true"></i>
+                <i class="fa fa-search clickable float-right" placement="top" ngbTooltip="{{'collection.more_details' | translate}}" (click)="openImageModal(portfolioItem)"
+                  aria-hidden="true"></i>
                 <p class="mb-0 starting-at">{{'collection.starting_at' | translate}}: {{portfolioItem.startingPriceFormatted}}</p>
+              </div>
+              <div class="w-100">
+                <ng-container *ngFor="let color of portfolioItem.colors">
+                  <div style="width: 40px; height: 40px; display: inline-block;">
+                    <div style="width: 20px; height: 40px; float: left;" class="orig" [style.backgroundColor]="color.origHex"></div>
+                    <div style="width: 20px; height: 40px; float: left;" class="matched" [style.backgroundColor]="color.matchedHex"></div>
+                  </div>
+                </ng-container>
               </div>
             </div>
           </div>

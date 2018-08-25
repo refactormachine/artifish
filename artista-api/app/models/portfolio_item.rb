@@ -35,7 +35,7 @@ class PortfolioItem < ApplicationRecord
     @@project_id ||= "artifish-app"
     @@vision ||= Google::Cloud::Vision.new project: @@project_id, credentials: JSON.parse(ENV['GOOGLE_APPLICATION_CREDENTIALS'])
 
-    @@filter_colors ||= Color.all
+    @@filter_colors ||= AppColor.all
 
     filename = self.image.filename.to_s
     temp_file = Tempfile.new(filename)
@@ -59,7 +59,7 @@ class PortfolioItem < ApplicationRecord
     tag_colors = {}
     vision_dominant_colors.each do |vision_dominant_color|
       DominantColor.create!(portfolio_item_id: self.id, r: vision_dominant_color.red, g: vision_dominant_color.green, b: vision_dominant_color.blue, score: vision_dominant_color.score, pixel_fraction: vision_dominant_color.pixel_fraction)
-      dominant_color = Color.new(r: vision_dominant_color.red, g: vision_dominant_color.green, b: vision_dominant_color.blue)
+      dominant_color = AppColor.new(r: vision_dominant_color.red, g: vision_dominant_color.green, b: vision_dominant_color.blue)
       tag_color = @@filter_colors.min_by { |filter_color| calculate_color_diff(dominant_color, filter_color) }
       dominance_similarity = calculate_color_diff(dominant_color, tag_color)
       tag_colors[tag_color] ||= {}
@@ -92,12 +92,12 @@ class PortfolioItem < ApplicationRecord
 
   def regenerate_color_tags
     self.portfolio_item_colors.destroy_all
-    @@filter_colors ||= Color.all
+    @@filter_colors ||= AppColor.all
     tag_colors = {}
 
     saved_dominant_colors = DominantColor.where(portfolio_item_id: self.id)
     saved_dominant_colors.each do |saved_dominant_color|
-      dominant_color = Color.new(r: saved_dominant_color.r, g: saved_dominant_color.g, b: saved_dominant_color.b)
+      dominant_color = AppColor.new(r: saved_dominant_color.r, g: saved_dominant_color.g, b: saved_dominant_color.b)
       tag_color = @@filter_colors.min_by { |filter_color| calculate_color_diff(dominant_color, filter_color) }
       dominance_similarity = calculate_color_diff(dominant_color, tag_color)
       tag_colors[tag_color] ||= {}
@@ -120,7 +120,7 @@ class PortfolioItem < ApplicationRecord
   end
 
   def old_extract_colors(color_count = 10)
-    @@filter_colors ||= Color.all
+    @@filter_colors ||= AppColor.all
 
     filename = self.image.filename.to_s
     temp_file = Tempfile.new(filename)
@@ -157,6 +157,9 @@ class PortfolioItem < ApplicationRecord
   private
 
   def calculate_color_diff(c1, c2)
-    d = Math.sqrt((c1.r-c2.r)**2 + (c1.g-c2.g)**2 + (c1.b-c2.b)**2)
+    # d = Math.sqrt((c1.r-c2.r)**2 + (c1.g-c2.g)**2 + (c1.b-c2.b)**2)
+    color1 = Color::RGB.new(c1.r, c1.g, c1.b)
+    color2 = Color::RGB.new(c2.r, c2.g, c2.b)
+    Color::Comparison.distance(color1, color2)
   end
 end

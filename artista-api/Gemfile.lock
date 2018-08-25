@@ -70,6 +70,7 @@ GEM
     climate_control (0.2.0)
     cocaine (0.6.0)
       terrapin (= 0.6.0)
+    color-rgb (0.0.2)
     concurrent-ruby (1.0.5)
     crass (1.0.4)
     declarative (0.0.10)
@@ -281,6 +282,7 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   byebug
   camalian
+  color-rgb
   google-cloud-storage (~> 1.8)
   google-cloud-vision
   httparty

@@ -16,5 +16,5 @@ class PortfolioItemColor < ApplicationRecord
 
   # Relations
   belongs_to :portfolio_item
-  belongs_to :color
+  belongs_to :color, :class_name => "AppColor"
 end

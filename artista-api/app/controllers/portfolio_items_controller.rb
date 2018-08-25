@@ -64,7 +64,7 @@ class PortfolioItemsController < ApplicationController
 
   def hex_to_color(hex_color)
     m = hex_color.match /#(..)(..)(..)/
-    Color.where(r: m[1].hex, g: m[2].hex, b: m[3].hex).first
+    AppColor.where(r: m[1].hex, g: m[2].hex, b: m[3].hex).first
   end
 
   def no_filters

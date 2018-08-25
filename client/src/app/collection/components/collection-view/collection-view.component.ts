@@ -51,7 +51,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
           = { query: null, tags: [], color: null, material: null, size: { width: null, height: null }, minPrice: null, maxPrice: null }
   tags: any[] = [];
   materialTypes: any[] = [];
-  hexColors: any[] = ['#bcb7b0', '#000000', '#0c2c53', '#444a6d', '#6f7072', '#8196b5', '#a4c1e2', '#1797b8', '#00a7ed', '#0e59e1', '#2f29e7', '#7327e7', '#c55c9c', '#cd3846', '#e1947f', '#e69f55', '#efd05e', '#ae985d', '#9abe45', '#1ec6b7', '#bdfdfc'];
+  hexColors: any[] = ['#bcb7b0', '#000000', '#0c2c53', '#444a6d', '#6f7072', '#8196b5', '#a4c1e2', '#1797b8', '#00a7ed', '#0e59e1', '#2f29e7', '#7327e7', '#c55c9c', '#cd3846', '#e1947f', '#fcd1c2', '#e69f55', '#efd05e', '#ae985d', '#9abe45', '#1ec6b7', '#bdfdfc'];
   selectedMaterialType: any;
   priceRange: any[] = [0];
   maxPrice: string;
@@ -135,8 +135,8 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     scrollbar.scrollXTo(scrollLeft, 800);
   }
 
-  externalSearch() {
-    this.portfolioItemsPage = 1;
+  externalSearch(resetPage = true) {
+    if (resetPage) this.portfolioItemsPage = 1;
     this.searchLoading = true;
     this.portfolioItemService.search(this.filters, this.portfolioItemsPage, this.portfolioItemsPageSize).subscribe(res => {
       this.portfolioItems = res.portfolioItems;
@@ -183,7 +183,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
 
   pageChanged(event) {
     this.portfolioItems = [];
-    this.externalSearch();
+    this.externalSearch(false);
     window.scrollTo(0, 0);
   }
 
