@@ -61,10 +61,17 @@ class PortfolioItem < ApplicationRecord
       DominantColor.create!(portfolio_item_id: self.id, r: vision_dominant_color.red, g: vision_dominant_color.green, b: vision_dominant_color.blue, score: vision_dominant_color.score, pixel_fraction: vision_dominant_color.pixel_fraction)
       dominant_color = AppColor.new(r: vision_dominant_color.red, g: vision_dominant_color.green, b: vision_dominant_color.blue)
       tag_color = @@filter_colors.min_by { |filter_color| calculate_color_diff(dominant_color, filter_color) }
+      # tag_color = @@filter_colors.min_by do |filter_color|
+      #   hsl = filter_color.to_hsl
+      #   dominant_color_hsl = dominant_color.to_hsl
+      #   new_l = dominant_color_hsl[2] > 50 ? 50 : dominant_color_hsl[2]
+      #   filter_color_same_l = AppColor.from_hsl(hsl[0], hsl[1], new_l) # use the same l of the dominant color for the comparison
+      #   calculate_color_diff(dominant_color, filter_color_same_l)
+      # end
       dominance_similarity = calculate_color_diff(dominant_color, tag_color)
-      tag_colors[tag_color] ||= {}
-      tag_colors[tag_color][:dominance_score] ||= vision_dominant_color.score
-      tag_colors[tag_color][:dominance_pixel_fraction] ||= vision_dominant_color.pixel_fraction
+      tag_colors[tag_color] ||= {dominance_pixel_fraction: 0, dominance_score: 0}
+      tag_colors[tag_color][:dominance_score] += vision_dominant_color.score
+      tag_colors[tag_color][:dominance_pixel_fraction] += vision_dominant_color.pixel_fraction
       if tag_colors[tag_color][:dominance_similarity]
         tag_colors[tag_color][:dominance_similarity] = [dominance_similarity, tag_colors[tag_color][:dominance_similarity]].min
       else
@@ -99,10 +106,17 @@ class PortfolioItem < ApplicationRecord
     saved_dominant_colors.each do |saved_dominant_color|
       dominant_color = AppColor.new(r: saved_dominant_color.r, g: saved_dominant_color.g, b: saved_dominant_color.b)
       tag_color = @@filter_colors.min_by { |filter_color| calculate_color_diff(dominant_color, filter_color) }
+      # tag_color = @@filter_colors.min_by do |filter_color|
+      #   hsl = filter_color.to_hsl
+      #   dominant_color_hsl = dominant_color.to_hsl
+      #   new_l = dominant_color_hsl[2] > 50 ? 50 : dominant_color_hsl[2]
+      #   filter_color_same_l = AppColor.from_hsl(hsl[0], hsl[1], new_l) # use the same l of the dominant color for the comparison
+      #   calculate_color_diff(dominant_color, filter_color_same_l)
+      # end
       dominance_similarity = calculate_color_diff(dominant_color, tag_color)
-      tag_colors[tag_color] ||= {}
-      tag_colors[tag_color][:dominance_score] ||= saved_dominant_color.score
-      tag_colors[tag_color][:dominance_pixel_fraction] ||= saved_dominant_color.pixel_fraction
+      tag_colors[tag_color] ||= {dominance_pixel_fraction: 0, dominance_score: 0}
+      tag_colors[tag_color][:dominance_score] += saved_dominant_color.score
+      tag_colors[tag_color][:dominance_pixel_fraction] += saved_dominant_color.pixel_fraction
       if tag_colors[tag_color][:dominance_similarity]
         tag_colors[tag_color][:dominance_similarity] = [dominance_similarity, tag_colors[tag_color][:dominance_similarity]].min
       else
@@ -135,6 +149,12 @@ class PortfolioItem < ApplicationRecord
     tag_colors = {}
     dominant_colors.each_with_index do |dominant_color, index|
       tag_color = @@filter_colors.min_by { |filter_color| calculate_color_diff(dominant_color, filter_color) }
+      # tag_color = @@filter_colors.min_by do |filter_color|
+      #   hsl = filter_color.to_hsl
+      #   new_l = dominant_color.l > 50 ? 50 : dominant_color.l
+      #   filter_color_same_l = AppColor.from_hsl(hsl[0], hsl[1], new_l) # use the same l of the dominant color for the comparison
+      #   calculate_color_diff(dominant_color, filter_color_same_l)
+      # end
       dominance_similarity = calculate_color_diff(dominant_color, tag_color)
       tag_colors[tag_color] ||= {}
       tag_colors[tag_color][:dominance_score] ||= index
