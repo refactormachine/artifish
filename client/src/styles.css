@@ -63,6 +63,10 @@ body {
   font-size: 12px;
 }
 
+.no-animation {
+  transition: none;
+}
+
 .dropdown-toggle {
   -webkit-user-select: none;
   /* Safari */

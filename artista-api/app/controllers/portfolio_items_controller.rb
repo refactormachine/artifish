@@ -3,8 +3,6 @@ class PortfolioItemsController < ApplicationController
 
   # GET /portfolio_items
   def index
-    query_tags = []
-    query_tags = params[:tags].split(' ') if params[:tags]
     color = hex_to_color(params[:color]) if params[:color]
 
     size_name_query = "#{params[:width]}x#{params[:height]}" if params[:width] && params[:height]
@@ -28,15 +26,14 @@ class PortfolioItemsController < ApplicationController
       # @portfolio_items = @portfolio_items.where(:id => portfolio_items_ids)
       @portfolio_items = @portfolio_items.where.has{id > 0}
     else
-      @portfolio_items = @portfolio_items.joins(:tags).where.has{ tags.name.in query_tags } if query_tags.present?
       @portfolio_items = @portfolio_items.joins(:portfolio_item_colors).where.has{ portfolio_item_colors.color_id == color.id }
                                           .select("portfolio_item_colors.dominance_pixel_fraction, portfolio_item_colors.dominance_score, portfolio_item_colors.dominance_similarity")
                                           .order("portfolio_item_colors.dominance_pixel_fraction DESC, portfolio_item_colors.dominance_score DESC, portfolio_item_colors.dominance_similarity ASC") if color.present?
       @portfolio_items = @portfolio_items.where.has{purchase_options.material_id == material_id} if material_id
       @portfolio_items = @portfolio_items.where.has{purchase_options.size_id.in size_ids} if size_ids
       @portfolio_items = @portfolio_items.where.has{(purchase_options.price_cents > min_price_cents) & (purchase_options.price_cents < max_price_cents)} if min_price_cents && max_price_cents
-      if params[:query].present?
-        query_words = params[:query].split(' ')
+      if params[:tags].present?
+        query_words = params[:tags].split(' ')
         where_clause = query_words.map{|word| "(tags.name = '#{word}' OR tags.name LIKE '#{word}-%') OR "}.join.chomp(' OR ')
         tags_id = Tag.where(where_clause).pluck(:id)
         # tags_id = Tag.where.has{name.in query_words}.pluck(:id)

@@ -3,10 +3,10 @@
   <div class="row mb-3">
     <ng-container *ngIf="!loadingFilters">
       <div class="col-lg-6 pt-4">
-        <form #f="ngForm" autocomplete="off" (ngSubmit)="searchByQuery()">
+        <form #f="ngForm" autocomplete="off" (ngSubmit)="f.form.valid && searchByQuery()">
           <div class="form-group text-search">
             <button type="submit" class="btn"><i class="fa fa-search clickable"></i></button>
-            <input type="text" name="query" [(ngModel)]="filters.query" class="form-control" id="inputSearch">
+            <input type="text" name="query" [(ngModel)]="queryText" class="form-control" id="inputSearch" placeholder="{{'collection.find_something_great' | translate}}" required>
           </div>
         </form>
         <div class="mb-3 tag-chooser">
@@ -16,9 +16,19 @@
 
           <div class="horizontal-slide tag-list" id="tagList">
             <ng-scrollbar #tagsScroll [trackX]="true" [trackY]="false" viewClass="tags-scrollbar" barClass="tags-scrollbar-bar" thumbClass="tags-scrollbar-thumb">
+              <div *ngFor="let queryTag of currentQueryTags" class="tag">
+                <button class="btn btn-dark no-animation" container="body" #t="ngbTooltip"
+                  placement="top" ngbTooltip="{{ 'collection.remove' | translate }} {{queryTag.name}}"
+                  (click)="removeQueryTag(queryTag)">{{queryTag.name}}
+                  <span class="tag-remove-icon"><i class="fa fa-times clickable" (click)="t.close()"></i></span>
+                </button>
+              </div>
               <div *ngFor="let tag of tags" class="tag">
-                <button class="btn btn-light" [ngClass]="{ 'btn-dark': isTagSelected(tag) }" container="body" placement="top" ngbTooltip="{{'collection.filter_by' | translate}} {{tag.name}}"
-                  (click)="selectTagFilter(tag)">{{tag.name}}</button>
+                <button class="btn btn-light no-animation" [ngClass]="{ 'btn-dark': isTagSelected(tag) }" container="body" #t="ngbTooltip"
+                  placement="top" ngbTooltip="{{ !isTagSelected(tag) ? ('collection.filter_by' | translate) : ('collection.remove' | translate) }} {{tag.name}}"
+                  (click)="selectTagFilter(tag)">{{tag.name}}
+                  <span *ngIf="isTagSelected(tag)" class="tag-remove-icon"><i class="fa fa-times clickable" (click)="t.close()"></i></span>
+                </button>
               </div>
             </ng-scrollbar>
           </div>

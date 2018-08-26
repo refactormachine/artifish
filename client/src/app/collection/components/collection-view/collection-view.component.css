@@ -136,6 +136,13 @@
   overflow-x: hidden;
 }
 
+.tag-remove-icon {
+  border-left: 1px solid #b9b9b9;
+  padding-left: 6px;
+  margin-left: 4px;
+  font-size: 14px;
+}
+
 .color {
   width: 24px;
   height: 24px;

@@ -120,6 +120,7 @@
 		"save_collection": "שמור פרוייקט",
 		"reset_project": "נקה פרוייקט",
 		"filter_by": "סנן לפי",
+		"remove": "הסר",
 		"more_details": "פרטים נוספים",
 		"type": "סוג",
 		"filter_by_artwork_type": "סנן לפי סוג אמנות",
@@ -134,7 +135,8 @@
 		"drag_image_warning_text": "לחץ על התמונה כדי לבחור אותה, לאחר מכן לחץ על ",
 		"drag_image_warning_text_after_icon": " בסרגל הכלים כדי לגרור אותה",
 		"you_must_set_workspace_picture_first": "ראשית עליך לבחור את תמונת החלל",
-		"download_workspace_image": "הורד תמונה של החלל"
+		"download_workspace_image": "הורד תמונה של החלל",
+		"find_something_great": "מצא משהו מיוחד"
 	},
 	"collections": {
 		"my_collections": "הפרוייקטים שלי",

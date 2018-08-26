@@ -119,6 +119,7 @@
 		"save_collection": "Save project",
 		"reset_project": "Reset project",
 		"filter_by": "Filter by",
+		"remove": "Remove",
 		"more_details": "More details",
 		"type": "Type",
 		"filter_by_artwork_type": "Filter by artwork type",
@@ -133,7 +134,8 @@
 		"drag_image_warning_text": "Click on the image to select it, then click on ",
 		"drag_image_warning_text_after_icon": " in the toolbar to drag it",
 		"you_must_set_workspace_picture_first": "You must set a workspace picture first",
-		"download_workspace_image": "Download workspace image"
+		"download_workspace_image": "Download workspace image",
+		"find_something_great": "Find something great"
 	},
 	"collections": {
 		"my_collections": "My Saved Projects",
