@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_24_213129) do
+ActiveRecord::Schema.define(version: 2018_08_26_161013) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -137,6 +137,16 @@ ActiveRecord::Schema.define(version: 2018_08_24_213129) do
     t.index ["portfolio_item_id", "color_id"], name: "index_portfolio_item_colors_on_portfolio_item_id_and_color_id", unique: true
   end
 
+  create_table "portfolio_item_words", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "portfolio_item_id"
+    t.bigint "word_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["portfolio_item_id", "word_id"], name: "index_portfolio_item_words_on_portfolio_item_id_and_word_id", unique: true
+    t.index ["portfolio_item_id"], name: "index_portfolio_item_words_on_portfolio_item_id"
+    t.index ["word_id"], name: "index_portfolio_item_words_on_word_id"
+  end
+
   create_table "portfolio_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "product_identifier"
@@ -183,6 +193,16 @@ ActiveRecord::Schema.define(version: 2018_08_24_213129) do
     t.index ["name"], name: "index_suppliers_on_name", unique: true
   end
 
+  create_table "tag_words", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.bigint "word_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id", "word_id"], name: "index_tag_words_on_tag_id_and_word_id", unique: true
+    t.index ["tag_id"], name: "index_tag_words_on_tag_id"
+    t.index ["word_id"], name: "index_tag_words_on_word_id"
+  end
+
   create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -203,6 +223,11 @@ ActiveRecord::Schema.define(version: 2018_08_24_213129) do
     t.datetime "updated_at", null: false
     t.index ["email", "provider"], name: "index_users_on_email_and_provider", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
+  create_table "words", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.index ["name"], name: "index_words_on_name", unique: true
   end
 
   add_foreign_key "collection_items", "collections"

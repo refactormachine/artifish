@@ -16,8 +16,14 @@ class PortfolioItem < ApplicationRecord
   belongs_to :supplier
   has_many :purchase_options, dependent: :destroy
   has_and_belongs_to_many :tags
+
+  has_many :portfolio_item_words
+  has_many :words, :through => :portfolio_item_words
+
   has_many :portfolio_item_colors
   has_many :colors, :through => :portfolio_item_colors
+
+  after_save :add_portfolio_item_words
 
   def purchase_options_formatted
     group = purchase_options.preload(:size).joins(:material).where.has{material.enabled == true}.group_by(&:material_id)
@@ -28,6 +34,17 @@ class PortfolioItem < ApplicationRecord
   def calculate_starting_price
     min_purchase_option = purchase_options.min_by(&:price_cents)
     min_purchase_option ? min_purchase_option.price : nil
+  end
+
+  def add_portfolio_item_words
+    words = self.name.split(/[ ,-]/).reject(&:blank?).map { |w| Word.find_or_create_by!(name: w.downcase) }
+    words.each do |word|
+      begin
+        self.portfolio_item_words.create!(word_id: word.id)
+      rescue ActiveRecord::RecordNotUnique => e
+        nil
+      end
+    end
   end
 
   def extract_tags_and_colors

@@ -47,16 +47,16 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   portfolioItemsTotalEntries: number;
   portfolioItemsPageSize: number = 40;
 
-  filters: { tags: any[]; color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any }
-          = { tags: [], color: null, material: null, size: { width: null, height: null }, minPrice: null, maxPrice: null }
+  filters: { queryTags: any[], tags: any[]; color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any }
+          = { queryTags: [], tags: [], color: null, material: null, size: { width: null, height: null }, minPrice: null, maxPrice: null }
   tags: any[] = [];
+  queryText: string;
   currentQueryTags: any[] = [];
   materialTypes: any[] = [];
   hexColors: any[] = ['#bcb7b0', '#000000', '#0c2c53', '#444a6d', '#6f7072', '#8196b5', '#a4c1e2', '#1797b8', '#00a7ed', '#0e59e1', '#2f29e7', '#7327e7', '#c55c9c', '#cd3846', '#e1947f', '#fcd1c2', '#e69f55', '#efd05e', '#ae985d', '#9abe45', '#1ec6b7', '#bdfdfc'];
   selectedMaterialType: any;
   priceRange: any[] = [0];
   maxPrice: string;
-  queryText: string;
 
   isLoading: boolean = true;
   searchLoading: boolean = true;
@@ -168,18 +168,18 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       let queryWord = queryTags[i];
       let tagObj = { name: queryWord };
       this.currentQueryTags.push(tagObj)
-      this.filters.tags.push(tagObj)
     }
+    this.filters.queryTags = this.currentQueryTags;
     this.externalSearch();
   }
 
   removeQueryTag(queryTagObj) {
-    let selectedQueryTagIndex = this.filters.tags.indexOf(queryTagObj);
+    let selectedQueryTagIndex = this.currentQueryTags.indexOf(queryTagObj);
     if (selectedQueryTagIndex != -1) {
-      this.filters.tags.splice(selectedQueryTagIndex, 1);
       this.currentQueryTags.splice(selectedQueryTagIndex, 1);
     }
 
+    this.filters.queryTags = this.currentQueryTags;
     this.externalSearch();
   }
 

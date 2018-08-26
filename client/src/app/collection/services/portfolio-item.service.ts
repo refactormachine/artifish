@@ -13,14 +13,15 @@ export class PortfolioItemService {
   constructor(private http: HttpClient) { }
 
   search(
-    filters: { tags: any[], color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any },
+    filters: { queryTags: any[], tags: any[], color: string, material: any, size: { width: string, height: string }, minPrice: any, maxPrice: any },
     page: number,
     pageSize: number
   ): Observable<any> {
     let tagsParam = this.buildTagParams(filters.tags);
-    let params: any = { tags: tagsParam, page: page, per_page: pageSize };
-    if (filters.color) params.color = filters.color
-    if (filters.material) params.material = filters.material
+    let queryTagsParam = this.buildTagParams(filters.queryTags);
+    let params: any = { tags: tagsParam, query: queryTagsParam, page: page, per_page: pageSize };
+    if (filters.color) params.color = filters.color;
+    if (filters.material) params.material = filters.material;
     if (filters.size.width) params.width = filters.size.width;
     if (filters.size.height) params.height = filters.size.height;
     if (filters.minPrice != null) params.min_price = filters.minPrice;

@@ -32,13 +32,47 @@ class PortfolioItemsController < ApplicationController
       @portfolio_items = @portfolio_items.where.has{purchase_options.material_id == material_id} if material_id
       @portfolio_items = @portfolio_items.where.has{purchase_options.size_id.in size_ids} if size_ids
       @portfolio_items = @portfolio_items.where.has{(purchase_options.price_cents > min_price_cents) & (purchase_options.price_cents < max_price_cents)} if min_price_cents && max_price_cents
-      if params[:tags].present?
-        query_words = params[:tags].split(' ')
-        where_clause = query_words.map{|word| "(tags.name = '#{word}' OR tags.name LIKE '#{word}-%') OR "}.join.chomp(' OR ')
-        tags_id = Tag.where(where_clause).pluck(:id)
-        # tags_id = Tag.where.has{name.in query_words}.pluck(:id)
-        tags_id = [] if tags_id.count != query_words.count # no results if didn't find one of the words
-        @portfolio_items = @portfolio_items.joins(:tags).where.has{|pi| pi.tags.id.in tags_id }.group("portfolio_items.id").having("COUNT(DISTINCT portfolio_items_tags.tag_id) = #{tags_id.length}")
+
+
+      # Tags search explanation: params[:tags] includes selected tags. params[:query] includes free text query.
+      # For tag searching we use both tags and query free text.
+      # Each space seperated word brings a list of tags containing this word and the tags ids are saved as a group
+      # after getting multiple groups of tags ids from different query words, we perform intersection to get portfolio items
+      # that has tags in all groups.
+      # Portfolio item name is being searched against tag name only if query text is empty. Otherwise, tags are not used
+      # for portfolio item name but item name should contain query text words and also has a tag of tags words
+      if params[:tags].present? || params[:query].present?
+        tag_names = (params[:tags] || '').downcase.split(' ')
+        query_words = (params[:query] || '').downcase.split(' ')
+        # tag_names += query_words
+        portfolio_item_ids_groups_only_tag_names = []
+        portfolio_item_ids_groups = []
+        [tag_names, query_words].each do |words|
+          words.each do |tag_name|
+            if tag_name.include?('-') # query word is not a single word - no point in searching for dashed string in words
+              tags_id_including_word = TagWord.joins([:tag, :word]).where.has{tag.name == tag_name}.pluck(:tag_id)
+            else # query word is a single word, look for all words combinations
+              tags_id_including_word = TagWord.joins([:tag, :word]).where.has{word.name.in tag_name}.pluck(:tag_id)
+            end
+            portfolio_item_ids = @portfolio_items.joins(:tags).where.has{|pi| pi.tags.id.in tags_id_including_word }.pluck(:id).uniq
+            portfolio_item_ids_groups_only_tag_names << portfolio_item_ids if words == tag_names
+            portfolio_item_ids_groups << portfolio_item_ids
+          end
+        end
+        # intersects arrays
+        portfolio_item_ids_intersection = portfolio_item_ids_groups.length > 1 ? portfolio_item_ids_groups.inject(:&) : portfolio_item_ids_groups.first
+        portfolio_item_ids_intersection_only_tag_name = portfolio_item_ids_groups_only_tag_names.length > 1 ?
+                                                        portfolio_item_ids_groups_only_tag_names.inject(:&) :
+                                                        portfolio_item_ids_groups_only_tag_names.first
+
+        if params[:query].present?
+          portfolio_item_ids_name_matched = PortfolioItem.joins(:words).where.has{|pi| pi.words.name.in query_words}.group("portfolio_items.id").having("COUNT(DISTINCT portfolio_item_words.word_id) = #{query_words.length}").pluck(:portfolio_item_id)
+          portfolio_item_ids_name_matched = portfolio_item_ids_name_matched & portfolio_item_ids_intersection_only_tag_name if portfolio_item_ids_intersection_only_tag_name
+        else
+          portfolio_item_ids_name_matched = PortfolioItem.joins(:words).where.has{|pi| pi.words.name.in tag_names}.group("portfolio_items.id").having("COUNT(DISTINCT portfolio_item_words.word_id) = #{tag_names.length}").pluck(:portfolio_item_id)
+        end
+        ids_from_tags_and_name_search = (portfolio_item_ids_intersection + portfolio_item_ids_name_matched).uniq
+        @portfolio_items = @portfolio_items.where.has{id.in ids_from_tags_and_name_search}
       end
     end
 
