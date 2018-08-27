@@ -39,6 +39,14 @@
   font-size: 13px;
 }
 
+.col-lg-12 .starting-at {
+  font-size: 16px;
+}
+
+.col-lg-12 .enlarge-img {
+  font-size: 19px;
+}
+
 .img-button.img-check-mark:hover:not(.disabled) {
   background-color: #efefef;
 }
@@ -261,6 +269,14 @@ div.rtl .arrow-left {
   top: 10px;
   font-size: 26px;
   font-weight: bold;
+}
+
+.workspace-image-accordion .card-body {
+  padding: 0;
+}
+
+.workspace-image-accordion .card-header {
+  background-color: rgba(0, 0, 0, .15);
 }
 
 .workspace-image-section {

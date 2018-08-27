@@ -22,6 +22,14 @@
         </li>
       </ul>
       <ul class="navbar-nav">
+        <li class="nav-item" routerLinkActive="active">
+          <a (click)="navService.changeNav(navService.CART_NAV_ITEM)" class="nav-link clickable">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            <ng-container *ngIf="navService.collectionItemCount$ | async as itemsCount">
+               {{itemsCount}}
+            </ng-container>
+          </a>
+        </li>
         <ng-template #annonymousUser>
           <li class="nav-item" routerLinkActive="active" (click)='close()'>
             <a routerLink="/login" class="nav-link">{{'navbar.login' | translate}}</a>

@@ -87,58 +87,68 @@
     </ng-container>
   </div>
   <div class="row">
-    <div class="col-lg-5 collection-panel pb-5">
-      <h3 class="mt-2 mb-0 text-center">{{'collection.project_board' | translate}}</h3>
-      <p class="text-center porject-board-help-block mb-1">{{'collection.project_board_hint' | translate}}</p>
+    <div class="col-lg-5 collection-panel pb-5" [ngbCollapse]="!showProjectBoard">
+      <!-- <h3 class="mt-2 mb-0 text-center">{{'collection.project_board' | translate}}</h3>
+      <p class="text-center porject-board-help-block mb-1">{{'collection.project_board_hint' | translate}}</p> -->
 
-      <div class="project-section mt-3 sticky-top">
-        <div class="workspace-image-section" data-step="1" [attr.data-intro]="('intro.step1' | translate)" data-disable-interaction="true">
-          <div class="project-toolbar">
+      <div class="project-section mt-3" [ngClass]="{ 'sticky-top': isWorkspacePanelOpen }">
+        <ngb-accordion #acc="ngbAccordion" [activeIds]="activeAccordionPanels" (panelChange)="accordionPanelToggle($event)" class="workspace-image-accordion">
+          <ngb-panel [id]="workspacePanelId" title="{{ isWorkspacePanelOpen ? ('common.hide' | translate) : ('collection.show_visualization_tool' | translate)}}">
+            <ng-template ngbPanelContent>
+              <div class="workspace-image-section" data-step="1" [attr.data-intro]="('intro.step1' | translate)" data-disable-interaction="true">
+                <div class="project-toolbar">
 
-            <div id="dragButton" class="float-right img-drag-mode" triggers="click:mouseleave" placement="top" ngbTooltip="{{'collection.you_must_set_workspace_picture_first' | translate}}">
-              <i [class.disabled]="!canvasImageDataUrl && !collection.workspaceImageUrl" class="img-button img-drag-mode fa fa-arrows float-right clickable position-relative"
-                [ngClass]="{ 'd-none': isEditName }" (click)="(canvasImageDataUrl || collection.workspaceImageUrl) && openCanvasModal()"
-                placement="top" ngbTooltip="{{'collection.see_pictures_on_wall' | translate}}" aria-hidden="true"
-                data-step="6" [attr.data-intro]="'intro.step6' | translate" data-disable-interaction="true"></i>
-            </div>
+                  <div id="dragButton" class="float-right img-drag-mode" triggers="click:mouseleave" placement="top" ngbTooltip="{{'collection.you_must_set_workspace_picture_first' | translate}}">
+                    <i [class.disabled]="!canvasImageDataUrl && !collection.workspaceImageUrl" class="img-button img-drag-mode fa fa-arrows float-right clickable position-relative"
+                      [ngClass]="{ 'd-none': isEditName }" (click)="(canvasImageDataUrl || collection.workspaceImageUrl) && openCanvasModal()"
+                      placement="top" ngbTooltip="{{'collection.see_pictures_on_wall' | translate}}" aria-hidden="true" data-step="6" [attr.data-intro]="'intro.step6' | translate"
+                      data-disable-interaction="true"></i>
+                  </div>
 
-            <i class="float-right img-button img-save-name fa fa-check float-right clickable" [ngClass]="{ 'd-none': !isEditName }" (click)="editName(false)"
-              placement="top" ngbTooltip="{{'common.save' | translate}}" aria-hidden="true"></i>
+                  <i class="float-right img-button img-save-name fa fa-check float-right clickable" [ngClass]="{ 'd-none': !isEditName }" (click)="editName(false)"
+                    placement="top" ngbTooltip="{{'common.save' | translate}}" aria-hidden="true"></i>
 
-            <i class="fa fa-upload img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="!saveLoading && imageFile.click()"
-              placement="top" ngbTooltip="{{'collection.upload_space_image' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
+                  <i class="fa fa-upload img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="!saveLoading && imageFile.click()"
+                    placement="top" ngbTooltip="{{'collection.upload_space_image' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
 
-            <i class="fa fa-picture-o img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="openModal(workspaceCollectionModal, {size: 'lg'})"
-              placement="top" ngbTooltip="{{'collection.choose_from_collection' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
+                  <i class="fa fa-picture-o img-button float-right img-upload clickable" [class.disabled]="saveLoading" (click)="openModal(workspaceCollectionModal, {size: 'lg'})"
+                    placement="top" ngbTooltip="{{'collection.choose_from_collection' | translate}}" [ngClass]="{ 'd-none': isEditName }"
+                    aria-hidden="true"></i>
 
-            <i class="fa fa-floppy-o img-button float-right img-save clickable" [class.disabled]="(saveLoading || !unsavedChanges) && !authService.isLoggedIn()"
-              (click)="!saveLoading && unsavedChanges && saveCollection(saveModal)" [ngClass]="{ 'fa-spinner fa-spin': saveLoading, 'd-none': isEditName }"
-              placement="top" ngbTooltip="{{'collection.save_collection' | translate}}" aria-hidden="true"></i>
+                  <i class="fa fa-floppy-o img-button float-right img-save clickable" [class.disabled]="(saveLoading || !unsavedChanges) && !authService.isLoggedIn()"
+                    (click)="!saveLoading && unsavedChanges && saveCollection(saveModal)" [ngClass]="{ 'fa-spinner fa-spin': saveLoading, 'd-none': isEditName }"
+                    placement="top" ngbTooltip="{{'collection.save_collection' | translate}}" aria-hidden="true"></i>
 
-            <img *ngIf="!authService.isLoggedIn()" src="assets/images/clean-icon.png" class="img-button float-right img-clear clickable"
-              [class.disabled]="saveLoading" (click)="!saveLoading && clearCollection()" placement="top" ngbTooltip="{{'collection.reset_project' | translate}}"
-              [ngClass]="{ 'd-none': isEditName }" aria-hidden="true">
+                  <img *ngIf="!authService.isLoggedIn()" src="assets/images/clean-icon.png" class="img-button float-right img-clear clickable"
+                    [class.disabled]="saveLoading" (click)="!saveLoading && clearCollection()" placement="top" ngbTooltip="{{'collection.reset_project' | translate}}"
+                    [ngClass]="{ 'd-none': isEditName }" aria-hidden="true">
 
-            <i class="fa fa-download img-button float-right img-download-workspace clickable" [class.disabled]="saveLoading || (!canvasImageDataUrl && !collection.workspaceImageUrl)" (click)="(canvasImageDataUrl || collection.workspaceImageUrl) && downloadWorkspaceImage()"
-              placement="top" ngbTooltip="{{'collection.download_workspace_image' | translate}}" [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
+                  <i class="fa fa-download img-button float-right img-download-workspace clickable" [class.disabled]="saveLoading || (!canvasImageDataUrl && !collection.workspaceImageUrl)"
+                    (click)="(canvasImageDataUrl || collection.workspaceImageUrl) && downloadWorkspaceImage()" placement="top" ngbTooltip="{{'collection.download_workspace_image' | translate}}"
+                    [ngClass]="{ 'd-none': isEditName }" aria-hidden="true"></i>
 
-            <i class="img-button img-edit-name fa fa-pencil float-right clickable" [ngClass]="{ 'd-none': isEditName }" (click)="editName(true)"
-              placement="top" ngbTooltip="{{'collection.edit_name' | translate}}" aria-hidden="true"></i>
+                  <i class="img-button img-edit-name fa fa-pencil float-right clickable" [ngClass]="{ 'd-none': isEditName }" (click)="editName(true)"
+                    placement="top" ngbTooltip="{{'collection.edit_name' | translate}}" aria-hidden="true"></i>
 
-            <input type="text" autofocus (keyup.enter)="onBlurCollectionName()" (blur)="onBlurCollectionName()" [(ngModel)]="collection.name"
-              name="name" #name id="name" class="form-control" [ngClass]="{ 'd-none': !isEditName }">
-            <h5 class="collection-name editable-text mb-0" [ngClass]="{ 'd-none': isEditName, 'd-inline-block': !isEditName }">{{collection.name}}</h5>
-          </div>
+                  <input type="text" autofocus (keyup.enter)="onBlurCollectionName()" (blur)="onBlurCollectionName()" [(ngModel)]="collection.name"
+                    name="name" #name id="name" class="form-control" [ngClass]="{ 'd-none': !isEditName }">
+                  <h5 class="collection-name editable-text mb-0" [ngClass]="{ 'd-none': isEditName, 'd-inline-block': !isEditName }">{{collection.name}}</h5>
+                </div>
 
-          <div class="position-relative text-center">
-            <img src="assets/images/placeholder_loading.png" [ngClass]="{ 'd-none': !imageLoading }" class="img-fluid" [alt]="collection.name">
-            <img [src]="canvasImageDataUrl || collection.workspaceImageUrl || 'assets/images/workspace_placeholder_with_button.jpg'" [ngClass]="{ 'd-none': imageLoading, 'clickable': !canvasImageDataUrl && !collection.workspaceImageUrl }"
-                 [appBlackoutHighlight]="canvasImageDataUrl || collection.workspaceImageUrl" elementIdToHighlight="dragButton"
-              class="workspace-image img-fluid" (click)="!saveLoading && !canvasImageDataUrl && !collection.workspaceImageUrl && imageFile.click()" [alt]="collection.name">
-            <i *ngIf="imageLoading" class="img-loader position-absolute fa fa-spinner fa-spin fa-3x"></i>
-            <input type="file" (input)="readURL($event); imageFile.value = ''" name="imageFile" #imageFile class="form-control-file d-none" id="inputWorkspaceImage">
-          </div>
-        </div>
+                <div class="position-relative text-center">
+                  <img src="assets/images/placeholder_loading.png" [ngClass]="{ 'd-none': !imageLoading }" class="img-fluid" [alt]="collection.name">
+                  <img [src]="canvasImageDataUrl || collection.workspaceImageUrl || 'assets/images/workspace_placeholder_with_button.jpg'"
+                    [ngClass]="{ 'd-none': imageLoading, 'clickable': !canvasImageDataUrl && !collection.workspaceImageUrl }" [appBlackoutHighlight]="canvasImageDataUrl || collection.workspaceImageUrl"
+                    elementIdToHighlight="dragButton" class="workspace-image img-fluid" (click)="!saveLoading && !canvasImageDataUrl && !collection.workspaceImageUrl && imageFile.click()"
+                    [alt]="collection.name">
+                  <i *ngIf="imageLoading" class="img-loader position-absolute fa fa-spinner fa-spin fa-3x"></i>
+                  <input type="file" (input)="readURL($event); imageFile.value = ''" name="imageFile" #imageFile class="form-control-file d-none"
+                    id="inputWorkspaceImage">
+                </div>
+              </div>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
 
         <div data-step="5" [attr.data-intro]="'intro.step5' | translate" data-disable-interaction="true">
           <div *ngIf="collectionItems.length > 0 || (introService.isWithinIntro() && introCollectionItems.length > 0)" class="row no-gutters mt-2">
@@ -185,7 +195,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-7">
+    <div [ngClass]="{ 'col-lg-12': !showProjectBoard, 'col-lg-7': showProjectBoard }">
       <p *ngIf="loadingFilters">{{'collection.loading_filters' | translate}}...
         <i class="fa fa-spinner fa-spin fa-2x"></i>
       </p>
@@ -194,24 +204,31 @@
         <i class="fa fa-spinner fa-spin fa-3x"></i>
       </div>
       <ng-container *ngIf="portfolioItems && portfolioItems.length > 0; else noResults">
-        <div class="row art-stuff" data-step="4" [attr.data-intro]="'intro.step4' | translate" data-disable-interaction="true">
-          <div *ngFor="let portfolioItem of portfolioItems" class="col-3 mb-2">
-            <div class="d-flex flex-column align-items-center h-100">
-              <div class="portfolio-item-img-container position-relative d-flex align-items-center h-100">
-                <ng-template #popupContent>{{'collection.drag_image_warning_text' | translate}} <i class='fa fa-arrows'></i> {{'collection.drag_image_warning_text_after_icon'
-                  | translate}}</ng-template>
-                <img [src]="portfolioItem.thumbUrl" class="portfolio-item-img img-fluid clickable" [ngClass]="{ 'selected-image': portfolioItem.selected }"
-                  triggers="dragstart:dragend" placement="top" popoverTitle="{{'collection.got_confused' | translate}}" [ngbPopover]="popupContent"
-                  (click)="imageSelected(portfolioItem)" alt="">
-                <i *ngIf="portfolioItem.selected" class="fa fa-check clickable img-check-mark img-button" (click)="imageSelected(portfolioItem)"
-                  aria-hidden="true"></i>
-              </div>
-              <div class="w-100">
-                <i class="fa fa-search clickable float-right" placement="top" ngbTooltip="{{'collection.more_details' | translate}}" (click)="openImageModal(portfolioItem)"
-                  aria-hidden="true"></i>
-                <p class="mb-0 starting-at">{{'collection.starting_at' | translate}}: {{portfolioItem.startingPriceFormatted}}</p>
+        <div data-step="4" [attr.data-intro]="'intro.step4' | translate" data-disable-interaction="true">
+          <div *ngFor="let portfolioItemsChunk of chunkArrayInGroups(portfolioItems, showProjectBoard ? 4 : 5)" class="row mb-2">
+            <div *ngFor="let portfolioItem of portfolioItemsChunk" class="col">
+              <div class="d-flex flex-column align-items-center h-100">
+                <div class="portfolio-item-img-container position-relative d-flex align-items-center h-100">
+                  <ng-template #popupContent>{{'collection.drag_image_warning_text' | translate}} <i class='fa fa-arrows'></i> {{'collection.drag_image_warning_text_after_icon'
+                    | translate}}</ng-template>
+                  <div class="portfolio-item d-inline-block">
+                    <img [src]="portfolioItem.thumbUrl" class="portfolio-item-img img-fluid clickable" [ngClass]="{ 'selected-image': portfolioItem.selected }"
+                      triggers="dragstart:dragend" placement="top" popoverTitle="{{'collection.got_confused' | translate}}" [ngbPopover]="popupContent"
+                      (click)="imageSelected(portfolioItem)" alt="">
+                    <i *ngIf="portfolioItem.selected" class="fa fa-check clickable img-check-mark img-button" (click)="imageSelected(portfolioItem)"
+                      aria-hidden="true"></i>
+                    <div>
+                      <i class="fa fa-search enlarge-img mr-1 clickable float-right" (click)="openImageModal(portfolioItem)" aria-hidden="true"></i>
+                      <span class="mb-0 starting-at align-top">{{'collection.starting_at' | translate}}: {{portfolioItem.startingPriceFormatted}}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+            <div *ngIf="!showProjectBoard && portfolioItemsChunk.length <= 4" class="col"></div>
+            <div *ngIf="portfolioItemsChunk.length <= 3" class="col"></div>
+            <div *ngIf="portfolioItemsChunk.length <= 2" class="col"></div>
+            <div *ngIf="portfolioItemsChunk.length == 1" class="col"></div>
           </div>
         </div>
         <div *ngIf="portfolioItemsTotalEntries / portfolioItemsPageSize > 1" class="text-center mt-3">

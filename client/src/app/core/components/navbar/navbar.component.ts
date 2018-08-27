@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../auth/services/auth.service';
-import { IntroService } from '../../../intro.service';
+import { NavService } from '../../services/nav.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +15,7 @@ export class NavbarComponent {
   constructor(
     public authService: AuthService,
     public router: Router,
-    private introService: IntroService) { }
+    public navService: NavService) { }
 
   toggleCollapse() {
     this.show = !this.show;
@@ -31,8 +31,6 @@ export class NavbarComponent {
   }
 
   startTour() {
-    window.scrollTo(0, 0);
-    this.introService.startTour();
-    window.scrollTo(0, 0);
+    this.navService.changeNav(this.navService.START_TOUR_NAV_ITEM);
   }
 }

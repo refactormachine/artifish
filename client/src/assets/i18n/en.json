@@ -40,7 +40,8 @@
 		"start": "Start",
 		"size": "Size",
 		"price": "Price",
-		"all": "All"
+		"all": "All",
+		"hide": "Hide"
 	},
 	"contact_us": {
 		"get_in_touch": "Get In Touch",
@@ -135,7 +136,8 @@
 		"drag_image_warning_text_after_icon": " in the toolbar to drag it",
 		"you_must_set_workspace_picture_first": "You must set a workspace picture first",
 		"download_workspace_image": "Download workspace image",
-		"find_something_great": "Find something great"
+		"find_something_great": "Find something great",
+		"show_visualization_tool": "Show Visualization Tool"
 	},
 	"collections": {
 		"my_collections": "My Saved Projects",

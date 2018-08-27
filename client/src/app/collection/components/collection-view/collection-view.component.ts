@@ -1,8 +1,8 @@
 import 'rxjs/add/observable/forkJoin';
 
-import { Component, EventEmitter, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
 
@@ -24,6 +24,8 @@ import { PortfolioItemService } from '../../services/portfolio-item.service';
 import { TagService } from '../../services/tag.service';
 import { PurchaseOptionService } from '../../services/purchase-option.service';
 import { ScrollbarComponent } from 'ngx-scrollbar';
+import { NavService } from '../../../core/services/nav.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-collection-view',
@@ -31,13 +33,21 @@ import { ScrollbarComponent } from 'ngx-scrollbar';
   styleUrls: ['./collection-view.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class CollectionViewComponent implements OnInit, CollectionViewComponentCanDeactivate {
+export class CollectionViewComponent implements OnInit, OnDestroy, CollectionViewComponentCanDeactivate {
   direction: string;
   user: any = {};
   validationErrors = {};
 
   collection: any = {};
-  collectionItems: any[] = [];
+  private _collectionItems: any[] = [];
+  public get collectionItems(): any[] {
+    return this._collectionItems;
+  }
+  public set collectionItems(v: any[]) {
+    this._collectionItems = v;
+    this.navService.changeCollectionItemCount(this._collectionItems.length);
+  }
+
   portfolioItems: any[];
   workspacePresets = [{ name: 'bathroom', image: 'Bathroom.jpg' }, { name: 'dress_room', image: 'Dress-room.jpg' }, { name: 'kitchen', image: 'Kitchen.jpg' }, { name: 'living_room', image: 'Living-room.jpg' }, { name: 'living_room', image: 'Living-room-2.jpg' }, { name: 'living_room', image: 'Living-room-3.jpg' }, { name: 'lounge', image: 'Lounge.jpg' }, { name: 'seating_area', image: 'Seating-area.jpg' }, { name: 'seating_area', image: 'Seating-area-2.jpg' }, { name: 'working_room', image: 'Working-room.jpg' }, { name: 'black_wall', image: 'Black-wall.jpg' }, { name: 'blue_wall', image: 'Blue-wall.jpg' }, { name: 'gray_wall', image: 'Gray-wall.jpg' }, { name: 'green_wall', image: 'Green-wall.jpg' }, { name: 'lilac_wall', image: 'Lilac-wall.jpg' }, { name: 'orange_wall', image: 'Orange-wall.jpg' }, { name: 'pink_wall', image: 'Pink-wall.jpg' }, { name: 'purple_wall', image: 'Purple-wall.jpg' }, { name: 'red_wall', image: 'Red-wall.jpg' }, { name: 'white_wall', image: 'White-wall.jpg' }, { name: 'yellow_wall', image: 'Yellow-wall.jpg' }];
 
@@ -67,10 +77,13 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
   imageLoading: boolean = false;
   loginLoading: boolean = false;
 
+  showProjectBoard: boolean = true;
   isEditName: boolean = false;
   unsavedChanges: boolean = false;
   modalErrorMessage: string;
   modalNavigateUrlOnSuccess: string;
+  workspacePanelId = "workspace-panel"
+  activeAccordionPanels: (string | string[]) = this.workspacePanelId;
 
   openModalImage: boolean = false;
   openModalCanvas: boolean = false;
@@ -89,6 +102,8 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     startingPriceFormatted: '$550',
   }];
 
+  private navItemRef: Subscription
+
   constructor(
     private alertService: AlertService,
     private router: Router,
@@ -104,6 +119,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     private userService: UserService,
     private authService: AuthService,
     private introService: IntroService,
+    private navService: NavService
   ) {
     this.direction = environment.rtl ? "rtl" : "ltr";
     introService.clickOnDisabledAreaEvent.subscribe(this.clickOnIntroDisabledArea.bind(this));
@@ -125,6 +141,11 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       this.portfolioItemsTotalEntries = res.totalEntries;
       this.searchLoading = false;
     })
+    this.navItemRef = this.navService.navItem$.subscribe(this.handleNavItemChanged.bind(this));
+  }
+
+  ngOnDestroy() {
+    this.navItemRef.unsubscribe();
   }
 
   canDeactivate() {
@@ -230,6 +251,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     portfolioItem.selected = portfolioItem.selected === undefined ? true : !portfolioItem.selected
     if (portfolioItem.selected) {
       this.collectionItems.push(portfolioItem);
+      this.navService.changeCollectionItemCount(this.collectionItems.length);
     } else {
       this.removeCollectionItem(portfolioItem);
     }
@@ -240,6 +262,7 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
     let index = this.collectionItems.indexOf(portfolioItem);
     if (index == -1) return;
     this.collectionItems.splice(index, 1);
+    this.navService.changeCollectionItemCount(this.collectionItems.length);
     this.unsavedChanges = true;
     portfolioItem.selected = false;
     if (fireEvent)
@@ -467,6 +490,55 @@ export class CollectionViewComponent implements OnInit, CollectionViewComponentC
       this.canvasImageDataUrl = null;
       this.imageLoading = false;
     })
+  }
+
+  private handleNavItemChanged(navItem: string) {
+    if (navItem == this.navService.CART_NAV_ITEM) {
+      this.showProjectBoard = !this.showProjectBoard;
+      if (this.showProjectBoard) window.scrollTo(0, 0);
+    }
+    if (navItem == this.navService.START_TOUR_NAV_ITEM) {
+      this.isWorkspacePanelOpen = true;
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        this.introService.startTour();
+        window.scrollTo(0, 0);
+      }, 10);
+    }
+  }
+
+ chunkArrayInGroups(arr, size) {
+  var myArray = [];
+  for (var i = 0; i < arr.length; i += size) {
+    myArray.push(arr.slice(i, i + size));
+  }
+  return myArray;
+}
+
+  accordionPanelToggle(e: NgbPanelChangeEvent) {
+    if (e.panelId == this.workspacePanelId)
+      this.isWorkspacePanelOpen = e.nextState;
+  }
+
+  public get isWorkspacePanelOpen(): boolean {
+    return this.activeAccordionPanels == this.workspacePanelId ||
+      this.activeAccordionPanels.indexOf(this.workspacePanelId) != -1;
+  }
+  public set isWorkspacePanelOpen(toOpen: boolean) {
+    if (toOpen) {
+      if (typeof this.activeAccordionPanels === "string")
+        this.activeAccordionPanels = this.workspacePanelId;
+      else
+        (this.activeAccordionPanels as string[]).push(this.workspacePanelId)
+    } else {
+      if (typeof this.activeAccordionPanels === "string")
+        this.activeAccordionPanels = '';
+      else {
+        let index = (this.activeAccordionPanels as string[]).indexOf(this.workspacePanelId);
+        (this.activeAccordionPanels as string[]).splice(index, 1);
+      }
+
+    }
   }
 
   private clearCollectionItemsPositions() {

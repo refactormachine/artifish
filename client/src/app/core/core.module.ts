@@ -19,6 +19,7 @@ import { BetaLoginComponent } from './components/beta-login/beta-login.component
 import { BetaLoginGuard } from './services/beta-login-guard.service';
 import { BetaComponent } from './components/beta/beta.component';
 import { JoinBetaService } from './services/join-beta.service';
+import { NavService } from './services/nav.service';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { JoinBetaService } from './services/join-beta.service';
     LocationService,
     ContactUsService,
     JoinBetaService,
-    BetaLoginGuard
+    BetaLoginGuard,
+    NavService
   ],
   exports: [
     NavbarComponent,
