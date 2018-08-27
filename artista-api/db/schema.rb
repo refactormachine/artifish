@@ -10,7 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_26_161013) do
+ActiveRecord::Schema.define(version: 2018_08_27_133011) do
+
+  create_table "action_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "client_uuid"
+    t.bigint "action_id"
+    t.text "payload"
+    t.integer "parent_action_log_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_id"], name: "index_action_logs_on_action_id"
+    t.index ["parent_action_log_id"], name: "index_action_logs_on_parent_action_log_id"
+    t.index ["user_id"], name: "index_action_logs_on_user_id"
+  end
+
+  create_table "actions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -230,6 +249,8 @@ ActiveRecord::Schema.define(version: 2018_08_26_161013) do
     t.index ["name"], name: "index_words_on_name", unique: true
   end
 
+  add_foreign_key "action_logs", "actions"
+  add_foreign_key "action_logs", "users"
   add_foreign_key "collection_items", "collections"
   add_foreign_key "collections", "users"
   add_foreign_key "dominant_colors", "portfolio_items"

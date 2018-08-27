@@ -1,4 +1,5 @@
 class PortfolioItemsController < ApplicationController
+  FILTERS_LIST = [:query, :tags, :color, :width, :height, :material, :min_price, :max_price]
   skip_before_action :authorize_request
 
   # GET /portfolio_items
@@ -26,6 +27,14 @@ class PortfolioItemsController < ApplicationController
       # @portfolio_items = @portfolio_items.where(:id => portfolio_items_ids)
       @portfolio_items = @portfolio_items.where.has{id > 0}
     else
+      if params[:page] == "1"
+        filters = params.slice(*FILTERS_LIST)
+        filters.reject! { |k, v| v.blank? }
+        parent_action_log = create_action_log(Action::SEARCH_PERFORMED, filters)
+      else
+        parent_action_log = create_action_log(Action::MOVE_PAGE, params[:page])
+      end
+
       @portfolio_items = @portfolio_items.joins(:portfolio_item_colors).where.has{ portfolio_item_colors.color_id == color.id }
                                           .select("portfolio_item_colors.dominance_pixel_fraction, portfolio_item_colors.dominance_score, portfolio_item_colors.dominance_similarity")
                                           .order("portfolio_item_colors.dominance_pixel_fraction DESC, portfolio_item_colors.dominance_score DESC, portfolio_item_colors.dominance_similarity ASC") if color.present?
@@ -89,9 +98,26 @@ class PortfolioItemsController < ApplicationController
     .select("portfolio_items.*").group("portfolio_items.id, purchase_options.price_currency #{', portfolio_item_colors.dominance_pixel_fraction, portfolio_item_colors.dominance_score, portfolio_item_colors.dominance_similarity' if color.present?}") if @portfolio_items
 
     @portfolio_items = @portfolio_items.shuffle if no_filters # shuffle in case of showing random items as no filters were provided
+    unless no_filters
+      portfolio_item_ids = @portfolio_items.pluck(:id)
+      create_action_log(Action::RESULT_SETS, portfolio_item_ids, parent_action_log)
+    end
   end
 
   private
+
+  def create_action_log(type, payload, parent_action_log = nil)
+    action = Action.find_by_name(type)
+    user_id = current_user.id if current_user
+    begin
+      action_log_params = {user_id: user_id, client_uuid: current_client_uuid, action_id: action.id,
+        payload: payload}
+      action_log_params[:parent_action_log_id] = parent_action_log.id if parent_action_log
+      ActionLog.create!(action_log_params)
+    rescue Exception => e
+      Rails.logger.error "Could not create action log with params: #{action_log_params}"
+    end
+  end
 
   def hex_to_color(hex_color)
     m = hex_color.match /#(..)(..)(..)/
@@ -99,6 +125,6 @@ class PortfolioItemsController < ApplicationController
   end
 
   def no_filters
-    params[:query].blank? && params[:tags].blank? && params[:color].blank? && params[:width].blank? && params[:height].blank? && params[:material].blank? && params[:min_price].blank? && params[:max_price].blank?
+    FILTERS_LIST.all? { |f| params[f].blank? }
   end
 end

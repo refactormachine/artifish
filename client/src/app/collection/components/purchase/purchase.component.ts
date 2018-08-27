@@ -12,6 +12,7 @@ import { NotFoundError } from '../../../shared/models/not-found-error';
 import { TRANSLATE } from '../../../translation-marker';
 import { AlertService } from '../../../shared/services/alert.service';
 import { DataService } from '../../../shared/services/data.service';
+import { ActionLogService } from '../../../shared/services/action-log.service';
 
 @Component({
   selector: 'app-purchase',
@@ -41,7 +42,8 @@ export class PurchaseComponent implements OnInit {
     private orderService: OrderService,
     private alertService: AlertService,
     private dataService: DataService,
-    private paymentSerivce: PaymentService) { }
+    private paymentSerivce: PaymentService,
+    private actionLogService: ActionLogService) { }
 
   ngOnInit() {
     const component = this;
@@ -63,6 +65,8 @@ export class PurchaseComponent implements OnInit {
       this.collectionItemService.getAll(this.collection.id)
         .subscribe(items => {
           this.collectionItems = items;
+          this.actionLogService.create({ actionName: 'proceeded_to_purchase', payload: (items as any[]).map(i => i.portfolioItemId) })
+            .subscribe(res => { }, error => { })
           if (items.length == 0) {
             this.router.navigate(['/collections', this.collection.id]);
             return;

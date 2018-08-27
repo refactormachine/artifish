@@ -2,9 +2,10 @@ class ApplicationController < ActionController::API
   include Response
   include ExceptionHandler
 
-  before_action :authorize_request
+  before_action :authorize_request, :set_client_uuid
 
   attr_reader :current_user
+  attr_reader :current_client_uuid
 
   private
 
@@ -16,5 +17,9 @@ class ApplicationController < ActionController::API
   def authorize_request_from_non_verified_user
     result = AuthorizeApiRequest.new(request.headers).call
     @current_user = result[:user]
+  end
+
+  def set_client_uuid
+    @current_client_uuid = request.headers['Application-UUID']
   end
 end

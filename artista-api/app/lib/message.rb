@@ -62,5 +62,9 @@ class Message
     def payment_was_already_processed
       { message: :payment_was_already_processed, description: "Payment was already processed" }.to_json
     end
+
+    def action_name_does_not_exist(action_name)
+      { message: :action_name_does_not_exist, description: "Action name #{action_name} does not exist" }.to_json
+    end
   end
 end

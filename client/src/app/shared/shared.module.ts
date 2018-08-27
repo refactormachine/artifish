@@ -11,6 +11,7 @@ import { DataService } from './services/data.service';
 import { ImageModalComponent } from './components/image-modal/image-modal.component';
 import { CanvasModalComponent } from './components/canvas-modal/canvas-modal.component';
 import { BlackoutHighlightDirective } from './directives/blackout-highlight.directive';
+import { ActionLogService } from './services/action-log.service';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { BlackoutHighlightDirective } from './directives/blackout-highlight.dire
   ],
   providers: [
     AlertService,
-    DataService
+    DataService,
+    ActionLogService
   ],
   declarations: [
     AlertComponent,

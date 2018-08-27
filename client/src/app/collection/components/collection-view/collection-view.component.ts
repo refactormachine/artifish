@@ -26,6 +26,7 @@ import { PurchaseOptionService } from '../../services/purchase-option.service';
 import { ScrollbarComponent } from 'ngx-scrollbar';
 import { NavService } from '../../../core/services/nav.service';
 import { Subscription } from 'rxjs/Subscription';
+import { ActionLogService } from '../../../shared/services/action-log.service';
 
 @Component({
   selector: 'app-collection-view',
@@ -119,7 +120,8 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
     private userService: UserService,
     private authService: AuthService,
     private introService: IntroService,
-    private navService: NavService
+    private navService: NavService,
+    private actionLogService: ActionLogService
   ) {
     this.direction = environment.rtl ? "rtl" : "ltr";
     introService.clickOnDisabledAreaEvent.subscribe(this.clickOnIntroDisabledArea.bind(this));
@@ -252,6 +254,8 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
     if (portfolioItem.selected) {
       this.collectionItems.push(portfolioItem);
       this.navService.changeCollectionItemCount(this.collectionItems.length);
+      this.actionLogService.create({ actionName: 'add_image_to_collection', payload: portfolioItem.portfolioItemId })
+        .subscribe(res => { }, error => { })
     } else {
       this.removeCollectionItem(portfolioItem);
     }
@@ -263,6 +267,8 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
     if (index == -1) return;
     this.collectionItems.splice(index, 1);
     this.navService.changeCollectionItemCount(this.collectionItems.length);
+    this.actionLogService.create({ actionName: 'remove_image_from_collection', payload: portfolioItem.portfolioItemId })
+      .subscribe(res => { }, error => { })
     this.unsavedChanges = true;
     portfolioItem.selected = false;
     if (fireEvent)
@@ -430,6 +436,8 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
   }
 
   openImageModal(item) {
+    this.actionLogService.create({ actionName: 'enlarged_image', payload: item.portfolioItemId })
+      .subscribe(res => {}, error => {})
     this.modalImages.pop()
     this.modalImages.push({ thumb: item.thumbUrl, img: item.imageUrl, description: item.name });
     this.openModalImage = true;
