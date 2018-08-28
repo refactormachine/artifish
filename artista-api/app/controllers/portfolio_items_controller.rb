@@ -1,6 +1,7 @@
 class PortfolioItemsController < ApplicationController
   FILTERS_LIST = [:query, :tags, :color, :width, :height, :material, :min_price, :max_price]
   skip_before_action :authorize_request
+  before_action :try_authorize_request
 
   # GET /portfolio_items
   def index

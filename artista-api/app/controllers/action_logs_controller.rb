@@ -1,5 +1,6 @@
 class ActionLogsController < ApplicationController
   skip_before_action :authorize_request
+  before_action :try_authorize_request
 
   def create
     action = Action.find_by_name(params[:action_name])

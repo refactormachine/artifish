@@ -17,8 +17,8 @@ export class PaymentConfirmationComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.payment = this.dataService.data;
-    this.dataService.data = null;
+    this.payment = this.dataService.data.payment;
+    delete this.dataService.data.payment;
     if (this.payment) this.order = this.payment.order;
     if (!this.payment || !this.order) {
       this.router.navigate(['/']);

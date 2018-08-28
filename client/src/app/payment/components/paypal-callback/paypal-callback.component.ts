@@ -40,7 +40,8 @@ export class PaypalCallbackComponent implements OnInit {
 
     this.makePayPalPayment(orderId, token, payerId).subscribe(
       payment => {
-        this.dataService.data = payment;
+        if (!this.dataService.data) this.dataService.data = {};
+        this.dataService.data['payment'] = payment;
         this.router.navigate(['/purchase/success']);
       },
       (error: AppError) => {

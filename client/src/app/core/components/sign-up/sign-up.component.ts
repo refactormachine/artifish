@@ -40,7 +40,6 @@ export class SignUpComponent implements OnInit {
     this.userService.create(this.model)
       .subscribe(
         data => {
-          this.dataService.data = this.model.email;
           localStorage.setItem("token", data['auth_token']);
           this.router.navigateByUrl(this.returnUrl);
         },

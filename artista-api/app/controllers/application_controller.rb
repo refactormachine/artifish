@@ -19,6 +19,14 @@ class ApplicationController < ActionController::API
     @current_user = result[:user]
   end
 
+  def try_authorize_request
+    begin
+      authorize_request
+    rescue Exception => e
+      nil
+    end
+  end
+
   def set_client_uuid
     @current_client_uuid = request.headers['Application-UUID']
   end
