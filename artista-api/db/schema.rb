@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_133011) do
+ActiveRecord::Schema.define(version: 2018_08_29_111256) do
 
   create_table "action_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_133011) do
     t.bigint "supplier_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "artist_name"
     t.index ["name"], name: "index_portfolio_items_on_name"
     t.index ["supplier_id", "product_identifier"], name: "index_portfolio_items_on_supplier_id_and_product_identifier", unique: true
     t.index ["supplier_id"], name: "index_portfolio_items_on_supplier_id"

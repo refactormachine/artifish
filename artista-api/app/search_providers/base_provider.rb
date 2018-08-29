@@ -25,7 +25,7 @@ module SearchProviders
 
       self.class::CATEGORIES.each do |category_name, category_identifiers|
         @category_name = category_name
-        @tag = Tag.find_or_create_by(name: @category_name)
+        @tag = Tag.find_or_create_by(name: @category_name) if @category_name
         @already_loaded_portfolios[category_name] ||= {}
         Array(category_identifiers).each do |category_identifier|
           linked_images = build_linked_image_hashes(url(category_identifier))
@@ -60,15 +60,16 @@ module SearchProviders
           name: image_hash[:name],
           product_identifier: image_hash[:catalog_num],
           product_url: image_hash[:url_link],
+          artist_name: image_hash[:artist_name],
           supplier_id: @supplier_id
         })
-        p.tags << @tag
+        p.tags << @tag if @tag
         begin
           p.save!
         rescue ActiveRecord::RecordNotUnique => e
           # If scraped same portfolio item under different tag, add the new tag to it
           p = PortfolioItem.find_by(supplier_id: @supplier_id, product_identifier: image_hash[:catalog_num])
-          p.tags << @tag
+          p.tags << @tag if @tag
         end
         @already_loaded_portfolios[@category_name][p.product_url] = true
         attach_image(p, image_hash[:image_url])
@@ -84,6 +85,11 @@ module SearchProviders
     def download_image(image_url)
       filename = image_url.split('/').last
       full_path = "#{Rails.root}/tmp/images/#{filename}"
+      ext = File.extname(full_path)
+      clean_ext = ext.gsub(/\?.*/, '')
+      full_path = full_path.gsub(ext, clean_ext)
+      full_path = full_path[0..255 - clean_ext.length] + clean_ext if full_path.length > 255
+      filename = full_path.split('/').last
       File.open(full_path, "wb") do |f|
         f.write HTTParty.get(URI.encode(image_url)).body
       end
