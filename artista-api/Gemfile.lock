@@ -78,6 +78,10 @@ GEM
     digest-crc (0.4.1)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.5.0)
+    dotenv-rails (2.5.0)
+      dotenv (= 2.5.0)
+      railties (>= 3.2, < 6.0)
     erubi (1.7.1)
     faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
@@ -283,6 +287,7 @@ DEPENDENCIES
   byebug
   camalian
   color-rgb
+  dotenv-rails
   google-cloud-storage (~> 1.8)
   google-cloud-vision
   httparty
