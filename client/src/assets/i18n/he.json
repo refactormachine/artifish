@@ -175,7 +175,8 @@
 		"all": "הכל",
 		"canvas": "קנבס",
 		"acrylic_glass": "זכוכית אקרילית (פרספקס)",
-		"aluminum": "אלומיניום"
+		"aluminum": "אלומיניום",
+		"paper": "נייר"
 	},
 	"intro": {
 		"next": "הבא &larr;",

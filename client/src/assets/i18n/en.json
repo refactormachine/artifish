@@ -174,7 +174,8 @@
 		"all": "All",
 		"canvas": "Canvas",
 		"acrylic_glass": "Acrylic Glass",
-		"aluminum": "Aluminum"
+		"aluminum": "Aluminum",
+		"paper": "Paper"
 	},
 	"intro": {
 		"next": "Next &rarr;",
