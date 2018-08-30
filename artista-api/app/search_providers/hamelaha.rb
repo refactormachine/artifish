@@ -79,7 +79,7 @@ module SearchProviders
     end
 
     def get_image_full_size(page)
-      "https:" + page.css('.product-single__photo-wrapper')[1].css('.product-single__photo').css('img').last[:src]
+      "https:" + page.css('.product-single__photo-wrapper')[1].css('.product-single__photo').first['data-zoom']
     end
   end
 end

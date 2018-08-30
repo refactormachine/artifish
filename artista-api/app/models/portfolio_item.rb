@@ -50,7 +50,11 @@ class PortfolioItem < ApplicationRecord
   def extract_tags_and_colors
     require "google/cloud/vision"
     @@project_id ||= "artifish-app"
-    @@vision ||= Google::Cloud::Vision.new project: @@project_id, credentials: JSON.parse(ENV['GOOGLE_APPLICATION_CREDENTIALS'])
+    if File.exist?(Rails.root.join("/home/deploy/artifish-google-keyfile.json"))
+      @@vision ||= Google::Cloud::Vision.new project: @@project_id, credentials: Rails.root.join("/home/deploy/artifish-google-keyfile.json")
+    else
+      @@vision ||= Google::Cloud::Vision.new project: @@project_id, credentials: JSON.parse(ENV['GOOGLE_APPLICATION_CREDENTIALS'])
+    end
 
     @@filter_colors ||= AppColor.all
 
