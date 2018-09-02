@@ -9,6 +9,7 @@
 #  supplier_id        :bigint(8)
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  artist_name        :string(255)
 #
 
 class PortfolioItem < ApplicationRecord

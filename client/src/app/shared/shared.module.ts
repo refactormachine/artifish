@@ -12,6 +12,8 @@ import { ImageModalComponent } from './components/image-modal/image-modal.compon
 import { CanvasModalComponent } from './components/canvas-modal/canvas-modal.component';
 import { BlackoutHighlightDirective } from './directives/blackout-highlight.directive';
 import { ActionLogService } from './services/action-log.service';
+import { FeedbackModalComponent } from './components/feedback-modal/feedback-modal.component';
+import { FeedbackService } from './services/feedback.service';
 
 @NgModule({
   imports: [
@@ -29,13 +31,15 @@ import { ActionLogService } from './services/action-log.service';
   providers: [
     AlertService,
     DataService,
-    ActionLogService
+    ActionLogService,
+    FeedbackService
   ],
   declarations: [
     AlertComponent,
     ImageModalComponent,
     CanvasModalComponent,
-    BlackoutHighlightDirective
+    BlackoutHighlightDirective,
+    FeedbackModalComponent
   ],
   exports: [
     AlertComponent,
@@ -45,7 +49,8 @@ import { ActionLogService } from './services/action-log.service';
     HttpClientModule,
     FormsModule,
     TranslateModule,
-    BlackoutHighlightDirective
+    BlackoutHighlightDirective,
+    FeedbackModalComponent
   ]
 })
 export class SharedModule { }

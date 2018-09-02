@@ -28,6 +28,10 @@ class Message
       { message: :internal_error, description: 'Sorry, an internal server error has occured' }.to_json
     end
 
+    def invalid_operation
+      { message: :invalid_operation, description: 'Operation is invalid' }.to_json
+    end
+
     # TODO: Uncomment when you want verification code...
     # def user_created
     #   { message: :user_created, description: 'User created successfully' }.to_json
@@ -65,6 +69,10 @@ class Message
 
     def action_name_does_not_exist(action_name)
       { message: :action_name_does_not_exist, description: "Action name #{action_name} does not exist" }.to_json
+    end
+
+    def feedback_subject_name_does_not_exist(feedback_subject_name)
+      { message: :feedback_subject_name_does_not_exist, description: "Feedback subject name #{feedback_subject_name} does not exist" }.to_json
     end
   end
 end

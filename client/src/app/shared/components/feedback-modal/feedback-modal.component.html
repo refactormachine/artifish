@@ -1,0 +1,19 @@
+<div *ngIf="popupShow" class="nps-modal popup" [attr.dir]="direction" [ngClass]="direction" role="dialog">
+  <div class="nps-modal-content card-rich-interaction" (transitionend)="modalTransitionend()" [class.visually-hidden]="!popupAnimatedShow">
+    <div class="nps-header">
+      <h2 class="title-text">{{ title }}</h2>
+    </div>
+    <div class="nps-body">
+      <button *ngFor="let button of buttons"
+              class="nps-rating-button"
+              (click)="onFeedbackSubmit(button)">{{ button }}</button>
+      <div class="nps-rating-label horizontal-box align-items-spacebetween">
+        <div>{{ leastLabelText }}</div>
+        <div>{{ mostLabelText }}</div>
+      </div>
+    </div>
+    <div class="nps-modal-x-out">
+      <a aria-label="close" role="button" (click)="closeModal()">✕</a>
+    </div>
+  </div>
+</div>

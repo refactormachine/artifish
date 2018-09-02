@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   get 'purchase_options/max_price', to: 'purchase_options#max_price'
 
   resources :action_logs, only: [:create], defaults: {format: :json}
+  resources :feedbacks, only: [:create, :show], defaults: {format: :json}
 
   get 'static', to: 'static_pages#index'
   get 'static/yaniv', to: 'static_pages#yaniv'

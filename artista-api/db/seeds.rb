@@ -14,3 +14,5 @@ Action.find_or_create_by!(name: Action::REMOVE_IMAGE_FROM_COLLECTION)
 Action.find_or_create_by!(name: Action::PROCEEDED_TO_PURCHASE)
 Action.find_or_create_by!(name: Action::SEARCH_PERFORMED)
 Action.find_or_create_by!(name: Action::MOVE_PAGE)
+
+FeedbackSubject.find_or_create_by!(name: FeedbackSubject::PRODUCT_RECOMMENDATION)

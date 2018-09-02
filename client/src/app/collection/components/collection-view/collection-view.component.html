@@ -343,3 +343,8 @@
     </div>
   </div>
 </ng-template>
+
+<feedback-modal [direction]="direction" [show]="showFeedbackModal" (feedbackSubmit)="onFeedbackSubmited($event)"
+   title="{{'feedback.recommend_this_product_title' | translate}}"
+   leastLabelText="{{'feedback.not_likely' | translate}}"
+   mostLabelText="{{'feedback.very_likely' | translate}}"></feedback-modal>

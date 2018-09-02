@@ -27,6 +27,8 @@ import { ScrollbarComponent } from 'ngx-scrollbar';
 import { NavService } from '../../../core/services/nav.service';
 import { Subscription } from 'rxjs/Subscription';
 import { ActionLogService } from '../../../shared/services/action-log.service';
+import { FeedbackService } from '../../../shared/services/feedback.service';
+import { NotFoundError } from '../../../shared/models/not-found-error';
 
 @Component({
   selector: 'app-collection-view',
@@ -86,6 +88,8 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
   workspacePanelId = "workspace-panel"
   activeAccordionPanels: (string | string[]) = this.workspacePanelId;
 
+  showFeedbackModal = false;
+
   openModalImage: boolean = false;
   openModalCanvas: boolean = false;
   hideCanvas: boolean = true;
@@ -105,6 +109,20 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
 
   private navItemRef: Subscription
 
+  private _actionsPerformed : number = 0;
+  private get actionsPerformed() : number {
+    return this._actionsPerformed;
+  }
+  private set actionsPerformed(v : number) {
+    this._actionsPerformed = v;
+
+    if (this._actionsPerformed == 10 && this.feedbackAlreadyLeft == false) {
+      this.showFeedbackModal = true;
+    }
+  }
+
+  private feedbackAlreadyLeft = false;
+
   constructor(
     private alertService: AlertService,
     private router: Router,
@@ -121,7 +139,8 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
     private authService: AuthService,
     private introService: IntroService,
     private navService: NavService,
-    private actionLogService: ActionLogService
+    private actionLogService: ActionLogService,
+    private feedbackService: FeedbackService
   ) {
     this.direction = environment.rtl ? "rtl" : "ltr";
     introService.clickOnDisabledAreaEvent.subscribe(this.clickOnIntroDisabledArea.bind(this));
@@ -143,6 +162,7 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
       this.portfolioItemsTotalEntries = res.totalEntries;
       this.searchLoading = false;
     })
+    this.getLastFeedbackOfUser()
     this.navItemRef = this.navService.navItem$.subscribe(this.handleNavItemChanged.bind(this));
   }
 
@@ -168,6 +188,7 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
       this.portfolioItemsTotalEntries = res.totalEntries;
       this.searchLoading = false;
     })
+    this.actionsPerformed += 1;
   }
 
   searchByQuery() {
@@ -254,8 +275,7 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
     if (portfolioItem.selected) {
       this.collectionItems.push(portfolioItem);
       this.navService.changeCollectionItemCount(this.collectionItems.length);
-      this.actionLogService.create({ actionName: 'add_image_to_collection', payload: portfolioItem.portfolioItemId })
-        .subscribe(res => { }, error => { })
+      this.createActionLog({ actionName: 'add_image_to_collection', payload: portfolioItem.portfolioItemId });
     } else {
       this.removeCollectionItem(portfolioItem);
     }
@@ -267,8 +287,7 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
     if (index == -1) return;
     this.collectionItems.splice(index, 1);
     this.navService.changeCollectionItemCount(this.collectionItems.length);
-    this.actionLogService.create({ actionName: 'remove_image_from_collection', payload: portfolioItem.portfolioItemId })
-      .subscribe(res => { }, error => { })
+    this.createActionLog({ actionName: 'remove_image_from_collection', payload: portfolioItem.portfolioItemId });
     this.unsavedChanges = true;
     portfolioItem.selected = false;
     if (fireEvent)
@@ -436,8 +455,7 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
   }
 
   openImageModal(item) {
-    this.actionLogService.create({ actionName: 'enlarged_image', payload: item.portfolioItemId })
-      .subscribe(res => {}, error => {})
+    this.createActionLog({ actionName: 'enlarged_image', payload: item.portfolioItemId });
     this.modalImages.pop()
     this.modalImages.push({ thumb: item.thumbUrl, img: item.imageUrl, description: item.name });
     this.openModalImage = true;
@@ -498,6 +516,11 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
       this.canvasImageDataUrl = null;
       this.imageLoading = false;
     })
+  }
+
+  onFeedbackSubmited(feedbackButton: string) {
+    this.feedbackService.create({ feedbackSubjectName: "product_recommendation", score: feedbackButton })
+      .subscribe(res => { }, error => { });
   }
 
   private handleNavItemChanged(navItem: string) {
@@ -683,6 +706,23 @@ export class CollectionViewComponent implements OnInit, OnDestroy, CollectionVie
     this.introService.addOnExitCallback(closeModal);
     this.introService.addOnEndCallback(closeModal);
     this.introService.addOnChangeCallback(closeModal);
+  }
+
+  private createActionLog(actionLog) {
+    this.actionLogService.create(actionLog).subscribe(res => { }, error => { })
+    this.actionsPerformed += 1;
+  }
+
+  private getLastFeedbackOfUser() {
+    this.feedbackService.getLast().subscribe(res => {
+      if (res) this.feedbackAlreadyLeft = true;
+    }, (error: AppError) => {
+      if (error instanceof NotFoundError) {
+        this.feedbackAlreadyLeft = false;
+      } else {
+        this.feedbackAlreadyLeft = true;
+      }
+    })
   }
 
   private convertImageToBase64(imageUrl) {

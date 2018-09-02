@@ -100,7 +100,7 @@ class PortfolioItemsController < ApplicationController
 
     @portfolio_items = @portfolio_items.shuffle if no_filters # shuffle in case of showing random items as no filters were provided
     unless no_filters
-      portfolio_item_ids = @portfolio_items.pluck(:id)
+      portfolio_item_ids = @portfolio_items.uniq.map(&:id).uniq
       create_action_log(Action::RESULT_SETS, portfolio_item_ids, parent_action_log)
     end
   end

@@ -53,6 +53,11 @@
 		"title_is_required": "יש לכתוב נושא",
 		"message_is_required": "יש לכתוב הודעה"
 	},
+	"feedback": {
+		"recommend_this_product_title": "האם תמליץ על מוצר זה לחבר?",
+		"not_likely": "סביר שלא",
+		"very_likely": "סביר מאוד"
+	},
 	"home": {
 		"welcome_to_artista": "ברוך הבא ל Artifish",
 		"whats_your_vision?": "מה החזון שלך?",

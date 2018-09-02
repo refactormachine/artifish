@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_29_111256) do
+ActiveRecord::Schema.define(version: 2018_09_02_141154) do
 
   create_table "action_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2018_08_29_111256) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["action_id"], name: "index_action_logs_on_action_id"
+    t.index ["client_uuid"], name: "index_action_logs_on_client_uuid"
     t.index ["parent_action_log_id"], name: "index_action_logs_on_parent_action_log_id"
     t.index ["user_id"], name: "index_action_logs_on_user_id"
   end
@@ -29,6 +30,7 @@ ActiveRecord::Schema.define(version: 2018_08_29_111256) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_actions_on_name", unique: true
   end
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -92,6 +94,26 @@ ActiveRecord::Schema.define(version: 2018_08_29_111256) do
     t.bigint "portfolio_item_id"
     t.float "pixel_fraction"
     t.index ["portfolio_item_id"], name: "index_dominant_colors_on_portfolio_item_id"
+  end
+
+  create_table "feedback_subjects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_feedback_subjects_on_name", unique: true
+  end
+
+  create_table "feedbacks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "feedback_subject_id"
+    t.bigint "user_id"
+    t.string "client_uuid"
+    t.float "score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_uuid"], name: "index_feedbacks_on_client_uuid"
+    t.index ["feedback_subject_id"], name: "index_feedbacks_on_feedback_subject_id"
+    t.index ["score"], name: "index_feedbacks_on_score"
+    t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
   create_table "materials", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -255,6 +277,8 @@ ActiveRecord::Schema.define(version: 2018_08_29_111256) do
   add_foreign_key "collection_items", "collections"
   add_foreign_key "collections", "users"
   add_foreign_key "dominant_colors", "portfolio_items"
+  add_foreign_key "feedbacks", "feedback_subjects"
+  add_foreign_key "feedbacks", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "purchase_options"
   add_foreign_key "orders", "users"

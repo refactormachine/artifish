@@ -52,6 +52,11 @@
 		"title_is_required": "Title is required",
 		"message_is_required": "Message is required"
 	},
+	"feedback": {
+		"recommend_this_product_title": "How likely are you to recommend this product to a friend or colleague?",
+		"not_likely": "Not likely",
+		"very_likely": "Very likely"
+	},
 	"home": {
 		"welcome_to_artista": "Welcome to Artifish",
 		"whats_your_vision?": "What's your vision?",
